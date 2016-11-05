@@ -9,6 +9,6 @@ Voraussetzungen:
 Copyright (C) Michael Blank - 2014-2016, IBM Klub Böblingen, Sparte Modellbahn
 
 <p align="center">
-  <img src="http://github.com/michael71/AndroPanel/andropanel1.jpg" width="640" height="400"/>
+  <img src="http://github.com/michael71/AndroPanel/blob/master/andropanel1.jpg" width="640" height="400"/>
 </p>
 
