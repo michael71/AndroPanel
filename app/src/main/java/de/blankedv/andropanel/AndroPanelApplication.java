@@ -1,0 +1,358 @@
+package de.blankedv.andropanel;
+
+import java.lang.ref.WeakReference;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+import javax.jmdns.JmDNS;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.MulticastLock;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
+import android.preference.PreferenceManager;
+import android.text.TextPaint;
+import android.util.Log;
+
+/**
+ * main application
+ * holds all globally used constants and variables
+ * 
+ * handles interfacing with sx-net-client, which is run on different thread
+ * 
+ * main contains a 50msec timer which is used for LocoSpeed mass simulation
+ * 
+ * multiple turnouts can be controlled (all from panel...xml)
+ * and a single Loco (name "selectedLoco", selected from loco...xml)
+ * and sensor states are displayed (all from panel...xml)
+ * 
+ * @author mblank
+ *
+ */
+public class AndroPanelApplication extends Application {
+
+	public static int width, height;
+	public static final String TAG="AndroPanelActivity";
+	public static final boolean USS = true;    // German style or USS style
+	public static final boolean DISABLE_THROTTLE = false;
+
+	public static ArrayList<PanelElement> panelElements = new ArrayList<PanelElement>();
+	public static String panelName = "";
+	public static ArrayList<Route> routes = new ArrayList<Route>();
+	
+	public static LocoList locolist = new LocoList();
+	
+	public static final boolean DEBUG = true;  // enable or disable debugging with file
+	public static  boolean demoFlag = false;
+
+	public static int counter=0;
+	// preferences
+	public static final String KEY_IP = "ipPref";
+	public static final String KEY_PORT = "portPref";
+	public static final String KEY_LOCO_ADR = "locoAdrPref";
+	public static final String KEY_LOCO_MASS = "locoMassPref";
+	public static final String KEY_LOCO_NAME = "locoNamePref";
+	public static final String KEY_SHOW_SX = "showSXPref";
+	public static final String KEY_SHOW_XY_VALUES = "showXYPref";
+	public static final String KEY_ENABLE_ZOOM = "enableZoomPref";
+	public static final String KEY_ENABLE_EDIT = "enableEditPref";
+	public static final String KEY_ENABLE_DEMO = "enableDemoPref";
+	public static final String KEY_XOFF = "xoffPref";
+	public static final String KEY_YOFF = "yoffPref";
+	public static final String KEY_SCALE = "scalePref";
+	public static final String KEY_CONFIG_FILE = "configFilenamePref";
+	public static final String KEY_LOCOS_FILE = "locosFilenamePref";
+
+	public static final String SXNET_PORT = "4104";
+	public static final String SXNET_IP ="192.168.178.30";	
+
+    public static final int INVALID_INT = -9999;
+    
+	private static int[] sxData = new int[128];   // contains all selectrix channel data
+
+	public static boolean drawSXAddresses;
+	public static boolean drawXYValues;
+
+	public static IncomingHandler handler;   //
+
+	// connection state
+	public static SXnetClientThread client;
+	public static long mLastMessage=0;
+
+	public static final BlockingQueue<String> sendQ = new ArrayBlockingQueue<String>(50);
+
+	public static String connString="";
+
+	public static final String DIRECTORY = "andropanel/";     // with trailing slash
+	// panel config and loco config file (see preferences) are loaded from this directory
+	// names must match "panel....." and "loco.....", resp.
+	public static String configFilename;
+	public static String locosFilename;
+	public static final String DEMO_FILE="panel-demo.xml";    // demo data in raw assets dir.
+	public static final String DEMO_LOCOS_FILE="locos-demo.xml";
+	
+	public static boolean configHasChanged = false;   // store info whether config has changed
+	                            // if true, then a new config file is written at the end of the Activity
+
+	public static final ArrayList<Integer> adrList = new ArrayList<Integer>();  // contains all needed SX channels
+	public static final Hashtable<String, Bitmap> bitmaps = new Hashtable<String, Bitmap>();
+
+	public static boolean firstStart=true;
+
+	
+	public static boolean zoomEnabled;
+ 	public static float scale = 1.0f;  // user selectable scaling of panel area
+    public static final int prescale = 2;   
+ // fixed prefix for scaling - should be =1 for small displays and =2 for large displays
+ 	// all Paints and x/y-s are scaled before drawing
+ 	public static float xoff = 10*prescale;
+ 	public static float yoff = 50*prescale;
+	
+	// define Paints
+	public static Paint linePaint, linePaint2, rasterPaint, circlePaint, greenPaint;
+	public static Paint redPaint, linePaintRedDash, linePaintGrayDash, tachoPaint, tachoOutsideLine;
+	public static Paint rimCirclePaint, rimShadowPaint, rimPaint, majorTick, minorTick, tachoSpeedPaint, tachoShadowPaint;
+	public static final int BG_COLOR = Color.DKGRAY;  // panel background color
+	public static Paint bgPaint, sxAddressBGPaint;
+	public static TextPaint sxAddressPaint, xyPaint, panelNamePaint;  // used for displaying SX address on panel and for panel Name
+	
+	public static final int RASTER=(int)(20*prescale);   // raster points with xx pixels
+	public static final int TURNOUT_LENGTH = 10;  // NOT to be prescaled
+	public static final int TURNOUT_LENGTH_LONG = (int)(TURNOUT_LENGTH*1.4f);
+
+	public static Bitmap myBitmap = Bitmap.createBitmap(4000,1600, Bitmap.Config.ARGB_4444);
+	public static Canvas myCanvas = new Canvas(myBitmap);
+	
+	public static boolean enableEdit = false;
+
+	public static final int DISP_THROTTLE = 1;
+	public static final int DISP_PANEL = 0;
+	public static int disp_selected=0;
+
+
+	public static Context appContext;
+	 
+	@Override
+	public void onCreate() {
+		super.onCreate();	
+		if (DEBUG) Log.d(TAG,"onCreate AndroPanelApplication");
+
+		// do some initializations
+		for (int i=0; i<128; i++) sxData[i]=0;	
+		AndroBitmaps.init(getResources());
+		LinePaints.init(this);
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+        drawSXAddresses = prefs.getBoolean(KEY_SHOW_SX, false);
+        drawXYValues = prefs.getBoolean(KEY_SHOW_XY_VALUES, false);
+ 
+        handler = new IncomingHandler(this);
+        
+        Log.d(TAG,"device name="+getDeviceName());
+ 
+	}
+
+	// this construct to avoid leaks see the postings
+	// https://groups.google.com/forum/?fromgroups=#!msg/android-developers/1aPZXZG6kWk/lIYDavGYn5UJ
+	// http://stackoverflow.com/questions/11407943/this-handler-class-should-be-static-or-leaks-might-occur-incominghandler
+	static class IncomingHandler extends Handler {
+	    private final WeakReference<AndroPanelApplication> mApp; 
+
+	    IncomingHandler(AndroPanelApplication app) {
+	        mApp = new WeakReference<AndroPanelApplication>(app);
+	    }
+	    
+	    @Override
+	    public void handleMessage(Message msg)
+	    {
+	    	AndroPanelApplication app = mApp.get();
+	         if (app != null) {
+	              app.handleMessage(msg);
+	         }	tachoPaint.setStrokeCap(Paint.Cap.SQUARE);
+	    }
+	}
+	
+	
+	@Override
+	public void onTerminate() {
+		super.onTerminate();
+		Log.d(TAG,"AndroPanelApp - terminating.");
+	
+	}
+
+	public void handleMessage(Message msg) {
+		int chan = msg.arg1;
+		int data = msg.arg2;
+		sxData[chan] = data;
+		mLastMessage = System.currentTimeMillis();
+		for (PanelElement pe : panelElements) {
+			if (pe.getSxAdr() == chan) {
+				pe.update();
+			}
+		}
+	}
+
+	/**
+	 * the addresses of all active elements are stored in "adrList", to
+	 * be able to act properly if data in these channels is changing
+	 *  
+	 * @param panelElements
+	 */
+	public static void initSXaddresses(ArrayList<PanelElement> panelElements) {
+		adrList.clear();
+		for (PanelElement e: panelElements) {
+			if (e instanceof SXPanelElement) {
+				// add its address to list of interesting SX addresses
+				// only needed for active elements, not for tracks
+				int a = ((SXPanelElement)e).getSxAdr();
+				if (!adrList.contains(a) && (a != INVALID_INT)) {
+					adrList.add(a);
+				}
+			}
+		}
+		if (!adrList.contains(127)) adrList.add(127);  // always interested in (virtual) Power Channel
+		if (!adrList.contains(locolist.selectedLoco.adr)) adrList.add(locolist.selectedLoco.adr);
+
+        if (DEBUG) {
+        	String adrL = "";
+        	for (int a:adrList) { 
+        		adrL = adrL + " "+a;
+        	}
+        	Log.d(TAG,"adrlist="+adrL);
+        }
+		requestSXdata();
+	}
+
+	public static void requestSXdata() {
+		for (int a:adrList) sendQ.add("R "+a);  // request dara for these addresses from SX central station
+	}
+	
+	public static boolean isPowerOn() {
+		if ((sxData[127] & 0x80) != 0)
+			return true;
+		else
+			return false;
+	}
+
+	public static int  getSxData(int chan) {
+		if (validSXAddress(chan)) {
+			if (!adrList.contains(chan)) {
+				// add to list of addresses which needs to be listened to
+				adrList.add(chan);
+				sendQ.add("R " + chan);   // request data
+			}
+
+			return sxData[chan]; // sxData is private and read only for other
+									// programs
+		} else {
+			return 0;
+		}
+	}
+
+	public static int  getSxBit(int chan, int bit) {
+		if (validSXAddress(chan) && (bit >=1) && (bit <=8)) {
+			if ((sxData[chan] & ( 1 << (bit-1))) == 0) {
+				return 0;
+			} else {
+				return 1;
+			}
+		} else {
+			return 0;
+		}
+	}
+
+
+	public static boolean validSXAddress(int chan) {
+		if ((chan >=0 ) && (chan < 128)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+    public void saveZoomEtc() {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+         SharedPreferences.Editor editor = prefs.edit();
+
+     	 editor.putString(KEY_XOFF,""+xoff); 
+     	 editor.putString(KEY_YOFF,""+yoff); 
+     	 editor.putString(KEY_SCALE,""+scale); 
+     	 editor.putString(KEY_LOCO_ADR,""+locolist.selectedLoco.adr); 
+     	 editor.putString(KEY_LOCO_MASS,""+locolist.selectedLoco.mass); 
+     	 editor.putString(KEY_LOCO_NAME,""+locolist.selectedLoco.name); 
+         // Commit the edits!
+         editor.commit();         	
+    }
+    
+    public void loadZoomEtc() {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+    	zoomEnabled = prefs.getBoolean(KEY_ENABLE_ZOOM, false);
+    	enableEdit = prefs.getBoolean(KEY_ENABLE_EDIT, false);
+    	demoFlag = prefs.getBoolean(KEY_ENABLE_DEMO, false);
+    	xoff = Float.parseFloat(prefs.getString(KEY_XOFF,"20")); 
+    	yoff =  Float.parseFloat(prefs.getString(KEY_YOFF,"50"));
+    	scale = Float.parseFloat(prefs.getString(KEY_SCALE,"1.0")); 
+    	// loco data loaded before
+    	
+    }
+    
+   
+    public static boolean connectionIsAlive() {
+    	if ( (System.currentTimeMillis() - mLastMessage) < 30 *1000) {
+     		return true;
+    	} else {
+    		//if (DEBUG) Log.d(TAG,"connection no longer alive.");
+    		return false;
+    	}
+    }
+
+    /**
+     *  send a byte of loco data to the SX-net client
+     * @param data
+     */
+	public static void sendLocoData(int data) {
+		
+		if (client != null) {
+			client.sendCommand(locolist.selectedLoco.adr, data);
+			if (DEBUG) Log.d(TAG,"sendCommand loco-adr="+locolist.selectedLoco.adr+ " data="+data);
+		}
+		
+		}
+	
+	public String getDeviceName() {
+		  String manufacturer = Build.MANUFACTURER;
+		  String model = Build.MODEL;
+		  if (model.startsWith(manufacturer)) {
+		    return capitalize(model);
+		  } else {
+		    return capitalize(manufacturer) + " " + model;
+		  }
+		}
+
+
+		private String capitalize(String s) {
+		  if (s == null || s.length() == 0) {
+		    return "";
+		  }
+		  char first = s.charAt(0);
+		  if (Character.isUpperCase(first)) {
+		    return s;
+		  } else {
+		    return Character.toUpperCase(first) + s.substring(1);
+		  }
+		} 
+
+
+}

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<layout-config>
+<panel name="demo panel">
+<track x="20" y="60" x2="460" y2="60" />
+<track x="120" y="60" x2="160" y2="100" />
+<track x="120" y="100" x2="340" y2="100" />
+<track x="140" y="60" x2="180" y2="20" />
+<track x="160" y="40" x2="340" y2="40" />
+<track x="300" y="100" x2="340" y2="60" />
+<track x="180" y="20" x2="360" y2="20" />
+<track x="340" y="40" x2="360" y2="60" />
+<turnout x="120" y="60" x2="134" y2="60" xt="130" yt="70" sxadr="80" sxbit="4" />
+<turnout x="140" y="60" x2="154" y2="60" xt="150" yt="50" sxadr="12" sxbit="5" />
+<turnout x="340" y="60" x2="326" y2="60" xt="330" yt="70" sxadr="6" sxbit="3" />
+<turnout x="160" y="100" x2="146" y2="100" xt="150" yt="90" sxadr="5" sxbit="1" />
+<turnout x="300" y="100" x2="314" y2="100" xt="310" yt="90" sxadr="6" sxbit="3" />
+<turnout x="160" y="40" x2="170" y2="30" xt="174" yt="40" sxadr="5" sxbit="2" />
+<turnout x="360" y="60" x2="346" y2="60" xt="350" yt="50" sxadr="13" sxbit="4" />
+<sensor name="CS13" x="240" y="60" sxadr="102" sxbit="4" />
+<sensor name="CS14" x="240" y="100" sxadr="102" sxbit="5" />
+<sensor name="CS12" x="240" y="40" sxadr="102" sxbit="6" />
+<sensor name="CS11" x="240" y="20" sxadr="102" sxbit="7" />
+<sensor name="CS01" x="40" y="60" sxadr="101" sxbit="1" />
+<sensor name="CS21" x="420" y="60" sxadr="101" sxbit="7" />
+<!--  alternative sensor look <sensor name="CS22" x="100" y="40" x2="180" y2="40" sxadr="102" sxbit="3" /> -->
+</panel> 
+</layout-config>

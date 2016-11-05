@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/general_settings" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enableZoomPref"
+            android:title="@string/enableZoom" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/files_settings" >
+        <ListPreference
+            android:entries="@array/listEmpty"
+            android:entryValues="@array/listEmpty"
+            android:key="configFilenamePref"
+            android:summary="Bitte auswählen"
+            android:title="Panel Config File" />
+        <ListPreference
+            android:entries="@array/listEmpty"
+            android:entryValues="@array/listEmpty"
+            android:key="locosFilenamePref"
+            android:summary="Bitte auswählen"
+            android:title="Loco Config File" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/edit_settings" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enableEditPref"
+            android:title="@string/enableEdit" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="showSXPref"
+            android:title="@string/showSXaddresses" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="showXYPref"
+            android:title="@string/showXYvalues" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/sxnet_server_settings" >
+        <EditTextPreference
+            android:name="SXnet server address"
+            android:defaultValue="192.168.178.34"
+            android:key="ipPref"
+            android:summary="@string/ip_address_of_server"
+            android:title="SXnet server address" />
+        <EditTextPreference
+            android:name="SXnet server port"
+            android:defaultValue="4104"
+            android:key="portPref"
+            android:maxLength="5"
+            android:numeric="integer"
+            android:summary="@string/port"
+            android:title="@string/port_sh" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enableDemoPref"
+            android:title="@string/enableDemo" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
