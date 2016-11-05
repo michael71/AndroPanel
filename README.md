@@ -8,3 +8,7 @@ Voraussetzungen:
 
 Copyright (C) Michael Blank - 2014-2016, IBM Klub Böblingen, Sparte Modellbahn
 
+<p align="center">
+  <img src="andropanel1.jpeg" width="600"/>
+</p>
+
