@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">hello</string> 
+    <string name="hello">hello</string>
     <string name="app_name">Andro Panel</string>
     <string name="sxnet_server_settings">SXnet Server Settings</string>
     <string name="ip_address_of_server">Server IP Address</string>
@@ -15,8 +15,8 @@
     <string name="cancel">Cancel</string>
     <string name="sxnet_loco">Loco Address Setting</string>
     <string name="loco_address">Loco Address (1..103) </string>
-    <string name="showSXaddresses">display SX addresses</string>   
-    <string name="showXYvalues">display raster values [x,y] </string>   
+    <string name="showSXaddresses">display SX addresses</string>
+    <string name="showXYvalues">display raster values [x,y] </string>
     <string name="enableZoom">Enable Panel Zoom</string>
     <string name="enableEdit">Enable SX Edit Mode</string>
     <string name="enableDemo">Enable DEMO Mode (local echo)</string>
@@ -29,12 +29,14 @@
     <string name="files_settings">Config Files</string>
     <string name="center_panel">Center Panel</string>
     <string name="select_panel">Display Panel</string>
-        <string name="select_throttle">Display Throttle</string>
-        <string name="aboutString">"AndroPanel is free software - you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Andropanel is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  For details about the GNU General Public License see http://www.gnu.org/licenses "</string>
-        <string name="copyrightString">Copyright 2012 - Michael Blank - Sonja Schittenhelm - michael@oscale.net</string>
-        <string name="moreInfoString">more info on http://www.oscale.net/andropanel</string>
-        <string name="andropanelTitleString">AndroPanel</string>
-        <string name="versionUnknown">version x</string>
-        <string name="unknown">x</string>
-        <string name="helpString">Quick Start: the panel is coded as xml in the file "panel-demo.xml" (only the tracks and sensors have to be coded, turnouts are calculated automatically the first time tracks are read).\nThe Locos are coded in the file "locos-demo.xml" (directory /sdcard/andropanel/). Copy these file and change them for your layout, then select your new files in the settings. Loco Filenames = "loco...", Panel Filenames = "panel..." to enable the settings program to find them.</string>
+    <string name="select_throttle">Display Throttle</string>
+    <string name="aboutString">"AndroPanel is free software - you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Andropanel is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  For details about the GNU General Public License see http://www.gnu.org/licenses "</string>
+    <string name="copyrightString">Copyright 2012 - Michael Blank - Sonja Schittenhelm - michael@oscale.net</string>
+    <string name="moreInfoString">more info on http://www.oscale.net/andropanel</string>
+    <string name="andropanelTitleString">AndroPanel</string>
+    <string name="versionUnknown">version x</string>
+    <string name="unknown">x</string>
+    <string name="helpString">Quick Start: the panel is coded as xml in the file "panel-demo.xml" (only the tracks and sensors have to be coded, turnouts are calculated automatically the first time tracks are read).\nThe Locos are coded in the file "locos-demo.xml" (directory /sdcard/andropanel/). Copy these file and change them for your layout, then select your new files in the settings. Loco Filenames = "loco...", Panel Filenames = "panel..." to enable the settings program to find them.</string>
+    <string name="inverted">inv.</string>
+    <string name="yes_inverted">Y</string>
 </resources>

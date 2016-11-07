@@ -79,6 +79,11 @@ public class PanelElement {
 	public int getSxBit() {
 		return INVALID_INT;
 	}
+
+    public int getInverted() {
+        return INVALID_INT;
+    }
+
 	
 	public void update() {
 		// makes sense only for SX panel elements

@@ -1,17 +1,20 @@
 package de.blankedv.andropanel;
 
-import static de.blankedv.andropanel.AndroPanelApplication.*;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import static de.blankedv.andropanel.AndroPanelApplication.appContext;
+import static de.blankedv.andropanel.AndroPanelApplication.configHasChanged;
+import static de.blankedv.andropanel.AndroPanelApplication.locolist;
 
 /**
  * Dialog function for selection of a new locomotive
@@ -100,34 +103,57 @@ public class Dialogs {
 	// needed for edit mode for sx-controls
  	static void selectSXAddressDialog(PanelElement el) {
 
-    	final LayoutInflater factory = LayoutInflater.from(appContext);
-		final View selSxAddressView = factory.inflate(R.layout.alert_dialog_sel_sx_address, null);
+        final LayoutInflater factory = LayoutInflater.from(appContext);
+
+        final View selSxAddressView = factory.inflate(R.layout.alert_dialog_sel_sx_address, null);
+        final CheckBox cbInverted = (CheckBox) selSxAddressView.findViewById(R.id.cbInverted);
+        final TextView tvInverted = (TextView) selSxAddressView.findViewById(R.id.tvInverted);
+        if (el.getInverted() == 1) {
+            cbInverted.setChecked(true);
+        } else {
+            cbInverted.setChecked(false);
+        }
+        if (el.getType().equalsIgnoreCase("turnout")) {
+            // inverted is only used for turnout
+            cbInverted.setVisibility(View.VISIBLE);
+            tvInverted.setVisibility(View.VISIBLE);
+        } else {
+            // hidden for all other panel element
+            cbInverted.setVisibility(View.INVISIBLE);
+            tvInverted.setVisibility(View.INVISIBLE);
+        }
+
+
 		final NumberPicker sxAddress = (NumberPicker) selSxAddressView.findViewById(R.id.picker1);
 		sxAddress.setRange(1,103);
 		sxAddress.setSpeed(100); // faster change for long press
 		final NumberPicker sxBit = (NumberPicker) selSxAddressView.findViewById(R.id.picker2);
 		sxBit.setRange(1,8);
 		final SXPanelElement e = (SXPanelElement) el;
+
 		sxAddress.setCurrent(e.getSxAdr());
 		sxBit.setCurrent(e.getSxBit());
+
 		AlertDialog sxDialog = new AlertDialog.Builder(appContext)
-               .setMessage("SX Adresse?")
-		       .setCancelable(false)
+                .setMessage("SX Address ?")
+                .setCancelable(false)
 		       .setView(selSxAddressView)
-		       .setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-//		        	   Toast.makeText(appContext,"Adresse "+sxAddress.getCurrent()
-//		        			   +"/"+sxBit.getCurrent()+" wurde selektiert", Toast.LENGTH_SHORT)
-//		        	   .show();
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 		        	   e.setSxAdr(sxAddress.getCurrent());
 		        	   e.setSxBit(sxBit.getCurrent());
-		        	   configHasChanged = true; // flag for saving the configuration later when pausing the activity
-		        	   dialog.dismiss();
+                       if (e.getType().equalsIgnoreCase("turnout") && cbInverted.isChecked()) {
+                           e.setInverted(1);
+                       } else {
+                           e.setInverted(0);
+                       }
+                       configHasChanged = true; // flag for saving the configuration later when pausing the activity
+                        dialog.dismiss();
 		        	   
 		           }
 		       })
-		       .setNegativeButton("Zurück", new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
 		                //dialog.cancel();
 		                dialog.dismiss();
 		           }
@@ -137,108 +163,4 @@ public class Dialogs {
 		sxDialog.getWindow().setLayout(350,400);
 	}
  
-/*	OLD CODE WITH ADDRESS SELECTION
- * 
- *      static void selectLocoAddressDialog() {
-
-		final int oldAddress = locoAdr;
-
-		final LayoutInflater factory = LayoutInflater.from(appContext);
-		final View selSxAddressView = factory.inflate(R.layout.alert_dialog_sel_loco, null);
-		final NumberPicker sxAddress = (NumberPicker) selSxAddressView.findViewById(R.id.picker1);
-		final Spinner selLoco = (Spinner) selSxAddressView.findViewById(R.id.spinner);
-
-
-		String[] locosToSelect = new String[locos.size()];
-
-		int index = 0;
-		for (Loco l : locos) {
-			locosToSelect[index] = l.name;
-		    index++;
-		}
-
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(appContext,
-		        android.R.layout.simple_spinner_dropdown_item,
-		        locosToSelect);
-
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		selLoco.setAdapter(adapter);
-		selLocoIndex = 0;
-		selLoco.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				selLocoIndex = arg2;   // save for later use when "SAVE" pressed
-			}
-
-			public void onNothingSelected(AdapterView<?> arg0) {
-				selLocoIndex = 0;
-			}
-		});
-
-		sxAddress.setRange(1,99);
-		sxAddress.setSpeed(100); // faster change for long press
-		sxAddress.setCurrent(locoAdr);
- 
-		AlertDialog sxDialog = new AlertDialog.Builder(appContext)     //, R.style.Animations_GrowFromBottom ) => does also not work
-		.setMessage("Lok oder SX-Adresse auswählen")
-		.setCancelable(false)
-		.setView(selSxAddressView)
-		.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
-			
-
-			public void onClick(DialogInterface dialog, int id) {
-				if (sxAddress.getCurrent() != oldAddress) {
-//					Toast.makeText(appContext,"Adresse "+sxAddress.getCurrent()
-//							+" wurde selektiert", Toast.LENGTH_SHORT)
-//							.show();
-					locoAdr = sxAddress.getCurrent();
-					// check if this adr is already in locos list.
-					boolean contains=false;
-					for (int i=0; i<locos.size(); i++) {
-						if (locos.get(i).adr == locoAdr) {
-							contains=true;
-							break;
-						}
-					}
-					if (!contains) locos.add(new Loco(locoAdr,2));
-
-					
-				} else if (selLocoIndex > 0) {
-//					Toast.makeText(appContext,"Loco-index="+selLocoIndex
-//							+" wurde selektiert", Toast.LENGTH_SHORT)
-//							.show();
-					locoAdr = locos.get(selLocoIndex).adr;
-				}
-
-				dialog.dismiss();
-			}
-		})
-		.setNegativeButton("Zurück", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				//dialog.cancel();
-				dialog.dismiss();
-			}
-		})
-		
-		//   funktioniert nicht - daher spinner in layout
-		//		       .setSingleChoiceItems(adrs, 0, new DialogInterface.OnClickListener() {
-		//		           public void onClick(DialogInterface dialog, int id) {
-		//		        	   Toast.makeText(appContext,"Item "+sxAddress.getCurrent()
-		//		        			   +" wurde selektiert", Toast.LENGTH_SHORT)
-		//		        	   .show();
-		//		        	   locoAdr = id+50; //sxAddress.getCurrent();
-		//
-		//		        	   dialog.dismiss();
-		//		           }
-		//		       })
-		.create();
-		sxDialog.getWindow().getAttributes().windowAnimations = R.style.Animations_GrowFromRight;  // must be called before show()
-		sxDialog.getWindow().setGravity(Gravity.RIGHT);
-		sxDialog.show();
-		sxDialog.getWindow().setLayout(350,400);
-
-
-	}
-	
-*/
 }

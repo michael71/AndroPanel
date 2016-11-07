@@ -17,6 +17,7 @@ public class SXPanelElement extends PanelElement {
 	protected int sxAdr=INVALID_INT;
 	protected int sxBit=1;	
 	protected long lastToggle=0L;
+    protected int inverted = 0;   // "zero position" is inverted, if == 1
 
 	public SXPanelElement() {
 		super(null,0,0);
@@ -28,8 +29,19 @@ public class SXPanelElement extends PanelElement {
 		this.state = STATE_CLOSED;
 		this.sxAdr = adr;
 		this.sxBit = bit;
-		update();
+        this.inverted = 0;
+        update();
 	}
+
+    public SXPanelElement(String type, int x, int y, String name, int adr, int bit, int inverted) {
+        super(null, x, y);
+        this.type = type;
+        this.state = STATE_CLOSED;
+        this.sxAdr = adr;
+        this.sxBit = bit;
+        this.inverted = inverted;
+        update();
+    }
 
 	@Override
 	public int getSxAdr() {
@@ -50,11 +62,27 @@ public class SXPanelElement extends PanelElement {
 		update();
 	}
 
+    @Override
+    public int getInverted() {
+        return inverted;
+    }
+
+    public void setInverted(int inv) {
+        this.inverted = inv;
+        update();
+    }
 
 	@Override
 	public void update() {
-		state = AndroPanelApplication.getSxBit(sxAdr, sxBit) ; 
-	}
+        state = AndroPanelApplication.getSxBit(sxAdr, sxBit);
+        if (inverted == 1) {
+            if (state == STATE_CLOSED) {
+                state = STATE_THROWN;
+            } else {
+                state = STATE_CLOSED;
+            }
+        }
+    }
 
 	@Override
 	public boolean isSelected(float x1, float y1) {

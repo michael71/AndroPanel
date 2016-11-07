@@ -122,7 +122,10 @@ public class WriteConfig {
 					serializer.attribute("", "sxadr", ""+pe.getSxAdr());
 					serializer.attribute("", "sxbit", ""+pe.getSxBit());
 				}
-				serializer.endTag("",  pe.getType());
+                if (pe.getInverted() == 1) {
+                    serializer.attribute("", "inv", "1");
+                }
+                serializer.endTag("",  pe.getType());
 				serializer.text("\n");
 			}
 			serializer.endTag("", "panel");

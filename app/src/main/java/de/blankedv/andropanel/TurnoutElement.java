@@ -23,7 +23,8 @@ public class TurnoutElement extends SXPanelElement {
  		sxAdr = INVALID_INT;
 		sxBit = 1;
 		state = STATE_CLOSED;
- 	}
+        inverted = 0;
+    }
 
 	public TurnoutElement(PanelElement turnout) {
 		type = turnout.type;
@@ -36,7 +37,8 @@ public class TurnoutElement extends SXPanelElement {
 		sxAdr = INVALID_INT;
 		sxBit = 1;
 		state = STATE_CLOSED;
-	}
+        inverted = turnout.getInverted();
+    }
 
 	@Override
 	public void doDraw(Canvas canvas) {

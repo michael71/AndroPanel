@@ -238,8 +238,10 @@ public class ParseConfig {
 				pe.setSxAdr(Integer.parseInt(theAttribute.getNodeValue()));
 			} else if (theAttribute.getNodeName().equals("sxbit")) {
 				pe.setSxBit(Integer.parseInt(theAttribute.getNodeValue()));
-			} else {
-				if (DEBUG) Log.d(MYTAG,"unknown attribute "+theAttribute.getNodeName()+" in config file");
+            } else if (theAttribute.getNodeName().equals("inv")) {
+                pe.setInverted(Integer.parseInt(theAttribute.getNodeValue()));
+            } else {
+                if (DEBUG) Log.d(MYTAG,"unknown attribute "+theAttribute.getNodeName()+" in config file");
 			}
 		}
 

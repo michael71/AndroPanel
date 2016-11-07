@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center|center_horizontal" >
+    android:gravity="center|center_horizontal">
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_margin="5dip"
-        android:gravity="center" >
+        android:gravity="center">
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_weight="1"
-            android:gravity="right"
             android:text="@string/sx_adresse" />
 
         <TextView
@@ -23,24 +23,44 @@
             android:layout_margin="5dip"
             android:layout_weight="1"
             android:text="@string/_sx_bit" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:id="@+id/tvInverted"
+            android:text="@string/inverted" />
     </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_margin="5dip"
-        android:gravity="center" >
+        android:gravity="center">
 
         <de.blankedv.andropanel.NumberPicker
             android:id="@+id/picker1"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip" />
+            android:layout_margin="5dip"
+            android:layout_weight="1" />
 
         <de.blankedv.andropanel.NumberPicker
             android:id="@+id/picker2"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip" />
+            android:layout_margin="5dip"
+            android:layout_weight="1" />
+
+        <CheckBox
+            android:text="@string/yes_inverted"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:id="@+id/cbInverted"
+            android:checked="false"
+            android:layout_weight="1"
+            tools:text="Y" />
     </TableRow>
 
 </TableLayout>
