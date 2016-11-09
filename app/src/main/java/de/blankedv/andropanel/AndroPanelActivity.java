@@ -134,7 +134,11 @@ public class AndroPanelActivity extends Activity {  //implements ServiceListener
 			public void run() {
 				counter++;
 				locolist.selectedLoco.timer();
-			}
+                if (restartCommFlag) {
+                    restartCommFlag = false;
+                    restartCommunication();
+                }
+            }
 		}, 100, 100);
 
 	}

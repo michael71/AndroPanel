@@ -52,9 +52,12 @@ public final class LocoControlArea {
 	private static long lastSpeedCheckMove=0L;
 	private static float lastXt=X_LOCO_MID;
 
-
+    Context ctx;
 
 	public LocoControlArea(Context context) {
+
+        ctx = context;
+
 		sliderXoff =  bitmaps.get("slider").getWidth()/2;
 		sliderYoff =  bitmaps.get("slider").getHeight()/2;
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -103,8 +106,8 @@ public final class LocoControlArea {
 		decrSpeedBtn = new LocoButton(0.03f,0.5f,bitmaps.get("decr"));
 	
 		commBtn = new LocoButton(0.09f,0.5f,bitmaps.get("commok"),bitmaps.get("nocomm"));
-		powerBtn = new LocoButton(0.13f,0.5f, bitmaps.get("greendot"),bitmaps.get("reddot"));
-	}
+        powerBtn = new LocoButton(0.13f, 0.5f, bitmaps.get("greendot"), bitmaps.get("reddot"), bitmaps.get("greydot"));
+    }
 
 	public void draw(Canvas canvas) {
 			 
@@ -119,10 +122,11 @@ public final class LocoControlArea {
 		incrSpeedBtn.doDraw(canvas);
 		decrSpeedBtn.doDraw(canvas);
 		commBtn.doDraw(canvas,AndroPanelApplication.connectionIsAlive());
-		powerBtn.doDraw(canvas,AndroPanelApplication.isPowerOn());
-		
-	
-		// draw slider for speed selection
+        // disable power indicator when no connection
+        powerBtn.doDraw(canvas, AndroPanelApplication.isPowerOn(), AndroPanelApplication.connectionIsAlive());
+
+
+        // draw slider for speed selection
 		sxmin = (int)((canvas.getWidth()*(X_LOCO_MID-X_LOCO_RANGE)));
 		sxmax = (int)((canvas.getWidth()*(X_LOCO_MID+X_LOCO_RANGE)));
 
@@ -209,7 +213,9 @@ public final class LocoControlArea {
 			locolist.selectedLoco.decrLocoSpeed();
 		} else if (functionBtn.isTouched(x,y)) {
 			locolist.selectedLoco.toggleFunc();
-		} else if (adrBtn.isTouched(x,y)) {
+        } else if (commBtn.isTouched(x, y)) {
+            restartCommFlag = true;
+        } else if (adrBtn.isTouched(x,y)) {
 			Dialogs.selectLocoDialog();
 			
 		}

@@ -57,6 +57,8 @@ public class AndroPanelApplication extends Application {
 	public static final boolean DEBUG = true;  // enable or disable debugging with file
 	public static  boolean demoFlag = false;
 
+    public static boolean restartCommFlag = false;
+
 	public static int counter=0;
 	// preferences
 	public static final String KEY_IP = "ipPref";
@@ -163,6 +165,10 @@ public class AndroPanelApplication extends Application {
         Log.d(TAG,"device name="+getDeviceName());
  
 	}
+
+	/* TODO public static void restartComm() {
+        if (client == null)
+	} */
 
 	// this construct to avoid leaks see the postings
 	// https://groups.google.com/forum/?fromgroups=#!msg/android-developers/1aPZXZG6kWk/lIYDavGYn5UJ
