@@ -283,7 +283,18 @@ public class AndroPanelActivity extends Activity {  //implements ServiceListener
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String ip = prefs.getString(KEY_IP, "192.168.178.31");
+		boolean auto = prefs.getBoolean(KEY_AUTO_IP, false);
+        Log.d(TAG, "AndroPanelActivity - auto="+auto);
+        String ip = prefs.getString(KEY_IP, "192.168.178.31");
+		if ((auto == true) && (autoIP.length()>0)) {
+            ip = autoIP;
+            Log.d(TAG, "AndroPanelActivity - ip="+ip);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(KEY_AUTO_IP, ip);
+            // Commit the edits!
+            editor.commit();
+		}
+
 		int port = Integer.parseInt(prefs.getString(KEY_PORT, "4104"));
 		//locolist.selectedLoco.adr = Integer
 		//		.parseInt(prefs.getString(KEY_LOCO_ADR, "22"));

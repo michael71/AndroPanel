@@ -121,11 +121,41 @@ public class WriteConfig {
 				if (pe.getSxAdr() != INVALID_INT) {
 					serializer.attribute("", "sxadr", ""+pe.getSxAdr());
 					serializer.attribute("", "sxbit", ""+pe.getSxBit());
+					if (pe.getInverted() == 1) {
+						serializer.attribute("", "inv", "1");
+					}
 				}
-                if (pe.getInverted() == 1) {
-                    serializer.attribute("", "inv", "1");
-                }
+
                 serializer.endTag("",  pe.getType());
+				serializer.text("\n");
+			}
+
+			// the info is not needed when reading the panel - it is just for completeness
+			// stored in the xml file
+			for (Doubleslip ds: doubleslips){
+				if (DEBUG) Log.d(TAG,"writing doubleslip "+ds.toString());
+				serializer.startTag("", "doubleslip");
+
+				serializer.attribute("", "x", ""+ds.getT1().x);
+				serializer.attribute("", "y", ""+ds.getT1().y);
+
+				if (ds.getT1().getSxAdr() != INVALID_INT) {
+					serializer.attribute("", "sxadr_t1", ""+ds.getT1().getSxAdr());
+					serializer.attribute("", "sxbit_t1", ""+ds.getT1().getSxBit());
+					if (ds.getT1().getInverted() == 1) {
+						serializer.attribute("", "inv", "1");
+					}
+				}
+
+				if (ds.getT2().getSxAdr() != INVALID_INT) {
+					serializer.attribute("", "sxadr_t2", ""+ds.getT2().getSxAdr());
+					serializer.attribute("", "sxbit_t2", ""+ds.getT2().getSxBit());
+					if (ds.getT2().getInverted() == 1) {
+						serializer.attribute("", "inv", "1");
+					}
+				}
+
+				serializer.endTag("",  "doubleslip");
 				serializer.text("\n");
 			}
 			serializer.endTag("", "panel");

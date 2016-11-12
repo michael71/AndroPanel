@@ -334,8 +334,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		canvas.drawCircle(xc, yc, rad/40, minorTick);
 		//canvas.drawCircle(xc, yc, rad/1.04f, rimShadowPaint);
 		float al,phi,x1,x2,y1,y2;
-		for (int i= 0; i<= 160; i+=5) {
-			al = (float) (-135f+(i*270f/160));
+		int vmax = locolist.selectedLoco.vmax;
+		for (int i= 0; i<= vmax; i+=5) {
+			al = (float) (-135f+(i*270f/vmax));
 			phi = (float) (al*Math.PI/180.0f);
 			x1 = (float) (xc +rad*0.9*FloatMath.sin(phi));
 			x2 = (float) (xc +rad*FloatMath.sin(phi));
@@ -344,8 +345,8 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			canvas.drawLine(x1,y1,x2,y2,minorTick);
 			//Log.d(TAG,"al="+al+" phi="+phi+"  x1,x2,y1,y2="+x1+x2+y1+y2);
 		}
-		for (int i= 0; i<= 160; i+=20) {
-			al = (float) (-135f+(i*270f/160));
+		for (int i= 0; i<= vmax; i+=20) {
+			al = (float) (-135f+(i*270f/vmax));
 			phi = (float) (al*Math.PI/180.0f);
 			x1 = (float) (xc +rad*0.8*FloatMath.sin(phi));
 			x2 = (float) (xc +rad*FloatMath.sin(phi));
@@ -407,7 +408,11 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 				float speed = 160f*angle/270f;
 				Log.d(TAG,"speed radius o.k.  atan2 angleCorr="+angle+" speed="+speed+" km/h");
 				int s = Math.round(31*speed/160f);
-				locolist.selectedLoco.setSpeed(s);
+                if (locolist.selectedLoco.isForward()) {
+                    locolist.selectedLoco.setSpeed(s);
+                } else {
+                    locolist.selectedLoco.setSpeed(-s);
+                }
 			} else {
 				Log.d(TAG,"speed radius o.k.  invalid angle");
 			}

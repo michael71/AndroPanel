@@ -17,6 +17,7 @@
     <string name="loco_address">Loco Address (1..103) </string>
     <string name="showSXaddresses">display SX addresses</string>
     <string name="showXYvalues">display raster values [x,y] </string>
+    <string name="enableAutoIP">Automatically configure IP</string>
     <string name="enableZoom">Enable Panel Zoom</string>
     <string name="enableEdit">Enable SX Edit Mode</string>
     <string name="enableDemo">Enable DEMO Mode (local echo)</string>

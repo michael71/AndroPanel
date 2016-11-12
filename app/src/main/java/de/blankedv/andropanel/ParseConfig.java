@@ -185,7 +185,7 @@ public class ParseConfig {
 					// check whether this turnout is already known 
 					boolean known = false;
 					for (PanelElement e: pes ) {
-						if ((e.getType().equals("turnout") )&&(e.x == turnout.x) && (e.y == turnout.y)) {  // at same position => match
+						if ((e.getType().equals("turnout") )&&(e.x == turnout.x) && (e.y == turnout.y) && (e.x2 == turnout.x2)) {  // at same position and direction => match
 							known = true;
 							break;
 						}
@@ -197,7 +197,27 @@ public class ParseConfig {
 				}
 			}
 		}
-				
+
+		// check for doubleslips, doubleslips are turnouts with identical "rotation point"
+		for (PanelElement e: pes ) {
+			if (e.getType().equals("turnout") ) {
+				for (PanelElement e1: pes ) {
+                    if (!e.equals(e1) && (e1.getType().equals("turnout")) &&
+                        (e.x == e1.x) && (e.y == e1.y)) {
+                            // turnouts e and e2 are on same point => doubleslip
+                            // couple them, if not already in doubleslip list
+                            Doubleslip ds;
+                            ds = new Doubleslip((TurnoutElement) e, (TurnoutElement) e1);
+                            if (!doubleslips.contains(ds)) {
+                                doubleslips.add(ds);
+                                if (DEBUG) Log.d(TAG,"found doubleslip at (x,y)=("+e.x+","+e.y+")");
+                            }
+
+                    }
+                }
+			}
+		}
+
 		// look for sensors 
 		// SENSORS als LETZTE !!!! important (sind damit immer "on top")
 	

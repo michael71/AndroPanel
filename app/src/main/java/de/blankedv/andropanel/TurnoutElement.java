@@ -42,30 +42,39 @@ public class TurnoutElement extends SXPanelElement {
 
 	@Override
 	public void doDraw(Canvas canvas) {
-
-		// read data from SX bus and paint position of turnout accordingly
-		// draw a line and not a bitmap
-		if ((enableEdit) || (sxAdr == INVALID_INT)) {
-			canvas.drawLine(x*prescale,y*prescale,x2*prescale,y2*prescale,greenPaint);	
-			canvas.drawLine(x*prescale,y*prescale,xt*prescale,yt*prescale,redPaint);	
+		TurnoutElement otherTurnout = getDoubleslip();
+		if (otherTurnout != null) {
+			// draw other turnout
+            drawTurnout(canvas, otherTurnout);
+			if (drawSXAddresses) doDrawSXAddresses(canvas, otherTurnout);
 		} else {
-
-				if (state == STATE_CLOSED) {
-					canvas.drawLine(x*prescale,y*prescale,xt*prescale,yt*prescale,bgPaint);
-					canvas.drawLine(x*prescale,y*prescale,x2*prescale,y2*prescale,linePaint2);
-				} else if (state == STATE_THROWN){
-					canvas.drawLine(x*prescale,y*prescale,x2*prescale,y2*prescale,bgPaint);
-					canvas.drawLine(x*prescale,y*prescale,xt*prescale,yt*prescale,linePaint2);
-				} else if (state == STATE_UNKNOWN){
-					canvas.drawLine(x*prescale,y*prescale,xt*prescale,yt*prescale,bgPaint);
-					canvas.drawLine(x*prescale,y*prescale,x2*prescale,y2*prescale,bgPaint);
-				}
-	
+			// read data from SX bus and paint position of turnout accordingly
+			// draw a line and not a bitmap
+            drawTurnout(canvas, this);
+			if (drawSXAddresses) doDrawSXAddresses(canvas, this);
 		}
 
-		if (drawSXAddresses) doDrawSXAddresses(canvas);
+
 	}
-	
+
+	private void drawTurnout(Canvas canvas, TurnoutElement t) {
+		if ((enableEdit) || (sxAdr == INVALID_INT)) {
+			canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, greenPaint);
+			canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, redPaint);
+		} else {
+
+			if (state == STATE_CLOSED) {
+				canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, bgPaint);
+				canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, linePaint2);
+			} else if (state == STATE_THROWN) {
+				canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, bgPaint);
+				canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, linePaint2);
+			} else if (state == STATE_UNKNOWN) {
+				canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, bgPaint);
+				canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, bgPaint);
+			}
+		}
+	}
 	@Override
 	public void toggle() {
 		if (sxAdr == INVALID_INT) return; // do nothing if no sx address defined.
@@ -83,25 +92,68 @@ public class TurnoutElement extends SXPanelElement {
 			d = d & ~(1 << (sxBit-1));  // sx bit von 1 bis 8
 		}	
 		
-		/* aus sxi-interface:
-		    synchronized void sendAccessory(int adr, int bit, int data) {
-		  
-		        int d = sxData[adr];
-		        Byte[] b = {(byte) (adr + 128), 0};  // bit 7 muss gesetzt sein zum Schreiben
-		        if (data == 1) {  // set bit
-		            d |= (1 << (bit-1));  // sx bit von 1 bis 8
-		        } else {
-		            // reset bit
-		            d = d & ~(1 << (bit-1));  // sx bit von 1 bis 8
-		        }
-		        b[1] = (byte) (d);
-		        sxi.send(b);
-		    }  */
-		
-		//sxData[sxAdr] = d;
 		state = STATE_UNKNOWN; // until updated via SX message
 		client.sendCommand(sxAdr,d);  // ==> send changed data over network to interface
 		if (DEBUG) Log.d(TAG,"toggle sxAdr "+sxAdr);
 	}
 
+	public TurnoutElement getDoubleslip() {
+		for (Doubleslip d:doubleslips) {
+			if (d.getT1().equals(this)) {
+				return d.getT2();
+			} else if (d.getT2().equals(this)) {
+				return d.getT1();
+			}
+		}
+		return null;  // this turnout is not part of a doubleslip
+	}
+
+	// for turnouts, use "Schwerpunkt as center"
+	@Override
+	public boolean isSelected(float x1, float y1) {
+		// check only for active elements
+		//	Bitmap bm = bitmaps.get(type+"_closed");
+		//	int w = bm.getWidth();
+		//	int h = bm.getHeight();
+		int w = RASTER/3;   // RASTER defines sensitive area
+		int h = RASTER/3;
+
+		float xs = x1/prescale;  // reduces by overall dimension scaling factor
+		float ys = y1/prescale;
+		//if ((x1 >= (x+xoff)) && (x1 <=(x+xoff+w)) && (y1>=(y+yoff)) && (y1<=(y+yoff+h))) {
+
+		int mx = (x+xt+x2)/3;
+		int my = (y+yt+y2)/3;
+
+		if ((xs >= (mx-w)) && (xs <=(mx+w)) && (ys>=(my-h)) && (ys<=(my+h))) {
+			if (DEBUG) Log.i(TAG,"selected adr="+sxAdr+" /"+sxBit+" "+type+"  x="+x+xoff+" y="+y+yoff+" w="+w+" h"+y+" (xs,ys)=("+xs+","+ys+")");
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+   	// for turnouts, use "Schwerpunkt as center"
+	private void doDrawSXAddresses(Canvas canvas, TurnoutElement t) {
+
+		Rect bounds = new Rect();
+		String txt;
+		if (t.sxAdr == INVALID_INT) {
+			txt ="???";
+		} else {
+			txt = ""+t.sxAdr+"/"+t.sxBit;
+		}
+		sxAddressPaint.getTextBounds(txt, 0, txt.length(), bounds);
+		int text_height =  bounds.height();
+		int text_width =  bounds.width();
+
+		int mx = (t.x+t.xt+t.x2)/3;
+		int my = (t.y+t.yt+t.y2)/3;
+
+		canvas.drawRect((mx-2)*prescale, (my-2)*prescale-text_height,
+				((mx+2)*prescale+text_width), my*prescale+2, sxAddressBGPaint);  // dark rectangle
+		canvas.drawText(txt,mx*prescale, my*prescale, sxAddressPaint);   // the numbers
+
+	}
  }

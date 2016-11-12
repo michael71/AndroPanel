@@ -160,6 +160,7 @@ public class ParseLocos {
 		l.adr = INVALID_INT;
 		l.mass = 3; //default
 		l.name ="";
+		l.vmax = 160;
 
 		NamedNodeMap attributes = item.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
@@ -184,7 +185,17 @@ public class ParseLocos {
 					if (mass < 1)  l.mass=1;
 					Log.e(TAG, "ParseLoco: Error in loco mass. "+mass+" is invalid.");
 				}
-			} else {
+			}  else if (theAttribute.getNodeName().equals("vmax")) {
+				int vmax = Integer.parseInt(theAttribute.getNodeValue());
+				if ((vmax >= 40) && (vmax <= 300)) {
+					l.vmax=vmax;
+				} else {
+					if (vmax > 300) l.vmax=300;
+					if (vmax < 40)  l.vmax=40;
+					Log.e(TAG, "ParseLoco: Error in loco maximum speed. "+vmax+" is invalid.");
+				}
+			}
+			else {
 				if (DEBUG)
 					Log.e(TAG,
 							"ParseLoco: unknown attribute " + theAttribute.getNodeName()

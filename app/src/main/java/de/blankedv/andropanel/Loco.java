@@ -8,6 +8,7 @@ public class Loco {
 	public int adr;
 	public String name;
 	public int mass;    // 1...5 (never == 0 !)
+	public int vmax = 100;   // maximum speed in km/h
 	
 	// speed vars used for setting loco speed
 	public int speed_act;    	// -31 ... +31, speed currently sent via SXnet
@@ -65,7 +66,14 @@ public class Loco {
 		updateLocoFromSX();
 		resetToBe();
 	}
-	
+
+    public boolean isForward() {
+        if (speed_act >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 	private void resetToBe() {
 		speed_to_be = speed_act = speed_from_sx;	
 		function_to_be = function;
