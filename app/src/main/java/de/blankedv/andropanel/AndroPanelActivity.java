@@ -1,8 +1,6 @@
 package de.blankedv.andropanel;
 
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,23 +11,16 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.net.wifi.WifiManager.MulticastLock;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,8 +32,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import static de.blankedv.andropanel.AndroPanelActivity.layout;
-import static de.blankedv.andropanel.AndroPanelActivity.popUp;
 import static de.blankedv.andropanel.AndroPanelApplication.*;
 import static de.blankedv.andropanel.ParseConfig.*; // panelXmin etc from xml panel file
 
@@ -52,7 +41,7 @@ import static de.blankedv.andropanel.ParseConfig.*; // panelXmin etc from xml pa
  * @author mblank
  * 
  */
-public class AndroPanelActivity extends Activity {  //implements ServiceListener {
+public class  AndroPanelActivity extends Activity {  //implements ServiceListener {
 	Builder builder;
 
 	public static PopupWindow popUp;
@@ -126,7 +115,7 @@ public class AndroPanelActivity extends Activity {  //implements ServiceListener
 				});
 
 		if (client == null) {
-			restartCommunication();
+			startSXNetCommunication();
 		}
 
 		new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -136,7 +125,7 @@ public class AndroPanelActivity extends Activity {  //implements ServiceListener
 				locolist.selectedLoco.timer();
                 if (restartCommFlag) {
                     restartCommFlag = false;
-                    restartCommunication();
+                    startSXNetCommunication();
                 }
             }
 		}, 100, 100);
@@ -242,7 +231,7 @@ public class AndroPanelActivity extends Activity {  //implements ServiceListener
 			startActivity(new Intent(this, Preferences.class));
 			return (true);
 		case R.id.menu_reconnect:
-			restartCommunication();
+			startSXNetCommunication();
 			return (true);
 		case R.id.menu_panel: 
 			disp_selected=DISP_PANEL;
@@ -269,8 +258,8 @@ public class AndroPanelActivity extends Activity {  //implements ServiceListener
 		
 	}
 
-	public void restartCommunication() {
-		Log.d(TAG, "AndroPanelActivity - restartCommunication.");
+	public void startSXNetCommunication() {
+		Log.d(TAG, "AndroPanelActivity - startSXNetCommunication.");
 		if (client != null) {
 			client.shutdown();
 			try {
@@ -283,25 +272,25 @@ public class AndroPanelActivity extends Activity {  //implements ServiceListener
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		boolean auto = prefs.getBoolean(KEY_AUTO_IP, false);
-        Log.d(TAG, "AndroPanelActivity - auto="+auto);
+
+        Log.d(TAG, "AndroPanelActivity - autoIPEnabled="+autoIPEnabled);
         String ip = prefs.getString(KEY_IP, "192.168.178.31");
-		if ((auto == true) && (autoIP.length()>0)) {
+
+		if ((autoIPEnabled == true) && (autoIP.length()>0) && (!ip.equals(autoIP))) {
             ip = autoIP;
-            Log.d(TAG, "AndroPanelActivity - ip="+ip);
+            Log.d(TAG, "AndroPanelActivity - auto ip changed="+ip);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(KEY_AUTO_IP, ip);
+            editor.putString(KEY_IP, ip);
             // Commit the edits!
             editor.commit();
 		}
 
-		int port = Integer.parseInt(prefs.getString(KEY_PORT, "4104"));
 		//locolist.selectedLoco.adr = Integer
 		//		.parseInt(prefs.getString(KEY_LOCO_ADR, "22"));
 		drawSXAddresses = prefs.getBoolean(KEY_SHOW_SX, false);
 		drawXYValues = prefs.getBoolean(KEY_SHOW_XY_VALUES, false);
 
-		client = new SXnetClientThread(this, ip, port);
+		client = new SXnetClientThread(this, ip, SXNET_PORT);
 		client.start();
 		requestSXdata();
 	}

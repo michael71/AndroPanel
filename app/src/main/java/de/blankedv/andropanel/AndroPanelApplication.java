@@ -13,6 +13,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextPaint;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import java.lang.ref.WeakReference;
@@ -57,8 +58,7 @@ public class AndroPanelApplication extends Application {
     public static int counter = 0;
     // preferences
     public static final String KEY_IP = "ipPref";
-    public static final String KEY_AUTO_IP = "autoIpPref";
-    public static final String KEY_PORT = "portPref";
+    public static final String KEY_AUTOIP = "autoIPPref";
     public static final String KEY_LOCO_ADR = "locoAdrPref";
     public static final String KEY_LOCO_MASS = "locoMassPref";
     public static final String KEY_LOCO_NAME = "locoNamePref";
@@ -73,8 +73,12 @@ public class AndroPanelApplication extends Application {
     public static final String KEY_CONFIG_FILE = "configFilenamePref";
     public static final String KEY_LOCOS_FILE = "locosFilenamePref";
 
-    public static final String SXNET_PORT = "4104";
-    public static final String SXNET_IP = "192.168.178.30";
+    public static final int SXNET_PORT = 4104;
+    public static final String SXNET_START_IP = "192.168.1.2";
+    public static final int SX_FEEDBACK_MESSAGE = 1;
+    public static final int LAHNBAHN_MESSAGE = 2;
+    public static final int SX3PC_IP_MESSAGE = 3;
+    public static final int ERROR_MESSAGE = 4;
 
     public static final int INVALID_INT = -9999;
 
@@ -90,7 +94,7 @@ public class AndroPanelApplication extends Application {
     public static long mLastMessage = 0;
 
     public LanbahnThread lbClient;
-    public static String autoIP="";
+    public static String autoIP;
 
     public static final BlockingQueue<String> sendQ = new ArrayBlockingQueue<String>(50);
 
@@ -114,6 +118,7 @@ public class AndroPanelApplication extends Application {
 
 
     public static boolean zoomEnabled;
+    public static boolean autoIPEnabled;
     public static float scale = 1.0f;  // user selectable scaling of panel area
     public static final int prescale = 2;
     // fixed prefix for scaling - should be =1 for small displays and =2 for large displays
@@ -160,10 +165,13 @@ public class AndroPanelApplication extends Application {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         drawSXAddresses = prefs.getBoolean(KEY_SHOW_SX, false);
         drawXYValues = prefs.getBoolean(KEY_SHOW_XY_VALUES, false);
+        // initialize IPs
+        autoIP = prefs.getString(KEY_IP,SXNET_START_IP);
 
         handler = new IncomingHandler(this);
 
         Log.d(TAG, "device name=" + getDeviceName());
+
 
         // initialize Lanbahn
         lbClient = new LanbahnThread(getApplicationContext());
@@ -201,15 +209,39 @@ public class AndroPanelApplication extends Application {
     }
 
     public void handleMessage(Message msg) {
-        int chan = msg.arg1;
-        int data = msg.arg2;
-        sxData[chan] = data;
-        mLastMessage = System.currentTimeMillis();
-        for (PanelElement pe : panelElements) {
-            if (pe.getSxAdr() == chan) {
-                pe.update();
-            }
+        int what = msg.what;
+        switch (what) {
+            case SX_FEEDBACK_MESSAGE:
+                int chan = msg.arg1;
+                int data = msg.arg2;
+                sxData[chan] = data;
+                mLastMessage = System.currentTimeMillis();
+                for (PanelElement pe : panelElements) {
+                    if (pe.getSxAdr() == chan) {
+                        pe.update();
+                    }
+                }
+                break;
+            case LAHNBAHN_MESSAGE:
+                String content = (String)msg.obj;
+                System.out.println("object.toString()="+content);
+                break;
+
+            case ERROR_MESSAGE:
+                String error = (String)msg.obj;
+                Toast toast = Toast.makeText(appContext, error, Toast.LENGTH_LONG);
+                toast.show();
+                break;
+
+            case  SX3PC_IP_MESSAGE:
+                // this is a message which contains the ip of the computer running the SX3PC program,
+                // which we want to connect to
+
+                autoIP = (String)msg.obj;
+                System.out.println("autoIP read from lanbahn message="+autoIP);
+                break;
         }
+
     }
 
     /**

@@ -1,5 +1,6 @@
 package de.blankedv.andropanel;
 
+import static android.R.attr.data;
 import static de.blankedv.andropanel.AndroPanelApplication.*;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.net.SocketAddress;
 import android.content.Context;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * communicates with the SX3-PC server program (usually on port 4104)
@@ -51,14 +53,6 @@ public class SXnetClientThread extends Thread {
 		shuttingDown=false;
 		clientTerminated=false;
 		shutdownFlag=false;
-	}
-	
-	public String getIp() {
-		return ip;
-	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
 	}
 
 	public int getPort() {
@@ -161,7 +155,12 @@ public class SXnetClientThread extends Thread {
 
 		} catch (Exception e) {
 			Log.e(TAG,"SXnetClientThread.connect - Exception: "+e.getMessage());
-		} 
+
+            Message m = Message.obtain();
+            m.what = ERROR_MESSAGE;
+            m.obj = e.getMessage();
+            handler.sendMessage(m);  // send SX data to UI Thread via Message
+		}
  	}
 
 	public void disconnectContext() {
@@ -192,6 +191,7 @@ public class SXnetClientThread extends Thread {
 		if (shutdownFlag || clientTerminated || (adr == INVALID_INT)) return;
 		if (demoFlag) {
 			Message m = Message.obtain();
+            m.what = SX_FEEDBACK_MESSAGE;
 			m.arg1 = adr;
 			m.arg2 = data;
 			handler.sendMessage(m);  // send SX data to UI Thread via Message
@@ -260,6 +260,7 @@ public class SXnetClientThread extends Thread {
 				data = getDataFromString(info[2]);
 				if (( adr != ERROR) && (data != ERROR) ) {
 					Message m = Message.obtain();
+					m.what = SX_FEEDBACK_MESSAGE;
 					m.arg1 = adr;
 					m.arg2 = data;
 					handler.sendMessage(m);  // send SX data to UI Thread via Message

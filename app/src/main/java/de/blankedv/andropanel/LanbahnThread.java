@@ -33,6 +33,7 @@ import java.util.TimerTask;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Message;
 import android.util.Log;
 
 import static de.blankedv.andropanel.AndroPanelApplication.*;
@@ -126,11 +127,16 @@ public class LanbahnThread extends Thread {
 
     private void interpretMessage(String cmd) {
         //if (DEBUG) Log.d(TAG, "received  cmd=" + cmd);
-        if (cmd.toLowerCase().charAt(0) == 'a') {
+        cmd = cmd.toLowerCase();
+        if (cmd.charAt(0) == 'a') {
             String info[] = cmd.split(" ");
-            if ((info.length >= 3)  && info[1].toLowerCase().contains("sx3pc")) {
+            if ((info.length >= 3)  && info[1].contains("sx3pc")) {
+                // send message containing sx3pc to UI
                 if (DEBUG) Log.d(TAG, "SX3PC ip=" + info[2]);
-                // TODO send message to UI Thread  autoIP = info[2];
+                Message m = Message.obtain();
+                m.what = SX3PC_IP_MESSAGE;
+                m.obj = info[2];
+                handler.sendMessage(m);  // send lanbahn data to UI Thread via Message
             }
 
 

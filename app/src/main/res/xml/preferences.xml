@@ -38,22 +38,14 @@
     <PreferenceCategory android:title="@string/sxnet_server_settings" >
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="enableAutoIP"
-            android:title="@string/enableAutoIP" />
+            android:key="autoIPPref"
+            android:title="Automatically configure IP" />
         <EditTextPreference
             android:name="SXnet server address"
             android:defaultValue="192.168.178.34"
             android:key="ipPref"
             android:summary="@string/ip_address_of_server"
             android:title="SXnet server address" />
-        <EditTextPreference
-            android:name="SXnet server port"
-            android:defaultValue="4104"
-            android:key="portPref"
-            android:maxLength="5"
-            android:numeric="integer"
-            android:summary="@string/port"
-            android:title="@string/port_sh" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="enableDemoPref"

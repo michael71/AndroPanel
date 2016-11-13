@@ -18,6 +18,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import static android.R.attr.key;
 import static de.blankedv.andropanel.AndroPanelApplication.*;
 
 public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
@@ -34,7 +36,6 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		addPreferencesFromResource(R.xml.preferences); 
 
 		ipPref = (EditTextPreference)getPreferenceScreen().findPreference(KEY_IP);
-		portPref = (EditTextPreference)getPreferenceScreen().findPreference(KEY_PORT);
 
 //		showSXPref = (CheckBoxPreference)getPreferenceScreen().findPreference(KEY_SHOW_SX);
 //		enableZoomPref = (CheckBoxPreference)getPreferenceScreen().findPreference(KEY_ENABLE_ZOOM);
@@ -67,7 +68,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		// Let's do something if a preference value changes
 		if (key.equals(KEY_IP)) {
 			ipPref.setSummary("= "+sharedPreferences.getString(KEY_IP,""));
-			client.setIp(sharedPreferences.getString(KEY_IP,""));
+		} else  if (key.equals(KEY_AUTOIP)) {
+			autoIPEnabled = sharedPreferences.getBoolean(KEY_AUTOIP,false);
 		} else  if (key.equals(KEY_SHOW_SX)) {
 			drawSXAddresses = sharedPreferences.getBoolean(KEY_SHOW_SX,false);
 		} else if (key.equals(KEY_SHOW_XY_VALUES)) {
@@ -78,14 +80,6 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 			demoFlag = sharedPreferences.getBoolean(KEY_ENABLE_DEMO, false);
 		} else if (key.equals(KEY_ENABLE_EDIT)) {
 			enableEdit = sharedPreferences.getBoolean(KEY_ENABLE_EDIT, false);
-		} else if (key.equals(KEY_PORT)) {
-			portPref.setSummary("= "+sharedPreferences.getString(KEY_PORT,""));
-			try {
-				client.setPort(Integer.parseInt(sharedPreferences.getString(KEY_PORT,"")));
-			}catch (NumberFormatException e) {
-				Log.e(TAG,"invalid port number in preference");			
-			}
-
 		}  else  if (key.equals(KEY_CONFIG_FILE)) {
 		    configFilenamePref.setSummary("config loaded from "+sharedPreferences.getString(KEY_CONFIG_FILE,"-"));
 		}  else  if (key.equals(KEY_LOCOS_FILE)) {
@@ -102,8 +96,6 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context); 
 		// Setup the initial values
 		ipPref.setSummary("= "+prefs.getString(KEY_IP,""));
-		portPref.setSummary("= "+prefs.getString(KEY_PORT,""));
-		//locoAdrPref.setSummary("= "+prefs.getString(KEY_LOCO_ADR,""));
 
 		// Set up a listener whenever a key changes            
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
