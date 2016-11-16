@@ -44,7 +44,7 @@ public class AndroPanelApplication extends Application {
     public static final boolean DISABLE_THROTTLE = false;
 
     public static ArrayList<PanelElement> panelElements = new ArrayList<PanelElement>();
-    public static ArrayList<Doubleslip> doubleslips = new ArrayList<Doubleslip>();
+
     public static String panelName = "";
     public static ArrayList<Route> routes = new ArrayList<Route>();
 

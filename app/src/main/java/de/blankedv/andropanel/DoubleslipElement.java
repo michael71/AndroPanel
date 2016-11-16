@@ -14,6 +14,7 @@ import static de.blankedv.andropanel.AndroPanelApplication.client;
 import static de.blankedv.andropanel.AndroPanelApplication.drawSXAddresses;
 import static de.blankedv.andropanel.AndroPanelApplication.enableEdit;
 import static de.blankedv.andropanel.AndroPanelApplication.greenPaint;
+import static de.blankedv.andropanel.AndroPanelApplication.linePaint;
 import static de.blankedv.andropanel.AndroPanelApplication.linePaint2;
 import static de.blankedv.andropanel.AndroPanelApplication.prescale;
 import static de.blankedv.andropanel.AndroPanelApplication.redPaint;
@@ -22,23 +23,22 @@ import static de.blankedv.andropanel.SXPanelElement.STATE_THROWN;
 import static de.blankedv.andropanel.SXPanelElement.STATE_UNKNOWN;
 
 
-public class Doubleslip {
+public class DoubleslipElement extends PanelElement {
 
-	// for doubleslips which can be interactivly set from panel
-	// the doubleslip is equivalent to 2 (coupled) turnouts
-	private TurnoutElement t1;
-	private TurnoutElement t2;
 
-	public Doubleslip(TurnoutElement turnout1, TurnoutElement turnout2) {
- 		t1 = turnout1;
-		t2 = turnout2;
+	public DoubleslipElement(int x, int y) {
+ 		this.x = x;
+        this.y = y;
+        this.type = "doubleslip";
     }
 
-    TurnoutElement getT1() {
-        return t1;
+    public DoubleslipElement() {
+
     }
 
-    TurnoutElement getT2() {
-        return t2;
+    public void doDraw(Canvas canvas) {
+        // nothing is drawn
     }
+
+
  }

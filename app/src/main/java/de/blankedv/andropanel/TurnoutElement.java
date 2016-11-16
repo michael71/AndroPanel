@@ -15,6 +15,9 @@ public class TurnoutElement extends SXPanelElement {
 
 	// for turnouts which can be interactivly set from panel
 
+	private boolean isPartOfDoubleslip = false;
+	private TurnoutElement doubleslipSecondTurnout = null;
+
 	public TurnoutElement(String type, int x, int y, String name, int adr, int bit) {
 		super(type, x, y, name,  adr, bit);	
 	} 
@@ -40,13 +43,17 @@ public class TurnoutElement extends SXPanelElement {
         inverted = turnout.getInverted();
     }
 
+    public void setSecondTurnout(TurnoutElement t2) {
+        doubleslipSecondTurnout = t2;
+        isPartOfDoubleslip = true;
+    }
 	@Override
 	public void doDraw(Canvas canvas) {
-		TurnoutElement otherTurnout = getDoubleslip();
-		if (otherTurnout != null) {
+
+		if (isPartOfDoubleslip) {
 			// draw other turnout
-            drawTurnout(canvas, otherTurnout);
-			if (drawSXAddresses) doDrawSXAddresses(canvas, otherTurnout);
+            drawTurnout(canvas, doubleslipSecondTurnout);
+			if (drawSXAddresses) doDrawSXAddresses(canvas, doubleslipSecondTurnout);
 		} else {
 			// read data from SX bus and paint position of turnout accordingly
 			// draw a line and not a bitmap
@@ -97,16 +104,6 @@ public class TurnoutElement extends SXPanelElement {
 		if (DEBUG) Log.d(TAG,"toggle sxAdr "+sxAdr);
 	}
 
-	public TurnoutElement getDoubleslip() {
-		for (Doubleslip d:doubleslips) {
-			if (d.getT1().equals(this)) {
-				return d.getT2();
-			} else if (d.getT2().equals(this)) {
-				return d.getT1();
-			}
-		}
-		return null;  // this turnout is not part of a doubleslip
-	}
 
 	// for turnouts, use "Schwerpunkt as center"
 	@Override
@@ -144,6 +141,9 @@ public class TurnoutElement extends SXPanelElement {
 		} else {
 			txt = ""+t.sxAdr+"/"+t.sxBit;
 		}
+        //if (t.sxAdr == 0) {
+        //    Log.e(TAG, "sxAdr = 0 element-at ="+t.x+"/"+t.y+" type"+t.getType());
+        //}
 		sxAddressPaint.getTextBounds(txt, 0, txt.length(), bounds);
 		int text_height =  bounds.height();
 		int text_width =  bounds.width();

@@ -185,8 +185,9 @@ public class ParseConfig {
 					// check whether this turnout is already known 
 					boolean known = false;
 					for (PanelElement e: pes ) {
-						if ((e.getType().equals("turnout") )&&(e.x == turnout.x) && (e.y == turnout.y) && (e.x2 == turnout.x2)) {  // at same position and direction => match
-							known = true;
+						if ((e.getType().equals("turnout") )&&(e.x == turnout.x) && (e.y == turnout.y) /* && (e.x2 == turnout.x2) */) {  // at same position and direction => match
+							// TODO - could be a doubleslip => detect doubleslips here.
+                            known = true;
 							break;
 						}
 					}
@@ -198,24 +199,40 @@ public class ParseConfig {
 			}
 		}
 
-		// check for doubleslips, doubleslips are turnouts with identical "rotation point"
-		for (PanelElement e: pes ) {
-			if (e.getType().equals("turnout") ) {
-				for (PanelElement e1: pes ) {
-                    if (!e.equals(e1) && (e1.getType().equals("turnout")) &&
-                        (e.x == e1.x) && (e.y == e1.y)) {
-                            // turnouts e and e2 are on same point => doubleslip
-                            // couple them, if not already in doubleslip list
-                            Doubleslip ds;
-                            ds = new Doubleslip((TurnoutElement) e, (TurnoutElement) e1);
-                            if (!doubleslips.contains(ds)) {
-                                doubleslips.add(ds);
-                                if (DEBUG) Log.d(TAG,"found doubleslip at (x,y)=("+e.x+","+e.y+")");
-                            }
+		// look for doubleslips
+        // MUST BE CALLED AFTER TURNOUTS
+		// doubleslip = 2 turnouts mit gleichem x und y
+		// doubleslips werden nicht angezeigt
 
+		items = root.getElementsByTagName("doubleslip");
+		if (DEBUG) Log.d(MYTAG,"config: "+items.getLength()+" doubleslip");
+		for (int i=0;i<items.getLength();i++){
+            DoubleslipElement ds = parseDoubleslip(items.item(i));
+			pes.add(ds);
+            // add info to turnouts which are part of this doubleslip
+            boolean found_first = false;
+            boolean found_second = false;
+            TurnoutElement t1 = new TurnoutElement();
+            for (PanelElement t:pes) {
+                if (!found_first) {
+                    // look for first turnout
+                    if ((t.getType().equals("turnout")) && (t.x == ds.x) && (t.y == ds.y)) {
+                        // first turnout found
+                        t1 = (TurnoutElement)t;
+                        found_first = true;
+                    }
+                } else if (!found_second){
+                    // search for second
+                    if ((t.getType().equals("turnout")) && (t.x == ds.x) && (t.y == ds.y)) {
+                        // second turnout found
+                        t1.setSecondTurnout((TurnoutElement)t);
+                        ((TurnoutElement)t).setSecondTurnout(t1);
+                        found_second = true;
+                        break;
                     }
                 }
-			}
+            }
+
 		}
 
 		// look for sensors 
@@ -313,6 +330,30 @@ public class ParseConfig {
 					if (DEBUG) Log.d(MYTAG,"unknown attribute "+theAttribute.getNodeName()+" in config file");
 				}
 			}
+
+		return  pe;
+
+	}
+
+	private static DoubleslipElement parseDoubleslip(Node item) {
+		// ticket node can be Incident oder UserRequest
+		DoubleslipElement pe = new DoubleslipElement();
+		pe.type="doubleslip";
+		pe.x2=INVALID_INT;
+		NamedNodeMap attributes = item.getAttributes();
+		for (int i = 0; i < attributes.getLength(); i++) {
+			Node theAttribute = attributes.item(i);
+			// if (DEBUG) Log.d(MYTAG,theAttribute.getNodeName() + "=" + theAttribute.getNodeValue());
+			if (theAttribute.getNodeName().equals("name")) {
+				pe.name=theAttribute.getNodeValue();
+			} else if (theAttribute.getNodeName().equals("x")) {
+				pe.x=getValue(theAttribute.getNodeValue());
+			} else if (theAttribute.getNodeName().equals("y")) {
+				pe.y=getValue(theAttribute.getNodeValue());
+			}  else {
+				if (DEBUG) Log.d(MYTAG,"unknown attribute "+theAttribute.getNodeName()+" in config file");
+			}
+		}
 
 		return  pe;
 
