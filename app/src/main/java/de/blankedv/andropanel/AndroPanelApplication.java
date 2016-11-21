@@ -40,7 +40,6 @@ public class AndroPanelApplication extends Application {
 
     public static int width, height;
     public static final String TAG = "AndroPanelActivity";
-    public static final boolean USS = true;    // German style or USS style
     public static final boolean DISABLE_THROTTLE = false;
 
     public static ArrayList<PanelElement> panelElements = new ArrayList<PanelElement>();
@@ -72,6 +71,7 @@ public class AndroPanelApplication extends Application {
     public static final String KEY_SCALE = "scalePref";
     public static final String KEY_CONFIG_FILE = "configFilenamePref";
     public static final String KEY_LOCOS_FILE = "locosFilenamePref";
+    public static final String KEY_STYLE_PREF = "selectStylePref";
 
     public static final int SXNET_PORT = 4104;
     public static final String SXNET_START_IP = "192.168.1.2";
@@ -86,6 +86,7 @@ public class AndroPanelApplication extends Application {
 
     public static boolean drawSXAddresses;
     public static boolean drawXYValues;
+    public static String selectedStyle="DE";
 
     public static IncomingHandler handler;   //
 
@@ -127,12 +128,15 @@ public class AndroPanelApplication extends Application {
     public static float yoff = 50 * prescale;
 
     // define Paints
-    public static Paint linePaint, linePaint2, rasterPaint, circlePaint, greenPaint;
+    public static Paint linePaint, linePaint2, rasterPaint, circlePaint, signalLine, yellowPaint, yellowSignal, greenPaint, greenSignal, redSignal;
+    public static Paint greyPaint, whitePaint, btn0Paint, btn1Paint, addressPaint, addressBGPaint;
     public static Paint redPaint, linePaintRedDash, linePaintGrayDash, tachoPaint, tachoOutsideLine;
     public static Paint rimCirclePaint, rimShadowPaint, rimPaint, majorTick, minorTick, tachoSpeedPaint, tachoShadowPaint;
-    public static final int BG_COLOR = Color.DKGRAY;  // panel background color
+    public static int BG_COLOR = Color.DKGRAY;  // panel background color
     public static Paint bgPaint, sxAddressBGPaint;
     public static TextPaint sxAddressPaint, xyPaint, panelNamePaint;  // used for displaying SX address on panel and for panel Name
+
+
 
     public static final int RASTER = (int) (20 * prescale);   // raster points with xx pixels
     public static final int TURNOUT_LENGTH = 10;  // NOT to be prescaled
@@ -157,16 +161,20 @@ public class AndroPanelApplication extends Application {
         super.onCreate();
         if (DEBUG) Log.d(TAG, "onCreate AndroPanelApplication");
 
-        // do some initializations
-        for (int i = 0; i < 128; i++) sxData[i] = 0;
-        AndroBitmaps.init(getResources());
-        LinePaints.init(this);
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         drawSXAddresses = prefs.getBoolean(KEY_SHOW_SX, false);
         drawXYValues = prefs.getBoolean(KEY_SHOW_XY_VALUES, false);
         // initialize IPs
         autoIP = prefs.getString(KEY_IP,SXNET_START_IP);
+
+        selectedStyle = prefs.getString(KEY_STYLE_PREF, "US");
+        LinePaints.init(this, prescale);
+
+        // do some initializations
+        for (int i = 0; i < sxData.length; i++) {
+            sxData[i] = 0;
+        }
+        AndroBitmaps.init(getResources());
 
         handler = new IncomingHandler(this);
 
@@ -334,6 +342,7 @@ public class AndroPanelApplication extends Application {
         editor.putString(KEY_LOCO_ADR, "" + locolist.selectedLoco.adr);
         editor.putString(KEY_LOCO_MASS, "" + locolist.selectedLoco.mass);
         editor.putString(KEY_LOCO_NAME, "" + locolist.selectedLoco.name);
+        editor.putString(KEY_STYLE_PREF, selectedStyle);
         // Commit the edits!
         editor.commit();
     }
@@ -346,6 +355,7 @@ public class AndroPanelApplication extends Application {
         xoff = Float.parseFloat(prefs.getString(KEY_XOFF, "20"));
         yoff = Float.parseFloat(prefs.getString(KEY_YOFF, "50"));
         scale = Float.parseFloat(prefs.getString(KEY_SCALE, "1.0"));
+        selectedStyle = prefs.getString(KEY_STYLE_PREF, "US");
         // loco data loaded before
 
     }

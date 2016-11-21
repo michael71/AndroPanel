@@ -29,6 +29,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 //	private CheckBoxPreference showSXPref, enableZoomPref, enableEditPref, enableDemoPref;
 	private ListPreference configFilenamePref, locosFilenamePref;
 	private ListPreference lp;
+	private ListPreference selectStylePref;
 
 	public void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState); 
@@ -59,6 +60,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		
 		configFilenamePref.setSummary("config loaded from "+prefs.getString(KEY_CONFIG_FILE,"-"));
 	    locosFilenamePref.setSummary("locos loaded from "+prefs.getString(KEY_LOCOS_FILE,"-"));
+
+		selectStylePref = (ListPreference)getPreferenceScreen().findPreference(KEY_STYLE_PREF);
+		selectStylePref.setSummary("current selected style is "+selectedStyle);
 		
 	}
 
@@ -84,7 +88,11 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		    configFilenamePref.setSummary("config loaded from "+sharedPreferences.getString(KEY_CONFIG_FILE,"-"));
 		}  else  if (key.equals(KEY_LOCOS_FILE)) {
 		    locosFilenamePref.setSummary("locos loaded from "+sharedPreferences.getString(KEY_LOCOS_FILE,"-"));
-		}
+		} else  if (key.equals( KEY_STYLE_PREF)) {
+            selectedStyle = sharedPreferences.getString(KEY_STYLE_PREF, "US");
+            Log.d(TAG, "selectedStyle = " + selectedStyle);
+            selectStylePref.setSummary("current selected style is " + selectedStyle);
+        }
 
 	}
 

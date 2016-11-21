@@ -6,6 +6,13 @@
             android:defaultValue="false"
             android:key="enableZoomPref"
             android:title="@string/enableZoom" />
+        <ListPreference
+            android:key="selectStylePref"
+            android:title="@string/sel_style"
+            android:entries="@array/styles"
+            android:entryValues="@array/style_values"
+            android:summary="select a Style for dark or white background etc."
+            android:defaultValue="@string/sel_style_default" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/files_settings" >
         <ListPreference
