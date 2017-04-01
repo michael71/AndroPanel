@@ -66,7 +66,7 @@ public class Dialogs {
  
 		AlertDialog sxDialog = new AlertDialog.Builder(appContext)    
 		//, R.style.Animations_GrowFromBottom ) => does  not work
-		.setMessage("Lok auswählen - "+locolist.name)
+		//.setMessage("Lok auswählen - "+locolist.name)
 		.setCancelable(false)
 		.setView(selSxAddressView)
 		.setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
@@ -124,24 +124,26 @@ public class Dialogs {
         }
 
 
-		final NumberPicker sxAddress = (NumberPicker) selSxAddressView.findViewById(R.id.picker1);
-		sxAddress.setRange(1,103);
-		sxAddress.setSpeed(100); // faster change for long press
-		final NumberPicker sxBit = (NumberPicker) selSxAddressView.findViewById(R.id.picker2);
-		sxBit.setRange(1,8);
+		final android.widget.NumberPicker sxAddress = (android.widget.NumberPicker) selSxAddressView.findViewById(R.id.picker1);
+		sxAddress.setMinValue(1);
+		sxAddress.setMaxValue(103);
+        sxAddress.setWrapSelectorWheel(false);
+		final android.widget.NumberPicker sxBit = (android.widget.NumberPicker) selSxAddressView.findViewById(R.id.picker2);
+		sxBit.setMinValue(1);
+		sxBit.setMaxValue(8);
 		final SXPanelElement e = (SXPanelElement) el;
 
-		sxAddress.setCurrent(e.getSxAdr());
-		sxBit.setCurrent(e.getSxBit());
+		sxAddress.setValue(e.getSxAdr());
+		sxBit.setValue(e.getSxBit());
 
 		AlertDialog sxDialog = new AlertDialog.Builder(appContext)
-                .setMessage("SX Address ?")
+                //.setMessage("")
                 .setCancelable(false)
 		       .setView(selSxAddressView)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-		        	   e.setSxAdr(sxAddress.getCurrent());
-		        	   e.setSxBit(sxBit.getCurrent());
+		        	   e.setSxAdr(sxAddress.getValue());
+		        	   e.setSxBit(sxBit.getValue());
                        if (e.getType().equalsIgnoreCase("turnout") && cbInverted.isChecked()) {
                            e.setInverted(1);
                        } else {

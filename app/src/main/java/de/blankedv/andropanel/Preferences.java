@@ -136,16 +136,21 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		if (mExternalStorageAvailable) {
 
 			File dir = new File(Environment.getExternalStorageDirectory()+"/"+DIRECTORY);
+			Log.d(TAG, "reading directory " + dir.getAbsolutePath());
 			String[] allfiles = dir.list();
 
 			return allfiles;
 			
 			
-		}
-		return null;
+		} else {
+            Log.d(TAG, "cannot read externalStorageDirectory ");
+            return null;
+        }
+
     }
 
     private String[] matchingFiles(String match, String[] all) {
+		if (all == null) return null;
     	ArrayList<String> files = new ArrayList<String>();    	
     	for (String s : all) {
     	    int i = s.indexOf(match);

@@ -97,13 +97,13 @@ public final class LocoControlArea {
 		lampBtn = new LocoButton(0.848f,0.5f,
 				bitmaps.get("lamp1"),
 				bitmaps.get("lamp0"));
-		functionBtn = new LocoButton(0.80f,0.5f,
+		functionBtn = new LocoButton(0.796f,0.5f,
 			 	bitmaps.get("func1"),
 			 	bitmaps.get("func0"));
 		adrBtn = new LocoButton(0.91f,0.5f);  // only text.
 
-		incrSpeedBtn = new LocoButton(0.97f,0.5f,bitmaps.get("incr"));
-		decrSpeedBtn = new LocoButton(0.03f,0.5f,bitmaps.get("decr"));
+		incrSpeedBtn = new LocoButton(0.97f,0.52f,bitmaps.get("incr"));
+		decrSpeedBtn = new LocoButton(0.03f,0.52f,bitmaps.get("decr"));
 	
 		commBtn = new LocoButton(0.09f,0.5f,bitmaps.get("commok"),bitmaps.get("nocomm"));
         powerBtn = new LocoButton(0.13f, 0.5f, bitmaps.get("greendot"), bitmaps.get("reddot"), bitmaps.get("greydot"));
@@ -146,9 +146,9 @@ public final class LocoControlArea {
 		canvas.drawBitmap(bitmaps.get("slider"), xSpeedToBe-sliderXoff, ySpeed-sliderYoff,  null);
 
 		int xtext =  (int)(canvasWidth*(X_LOCO_MID+X_LOCO_RANGE*0.9f));
-		canvas.drawText(locoSpeed(),xtext, ySpeed+20, paintLocoSpeedTxt);
+		canvas.drawText(locoSpeed(),xtext, ySpeed+32, paintLocoSpeedTxt);
 		xtext =  (int)(canvasWidth*(X_LOCO_MID-X_LOCO_RANGE*0.9f));
-		canvas.drawText(nameText(),xtext, ySpeed+20, paintLocoSpeedTxt);
+		canvas.drawText(nameText(),xtext, ySpeed+32, paintLocoSpeedTxt);
 		
 		if (enableEdit) canvas.drawText("Edit", (int)(canvas.getWidth()*0.36f), ySpeed*0.8f, editPaint);
 		if (demoFlag) canvas.drawText("Demo", (int)(canvas.getWidth()*0.28f), ySpeed*0.8f, demoPaint);

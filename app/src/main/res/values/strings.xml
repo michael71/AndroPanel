@@ -25,8 +25,8 @@
     <string name="edit">Edit On/Off</string>
     <string name="sel_style">Anzeige Stil wählen</string>
     <string name="sel_style_default">US</string>
-    <string name="sx_adresse">SX Adresse</string>
-    <string name="_sx_bit">" SX Bit"</string>
+    <string name="sx_adresse">SX-Adr.</string>
+    <string name="_sx_bit">" SX-Bit"</string>
     <string name="sel_loco_prompt">Loco Auswahl</string>
     <string name="test_array">Choose a planet</string>
     <string name="files_settings">Config Files</string>
@@ -40,6 +40,7 @@
     <string name="versionUnknown">version x</string>
     <string name="unknown">x</string>
     <string name="helpString">Quick Start: the panel is coded as xml in the file "panel-demo.xml" (only the tracks and sensors have to be coded, turnouts are calculated automatically the first time tracks are read).\nThe Locos are coded in the file "locos-demo.xml" (directory /sdcard/andropanel/). Copy these file and change them for your layout, then select your new files in the settings. Loco Filenames = "loco...", Panel Filenames = "panel..." to enable the settings program to find them.</string>
-    <string name="inverted">inv.</string>
+    <string name="inverted">"invert"</string>
     <string name="yes_inverted">Y</string>
+    <string name="no_inverted">Y</string>
 </resources>

@@ -5,8 +5,10 @@ import java.io.File;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -94,6 +96,7 @@ public class ParseConfig {
 		if (mExternalStorageAvailable) {
 			try{
 				File f = new File(Environment.getExternalStorageDirectory()+"/"+DIRECTORY+configFilename);
+
 				FileInputStream fis;
 				InputStream demoIs=null;
 				if (!f.exists())  {
@@ -107,6 +110,7 @@ public class ParseConfig {
 						Log.e(MYTAG,"SAX Exception - "+e.getMessage());
 					}
 				} else {
+                    Log.d(TAG, "reading config from: "+f.toString());
 					fis = new FileInputStream(f);
 					try {
 						doc = builder.parse(fis);
@@ -116,7 +120,10 @@ public class ParseConfig {
 					}
 				}
 				
-				if (demoIs !=null) demoIs.close();
+				if (demoIs !=null) {
+					demoIs.close();
+					copyDemoFile(context);
+				}
 				
 
 
@@ -140,6 +147,29 @@ public class ParseConfig {
 		WriteRoutes.writeToXML(routes);
 		
 		return true;
+	}
+
+	private static void copyDemoFile(Context context) {
+		InputStream in;
+		OutputStream out;
+		try {
+			in = context.getAssets().open(DEMO_FILE);
+			out = new FileOutputStream(
+					Environment.getExternalStorageDirectory() + "/"
+							+ DIRECTORY   // DIR.. contains trailing slash
+							+ DEMO_FILE);
+			byte[] buffer = new byte[1024];
+			int read;
+			while ((read = in.read(buffer)) != -1) {
+				out.write(buffer, 0, read);
+			}
+			in.close();
+			out.close();
+		} catch (IOException e) {
+			Log.e(TAG, "Failed to copy asset file: " + DEMO_FILE + " "
+					+ e.getMessage());
+		}
+
 	}
 
 

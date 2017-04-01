@@ -28,6 +28,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -51,18 +53,23 @@ public class AboutActivity extends Activity {
 		int version = -1;
 		String vName="";
 
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		String dsp = "\n Display:  " + metrics.widthPixels+ " x " + metrics.heightPixels + " Pixel," +
+		 " \nDisplay densityDpi: " + metrics.densityDpi + "\nDisplay density:" + metrics.density + "   " + getDpiString(metrics.density);
+
 		PackageInfo pInfo;
 		try {
 			pInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_META_DATA);
 			version = pInfo.versionCode;
 			vName =pInfo.versionName;
-			vinfo = "Version: "+vName + "  (" + version + ")";
+			vinfo = "Version: "+vName + "  (" + version + ")" ;
 
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
 		 
-		versTv.setText(vinfo.toString());
+		versTv.setText(vinfo.toString() + dsp);
 		
 		if (connString.length() >0) { 
 			connTo.setText("connected to: "+connString);
@@ -99,4 +106,21 @@ public class AboutActivity extends Activity {
 //		}
 	}
 
+	public static String getDpiString(double density) {
+
+		if (density >= 4.0) {
+			 return "xxxhdpi";
+		} else if (density >= 3.0 && density < 4.0) {
+			 return "xxhdpi";
+		} else if (density >= 2.0) {
+			return "xhdpi";
+		} else if (density >= 1.5 && density < 2.0) {
+			return "hdpi";
+		} else if (density >= 1.3 && density < 1.5) {
+			return "tvdpi";
+		} else if (density >= 1.0 && density < 1.3) {
+			return "mdpi";
+		}
+		return "?";
+	}
 }

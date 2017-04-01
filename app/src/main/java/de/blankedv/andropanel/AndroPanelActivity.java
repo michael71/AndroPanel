@@ -92,6 +92,8 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 
 		setContentView(new Panel(this));
 
+		getDisplayInfo();
+
 		builder = new AlertDialog.Builder(this);
 		builder.setMessage("Are you sure you want to exit?")
 				.setCancelable(false)
@@ -167,6 +169,14 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 			client.disconnectContext();
 		client = null;
 
+	}
+
+	public void getDisplayInfo() {
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		Log.d(TAG, "Display in px is " + metrics.widthPixels+ " x " + metrics.heightPixels);
+
+		Log.d(TAG, "Display density is " + metrics.densityDpi);
 	}
 
 	@Override
@@ -373,7 +383,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 
 	}*/
 
-	public Boolean getSXnetConnection() {
+	/* public Boolean getSXnetConnection() {
 		WifiManager wifi = (WifiManager) this
 				.getSystemService(Context.WIFI_SERVICE);
 
@@ -410,13 +420,13 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		}
 		return true;
 
-	}
+	}  */
 
 	/**
 	 * Gets the current wifi state, and changes the text shown in the header as
 	 * required.
 	 */
-	public String checkWifiState() {
+	/* public String checkWifiState() {
 
 		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		int intaddr = wifi.getConnectionInfo().getIpAddress();
@@ -440,6 +450,6 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 
 		}
 
-	}
+	} */
 
 }
