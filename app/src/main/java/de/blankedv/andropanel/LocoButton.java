@@ -123,7 +123,7 @@ public class LocoButton {
         // (x,y) = lower left start of text.
         c.drawBitmap(bmON, x, y, null);
         //c.drawRect(x+3,y+3,x+w+w-3,y+h+h-3, bg);
-        c.drawText("" + locolist.selectedLoco.adr, x + w * 0.6f, y + h * 1.42f, p);
+        c.drawText("" + selectedLoco.adr, x + w * 0.6f, y + h * 1.42f, p);
 
     }
 

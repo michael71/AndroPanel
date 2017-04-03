@@ -1,5 +1,6 @@
 # Private Files
 *.private
+diverses/
 
 # Built application files
 *.apk

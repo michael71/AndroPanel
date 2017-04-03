@@ -111,14 +111,14 @@ public final class LocoControlArea {
 
 	public void draw(Canvas canvas) {
 			 
-		locolist.selectedLoco.updateLocoFromSX();  // to be able to display actual states of this loco
+		selectedLoco.updateLocoFromSX();  // to be able to display actual states of this loco
 		
 		// draw "buttons" and states
 		
-		adrBtn.doDraw(canvas,locolist.selectedLoco.adr, paintLocoAdrTxt);		
-		lampBtn.doDraw(canvas,locolist.selectedLoco.lamp_to_be);
-	 	functionBtn.doDraw(canvas,locolist.selectedLoco.function_to_be);
-		stopBtn.doDraw(canvas,(locolist.selectedLoco.speed_act != 0));
+		adrBtn.doDraw(canvas,selectedLoco.adr, paintLocoAdrTxt);		
+		lampBtn.doDraw(canvas,selectedLoco.lamp_to_be);
+	 	functionBtn.doDraw(canvas,selectedLoco.function_to_be);
+		stopBtn.doDraw(canvas,(selectedLoco.speed_act != 0));
 		incrSpeedBtn.doDraw(canvas);
 		decrSpeedBtn.doDraw(canvas);
 		commBtn.doDraw(canvas,AndroPanelApplication.connectionIsAlive());
@@ -157,25 +157,25 @@ public final class LocoControlArea {
 	}
 
 	private float sxSpeed() {
-		int s = locolist.selectedLoco.speed_from_sx;
+		int s = selectedLoco.speed_from_sx;
 		float speed = (X_LOCO_RANGE*(float)s / 31.0f)+X_LOCO_MID;  // sx=31 ==> ~0.25f (+0.6f offset)
 		                            
 		return speed;
 	}
 	
 	private float speedToBe() {
-		int s = locolist.selectedLoco.speed_to_be;
+		int s = selectedLoco.speed_to_be;
 		float speed = (X_LOCO_RANGE*(float)s / 31.0f)+X_LOCO_MID;  // sx=31 ==> ~0.25f (+0.6f offset)
 		return speed;
 	}
 
 	private  String locoSpeed() {		
-		int s = locolist.selectedLoco.speed_from_sx;
+		int s = selectedLoco.speed_from_sx;
 		return ""+s;
 	}
 
 	private String nameText() {
-		String s = locolist.selectedLoco.name+" (m="+locolist.selectedLoco.mass+")";
+		String s = selectedLoco.name+" (m="+selectedLoco.mass+")";
 		return s;
 	}
 
@@ -191,7 +191,7 @@ public final class LocoControlArea {
 			lastXt = xt;
 			int s = Math.round((((31.0f/X_LOCO_RANGE)*(xt - X_LOCO_MID*canvasWidth))/canvasWidth));
 			if (DEBUG) Log.d(TAG,"slider, speed set to be = "+s);
-			locolist.selectedLoco.setSpeed(s);  // will be sent only when different to currently known speed.
+			selectedLoco.setSpeed(s);  // will be sent only when different to currently known speed.
 			//AndroPanelApplication.sendSpeed(0,true);
 		}
 	}
@@ -204,15 +204,15 @@ public final class LocoControlArea {
 	 */
 	public void checkTouch(float x, float y) {
 		if (stopBtn.isTouched(x, y)) {
-			locolist.selectedLoco.stopLoco();
+			selectedLoco.stopLoco();
 		} else if (lampBtn.isTouched(x,y)) {
-			locolist.selectedLoco.toggleLocoLamp();
+			selectedLoco.toggleLocoLamp();
 		} else if (incrSpeedBtn.isTouched(x,y)) {
-			locolist.selectedLoco.incrLocoSpeed();
+			selectedLoco.incrLocoSpeed();
 		} else if (decrSpeedBtn.isTouched(x,y)) {
-			locolist.selectedLoco.decrLocoSpeed();
+			selectedLoco.decrLocoSpeed();
 		} else if (functionBtn.isTouched(x,y)) {
-			locolist.selectedLoco.toggleFunc();
+			selectedLoco.toggleFunc();
         } else if (commBtn.isTouched(x, y)) {
             restartCommFlag = true;
         } else if (adrBtn.isTouched(x,y)) {

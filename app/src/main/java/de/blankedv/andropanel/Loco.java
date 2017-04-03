@@ -1,5 +1,7 @@
 package de.blankedv.andropanel;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import static de.blankedv.andropanel.AndroPanelApplication.*;
 
@@ -25,6 +27,8 @@ public class Loco {
 	public boolean function_to_be;
 	public long lastToggleTime=0;
 	private long speedSetTime=0;   // last time the speed was set on interface
+
+	public Bitmap lbm;
 	
 	private int massCounter=0;
 	
@@ -35,7 +39,22 @@ public class Loco {
 		this.name = "Lok 22";
 		this.mass = 3 ;
 	}
-	
+
+	public Loco(String name, int adr, int mass, Bitmap lbm) {
+
+		this.adr = adr;
+		this.name = name;
+		this.lbm = lbm;
+		if ( (mass >=1) && (mass <=5) ) {
+			this.mass = mass;
+		} else {
+			this.mass = 3 ;
+		}
+		lastToggleTime=0; // no toggle so far
+		// init other data from actual SX bus data
+		initFromSX();
+	}
+
 	public Loco(int adr, int mass, String desc) {
 		super();
 		this.adr = adr;
@@ -61,7 +80,21 @@ public class Loco {
 		}
 		initFromSX();
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public String getAdr() {
+		return ""+adr;
+	}
+
+	public Bitmap getIcon() {
+		//Bitmap lbm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.genloco);
+
+		return lbm;
+
+	}
 	public void initFromSX() {
 		updateLocoFromSX();
 		resetToBe();

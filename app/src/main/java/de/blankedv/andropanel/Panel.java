@@ -334,7 +334,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		canvas.drawCircle(xc, yc, rad/40, minorTick);
 		//canvas.drawCircle(xc, yc, rad/1.04f, rimShadowPaint);
 		float al,phi,x1,x2,y1,y2;
-		int vmax = locolist.selectedLoco.vmax;
+		int vmax = selectedLoco.vmax;
 		for (int i= 0; i<= vmax; i+=5) {
 			al = (float) (-135f+(i*270f/vmax));
 			phi = (float) (al*Math.PI/180.0f);
@@ -366,7 +366,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		}
 
 		// speed zeiger
-		int s = locolist.selectedLoco.speed_from_sx;
+		int s = selectedLoco.speed_from_sx;
 		al = (float) (-135f+(Math.abs(s)*270f/31));
 		al = (float) (0.1*al+0.9*oldAl); // low pass filter
 		oldAl=al;
@@ -408,10 +408,10 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 				float speed = 160f*angle/270f;
 				Log.d(TAG,"speed radius o.k.  atan2 angleCorr="+angle+" speed="+speed+" km/h");
 				int s = Math.round(31*speed/160f);
-                if (locolist.selectedLoco.isForward()) {
-                    locolist.selectedLoco.setSpeed(s);
+                if (selectedLoco.isForward()) {
+                    selectedLoco.setSpeed(s);
                 } else {
-                    locolist.selectedLoco.setSpeed(-s);
+                    selectedLoco.setSpeed(-s);
                 }
 			} else {
 				Log.d(TAG,"speed radius o.k.  invalid angle");

@@ -43,4 +43,26 @@
     <string name="inverted">"invert"</string>
     <string name="yes_inverted">Y</string>
     <string name="no_inverted">Y</string>
+    <string name="add_loco">Add new Loco</string>
+    <string name="remove_loco">Remove Loco</string>
+    <string name="edit_loco">Edit Loco</string>
+    <string name="are_you_sure_this_will_overwrite_existing_current_data">Are you sure (this will overwrite existing current data)?</string>
+    <string name="are_you_sure_this_will_overwrite_any_existing_backup_data">Are you sure (this will overwrite any existing backup data)?</string>
+    <string name="external_storage_is_not_available_unable_to_export_data">External storage is not available, unable to export data.</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="different_icon">anderes Lok-Icon</string>
+    <string name="add_loco_to_xml_file">add_loco_to_xml_file</string>
+    <string name="add_loco_title">add_loco_title</string>
+    <string name="name">Loco Name</string>
+    <string name="back">back</string>
+    <string name="address">Loco Address</string>
+    <string name="store_changes">Store changes?</string>
+    <string name="add_new_loco">Add new Loco?</string>
+    <string name="selectloco">select Loco</string>
+    <string name="no_locos">No Locos</string>
+    <string name="locodb">Loco DB</string>
+    <string name="error_enter_address_first">ERROR: please enter loco ADDRESS first!</string>
+    <string name="error_enter_name_first">ERROR: please enter NAME first!</string>
+
 </resources>

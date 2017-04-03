@@ -47,7 +47,10 @@ public class AndroPanelApplication extends Application {
     public static String panelName = "";
     public static ArrayList<Route> routes = new ArrayList<Route>();
 
-    public static LocoList locolist = new LocoList();
+    public static ArrayList<Loco> locolist = new ArrayList<Loco>();
+    public static String LocoName = "";
+    public static Loco selectedLoco = null;
+    public static String locolistName ="?";
 
     public static final boolean DEBUG = true;  // enable or disable debugging with file
     public static boolean demoFlag = false;
@@ -187,7 +190,6 @@ public class AndroPanelApplication extends Application {
 
     }
 
-
     // this construct to avoid leaks see the postings
     // https://groups.google.com/forum/?fromgroups=#!msg/android-developers/1aPZXZG6kWk/lIYDavGYn5UJ
     // http://stackoverflow.com/questions/11407943/this-handler-class-should-be-static-or-leaks-might-occur-incominghandler
@@ -272,7 +274,7 @@ public class AndroPanelApplication extends Application {
         }
         if (!adrList.contains(127))
             adrList.add(127);  // always interested in (virtual) Power Channel
-        if (!adrList.contains(locolist.selectedLoco.adr)) adrList.add(locolist.selectedLoco.adr);
+        if (!adrList.contains(selectedLoco.adr)) adrList.add(selectedLoco.adr);
 
         if (DEBUG) {
             String adrL = "";
@@ -339,9 +341,9 @@ public class AndroPanelApplication extends Application {
         editor.putString(KEY_XOFF, "" + xoff);
         editor.putString(KEY_YOFF, "" + yoff);
         editor.putString(KEY_SCALE, "" + scale);
-        editor.putString(KEY_LOCO_ADR, "" + locolist.selectedLoco.adr);
-        editor.putString(KEY_LOCO_MASS, "" + locolist.selectedLoco.mass);
-        editor.putString(KEY_LOCO_NAME, "" + locolist.selectedLoco.name);
+        editor.putString(KEY_LOCO_ADR, "" + selectedLoco.adr);
+        editor.putString(KEY_LOCO_MASS, "" + selectedLoco.mass);
+        editor.putString(KEY_LOCO_NAME, "" + selectedLoco.name);
         editor.putString(KEY_STYLE_PREF, selectedStyle);
         // Commit the edits!
         editor.commit();
@@ -378,9 +380,9 @@ public class AndroPanelApplication extends Application {
     public static void sendLocoData(int data) {
 
         if (client != null) {
-            client.sendCommand(locolist.selectedLoco.adr, data);
+            client.sendCommand(selectedLoco.adr, data);
             if (DEBUG)
-                Log.d(TAG, "sendCommand loco-adr=" + locolist.selectedLoco.adr + " data=" + data);
+                Log.d(TAG, "sendCommand loco-adr=" + selectedLoco.adr + " data=" + data);
         }
 
     }

@@ -1,10 +1,7 @@
 package de.blankedv.andropanel;
 
-import static de.blankedv.andropanel.AndroPanelApplication.TAG;
-import static de.blankedv.andropanel.AndroPanelApplication.DEBUG;
-import static de.blankedv.andropanel.AndroPanelApplication.DIRECTORY;
-import static de.blankedv.andropanel.AndroPanelApplication.DEMO_LOCOS_FILE;
-import static de.blankedv.andropanel.AndroPanelApplication.INVALID_INT;
+import static de.blankedv.andropanel.AndroPanelApplication.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,11 +38,10 @@ public class ParseLocos {
 	 * @return true, if succeeds - false, if not.
 	 * 
 	 */
-	public static LocoList readLocosFromFile(Context context, String filename) {
+	public static void readLocosFromFile(Context context, String filename) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
-		LocoList mylist = new LocoList();
-		
+
 //		SharedPreferences prefs = PreferenceManager
 //				.getDefaultSharedPreferences(context);
 //		locosFilename = prefs.getString(KEY_LOCOS_FILE, DEMO_LOCOS_FILE);
@@ -55,7 +52,7 @@ public class ParseLocos {
 			Log.e(TAG, "ParserLocosException Exception - " + e1.getMessage());
 			Toast.makeText(context, "Parser Locos Exception - check file:"+filename, Toast.LENGTH_LONG)
 					.show();
-			return null;
+			return;
 		}
 		Document doc;
 
@@ -91,7 +88,7 @@ public class ParseLocos {
 
 					try {
 						doc = builder.parse(demoIs);
-						mylist = parseDoc(doc);
+						parseDoc(doc);
 					} catch (SAXException e) {
 						Log.e(TAG, "SAX Exception - " + e.getMessage());
 					}
@@ -100,7 +97,7 @@ public class ParseLocos {
 					fis = new FileInputStream(f);
 					try {
 						doc = builder.parse(fis);
-						mylist = parseDoc(doc);
+						parseDoc(doc);
 					} catch (SAXException e) {
 						Log.e(TAG, "SAX Exception - " + e.getMessage());
 					}
@@ -120,25 +117,25 @@ public class ParseLocos {
 
 			Toast.makeText(context, "ERROR:External storage not readable",
 					Toast.LENGTH_LONG).show();
-			return null;
+
 		}
 
-		return mylist;
+		return;
 	}
 
-	private static LocoList parseDoc(Document doc) {
+	private static void parseDoc(Document doc) {
 		// assemble new ArrayList of tickets.
 		//ArrayList<Loco> ls = new ArrayList<Loco>();
-		LocoList mylocolist = new LocoList();
+		locolist = new ArrayList<Loco>();
 		NodeList items;
 		Element root = doc.getDocumentElement();
 
 		items = root.getElementsByTagName("locolist");
 
-		mylocolist.name = parseName(items.item(0));
+		locolistName = parseName(items.item(0));
 		if (DEBUG)
 			Log.d(TAG, "config: " + items.getLength() + " locolists, name="
-					+ mylocolist.name);
+					+ locolistName);
 
 		// look for Locos
 		items = root.getElementsByTagName("loco");
@@ -147,11 +144,11 @@ public class ParseLocos {
 		for (int i = 0; i < items.getLength(); i++) {
 			Loco l = parseLoco(items.item(i));
 			if (l != null) {
-				mylocolist.locos.add(l);
+				locolist.add(l);
 			}
 		}
 
-		return mylocolist;
+		return;
 	}
 
 	private static Loco parseLoco(Node item) {
@@ -252,26 +249,5 @@ public class ParseLocos {
 			out.write(buffer, 0, read);
 		}
 	}
-	// private static int getValue(String s) {
-	// float b= Float.parseFloat(s);
-	// return (int)b;
-	// }
-
-	// private static String getConcatNodeValues(Node prop) {
-	// // behaves well for non-existing nodes and for node values which are
-	// // broken into several values because of special characters like '"'
-	// // needed for the android code - this problem only exists in
-	// // Android xml library and not on the PC !!
-	// if (prop.hasChildNodes()) { // false for optional attributes
-	// StringBuilder text = new StringBuilder();
-	// NodeList chars = prop.getChildNodes();
-	// for (int k=0;k<chars.getLength();k++){
-	// text.append(chars.item(k).getNodeValue());
-	// }
-	// return text.toString().trim();
-	// } else {
-	// return (""); // return empty string if empty
-	// }
-	// }
 
 }

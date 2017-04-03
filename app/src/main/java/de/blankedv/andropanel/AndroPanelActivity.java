@@ -124,7 +124,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 			@Override
 			public void run() {
 				counter++;
-				locolist.selectedLoco.timer();
+				selectedLoco.timer();
                 if (restartCommFlag) {
                     restartCommFlag = false;
                     startSXNetCommunication();
@@ -327,31 +327,31 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		int locoAddress = Integer.parseInt(prefs.getString(KEY_LOCO_ADR, "22"));  // last used loco address
 		String locolistName = prefs.getString(KEY_LOCOS_FILE,"-");
 		
-		locolist = ParseLocos.readLocosFromFile(this,locolistName);
+		ParseLocos.readLocosFromFile(this,locolistName);
 		
 		if (locolist == null) {
 			Toast.makeText(this, "could not read loco list xml file or errors in file", Toast.LENGTH_LONG ).show();;
 		} else {
 			// if last loco (from stored loco_address) is in list then use this loco
-			for (Loco loco : locolist.locos) {
+			for (Loco loco : locolist) {
 				if (loco.adr == locoAddress) {
-					locolist.selectedLoco = loco; // update from file
-					locolist.selectedLoco.initFromSX();
+					selectedLoco = loco; // update from file
+					selectedLoco.initFromSX();
 				}
 			}
 		
 		}
 		
-		if (locolist.selectedLoco == null) { // use first loco in list or use default
+		if (selectedLoco == null) { // use first loco in list or use default
 			if ( locolist.size() >= 1) {
-				locolist.selectedLoco = locolist.get(0);  // first loco in xml file
+				selectedLoco = locolist.get(0);  // first loco in xml file
 			} else {
 				// as a default use a "dummy loco" 
 				int locoMass = Integer
 						.parseInt(prefs.getString(KEY_LOCO_MASS, "3"));
 				String locoName = prefs.getString(KEY_LOCO_NAME, "default loco 22");
-				locolist.selectedLoco = new Loco(locoAddress, locoMass, locoName);
-				locolist.selectedLoco.initFromSX();
+				selectedLoco = new Loco(locoAddress, locoMass, locoName);
+				selectedLoco.initFromSX();
 			}
 		}
 	}
