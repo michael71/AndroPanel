@@ -40,6 +40,12 @@ public class Loco {
 		this.mass = 3 ;
 	}
 
+	public Loco(String name) {  // dummy loco
+		this.adr = 3;
+		this.name = name;
+		this.mass = 3 ;
+	}
+
 	public Loco(String name, int adr, int mass, Bitmap lbm) {
 
 		this.adr = adr;

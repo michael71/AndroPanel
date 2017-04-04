@@ -5,7 +5,7 @@ import static de.blankedv.andropanel.AndroPanelApplication.DIRECTORY;
 
 import static de.blankedv.andropanel.AndroPanelApplication.TAG;
 import static de.blankedv.andropanel.AndroPanelApplication.panelName;
-import static de.blankedv.andropanel.AndroPanelApplication.configFilename;
+import static de.blankedv.andropanel.AndroPanelApplication.locoConfigFilename;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class WriteRoutes {
 
 	public static boolean writeToXML(ArrayList<Route> routes) {
 
-		String routeFilename = "routes." + configFilename  /*Utils.getDateTime() + */ ;
+		String routeFilename = "routes." + locoConfigFilename  /*Utils.getDateTime() + */ ;
 		boolean mExternalStorageWriteable = false;
 		String state = Environment.getExternalStorageState();
 

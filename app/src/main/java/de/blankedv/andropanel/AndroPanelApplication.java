@@ -47,8 +47,8 @@ public class AndroPanelApplication extends Application {
     public static String panelName = "";
     public static ArrayList<Route> routes = new ArrayList<Route>();
 
+
     public static ArrayList<Loco> locolist = new ArrayList<Loco>();
-    public static String LocoName = "";
     public static Loco selectedLoco = null;
     public static String locolistName ="?";
 
@@ -107,12 +107,17 @@ public class AndroPanelApplication extends Application {
     public static final String DIRECTORY = "andropanel/";     // with trailing slash
     // panel config and loco config file (see preferences) are loaded from this directory
     // names must match "panel....." and "loco.....", resp.
-    public static String configFilename;
-    public static String locosFilename;
+
     public static final String DEMO_FILE = "panel-demo.xml";    // demo data in raw assets dir.
     public static final String DEMO_LOCOS_FILE = "locos-demo.xml";
+    public static final String DEFAULT_LOCOS_FILENAME = "locos.xml";
+    public static String locoConfigFilename = DEFAULT_LOCOS_FILENAME;
+    public static String configFilename = "panel.xml";
+
 
     public static boolean configHasChanged = false;   // store info whether config has changed
+    // if true, then a new config file is written at the end of the Activity
+    public static boolean locoConfigHasChanged = false;   // store info whether config has changed
     // if true, then a new config file is written at the end of the Activity
 
     public static final ArrayList<Integer> adrList = new ArrayList<Integer>();  // contains all needed SX channels

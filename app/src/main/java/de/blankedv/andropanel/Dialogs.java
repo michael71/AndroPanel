@@ -16,11 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static de.blankedv.andropanel.AndroPanelApplication.TAG;
-import static de.blankedv.andropanel.AndroPanelApplication.appContext;
-import static de.blankedv.andropanel.AndroPanelApplication.configHasChanged;
-import static de.blankedv.andropanel.AndroPanelApplication.locolist;
-import static de.blankedv.andropanel.AndroPanelApplication.selectedLoco;
+
+import static de.blankedv.andropanel.AndroPanelApplication.*;
 
 /**
  * Dialog function for selection of a new locomotive
@@ -33,7 +30,7 @@ public class Dialogs {
 
     private static int selLocoIndex;
     private static final int NOTHING = 99999;
-
+    private static final String NEW_LOCO_NAME = "+ NEUE LOK (3)";
 
     static void selectLocoDialog() {
 
@@ -44,11 +41,15 @@ public class Dialogs {
         String[] locosToSelect = new String[locolist.size() + 1];
 
         int index = 0;
+        int selection = 0;
         for (Loco l : locolist) {
             locosToSelect[index] = l.name + " (" + l.adr + ")";
+            if (l.equals(selectedLoco)) {
+                selection = index;
+            }
             index++;
         }
-        locosToSelect[index] = "+ NEUE LOK (3)";
+        locosToSelect[index] = NEW_LOCO_NAME ;
         final int NEW_LOCO = index;
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(appContext,
@@ -57,6 +58,7 @@ public class Dialogs {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selLoco.setAdapter(adapter);
+        selLoco.setSelection(selection);
 
         selLocoIndex = NOTHING;
         selLoco.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -81,7 +83,7 @@ public class Dialogs {
                     public void onClick(DialogInterface dialog, int id) {
                         if (selLocoIndex == NEW_LOCO) {
                             dialog.dismiss();
-                            Loco l = new Loco();
+                            Loco l = new Loco(NEW_LOCO_NAME);
                             locolist.add(l);
                             selectedLoco = l;
                             openEditDialog();
@@ -100,7 +102,7 @@ public class Dialogs {
                 .setNeutralButton("Edit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (selLocoIndex == NEW_LOCO) {
-                            Loco l = new Loco();
+                            Loco l = new Loco(NEW_LOCO_NAME);
                             locolist.add(l);
                             selectedLoco = l;
                         } else if (selLocoIndex != NOTHING) {
@@ -137,9 +139,11 @@ public class Dialogs {
         mass.setMinValue(1);
         mass.setMaxValue(5);
 
+        final boolean newLoco = (selectedLoco.getName().equals(NEW_LOCO_NAME));
 
         sxAddress.setValue(selectedLoco.adr);
         mass.setValue(selectedLoco.mass);
+        lName.setText(selectedLoco.getName());
 
         AlertDialog sxDialog = new AlertDialog.Builder(appContext)
                 //.setMessage("")
@@ -150,7 +154,14 @@ public class Dialogs {
                         //e.setSxAdr(sxAddress.getValue());
                         //e.setSxBit(sxBit.getValue());
 
-                        configHasChanged = true; // flag for saving the configuration later when pausing the activity
+                        locoConfigHasChanged = true; // flag for saving the configuration later when pausing the activity
+                        selectedLoco.adr = sxAddress.getValue();
+                        selectedLoco.mass = mass.getValue();
+                        selectedLoco.name = lName.getText().toString();
+                        if (newLoco) {
+                            locolist.add(selectedLoco);  // add the new, edited )
+                        }
+                        WriteLocos.writeToXML();
                         selectedLoco.initFromSX();
                         dialog.dismiss();
 

@@ -65,8 +65,8 @@ public class ParseConfig {
 		long time0=System.currentTimeMillis(); 
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context); 
-		configFilename = prefs.getString(KEY_CONFIG_FILE,DEMO_FILE);	
-		
+		configFilename = prefs.getString(KEY_CONFIG_FILE,DEMO_FILE);
+		Log.d(TAG,"configFilename="+configFilename);
 		
 		
 		try {
@@ -95,12 +95,12 @@ public class ParseConfig {
 
 		if (mExternalStorageAvailable) {
 			try{
-				File f = new File(Environment.getExternalStorageDirectory()+"/"+DIRECTORY+configFilename);
+				File f = new File(Environment.getExternalStorageDirectory()+"/"+DIRECTORY+ configFilename);
 
 				FileInputStream fis;
 				InputStream demoIs=null;
 				if (!f.exists())  {
-					Toast.makeText(context, "No Panel Config file found ("+DIRECTORY+configFilename+") - creating demo data", Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, "No Panel Config file found ("+DIRECTORY+ configFilename +") - creating demo data", Toast.LENGTH_SHORT).show();
 					demoIs = context.getAssets().open(DEMO_FILE);
 					configHasChanged = true;
 					try {
@@ -137,7 +137,7 @@ public class ParseConfig {
 			Toast.makeText(context, "ERROR:External storage not readable", Toast.LENGTH_LONG).show();
 			return false;
 		}
-		Log.d(MYTAG,"config loaded from "+configFilename+" in "+(System.currentTimeMillis()-time0)/1000f+" secs");
+		Log.d(MYTAG,"config loaded from "+ configFilename +" in "+(System.currentTimeMillis()-time0)/1000f+" secs");
 		
 		// calc min xy and max xy of panel
 		calcMinMax();
@@ -180,8 +180,13 @@ public class ParseConfig {
 		Element root= doc.getDocumentElement();
 		
 		items = root.getElementsByTagName("panel");
-		panelName = parsePanelName(items.item(0));
-		if (DEBUG) Log.d(MYTAG,"config: panel name="+panelName);
+		if (items.getLength() != 0) {
+			panelName = parsePanelName(items.item(0));
+			if (DEBUG) Log.d(MYTAG, "config: panel name=" + panelName);
+		} else {
+			panelName = "panel_1";
+			if (DEBUG) Log.d(MYTAG, "no panel name found, using: " + panelName);
+		}
 
 
 		// look for TrackElements  - this is the lowest layer

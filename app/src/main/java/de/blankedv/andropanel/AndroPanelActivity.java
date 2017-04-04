@@ -1,6 +1,5 @@
 package de.blankedv.andropanel;
 
-import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,12 +10,9 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -157,8 +153,12 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		// start
 		// sendQ.add(DISCONNECT);
 		((AndroPanelApplication) getApplication()).saveZoomEtc();
-		if (configHasChanged)
+		if (configHasChanged) {
 			WriteConfig.writeToXML();
+		}
+		if (locoConfigHasChanged) {
+			WriteLocos.writeToXML();
+		}
 	}
 
 	public void shutdownSXClient() {
@@ -196,22 +196,23 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		String cfFilename = prefs.getString(KEY_CONFIG_FILE, "-");
-		if (cfFilename != configFilename) { 
+		if (cfFilename != configFilename) {
 			// reload, if a new panel config file selected
 			if (DEBUG)
 				Log.d(TAG, "onResume - reloading panel config.");
-			ParseConfig.readConfigFromFile(this); // reload config File
+			ParseConfig.readConfigFromFile(this); // reload config File with scaling
 			((AndroPanelApplication) getApplication()).loadZoomEtc();
 			recalcScale();
 		} else {
 			((AndroPanelApplication) getApplication()).loadZoomEtc(); // reload
-																		// settings
+            // settings without scaling
 		}
 		String lfFilename = prefs.getString(KEY_LOCOS_FILE, "-");
-		if (lfFilename != locosFilename) { 
+		if (lfFilename != locoConfigFilename) {
 			// reload, if a new loco config file was selected
-			if (DEBUG)
-				Log.d(TAG, "onResume - reloading loco config file.");
+			if (DEBUG) {
+                Log.d(TAG, "onResume - reloading loco config file.");
+            }
 			loadLocos();
 		}
 	}
@@ -324,17 +325,19 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 	private void loadLocos() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		int locoAddress = Integer.parseInt(prefs.getString(KEY_LOCO_ADR, "22"));  // last used loco address
-		String locolistName = prefs.getString(KEY_LOCOS_FILE,"-");
+		int lastLocoAddress = Integer.parseInt(prefs.getString(KEY_LOCO_ADR, "22"));  // last used loco address
+
+        locoConfigFilename = prefs.getString(KEY_LOCOS_FILE, DEFAULT_LOCOS_FILENAME);
 		
-		ParseLocos.readLocosFromFile(this,locolistName);
+		ParseLocos.readLocosFromFile(this,locoConfigFilename);
 		
 		if (locolist == null) {
-			Toast.makeText(this, "could not read loco list xml file or errors in file", Toast.LENGTH_LONG ).show();;
+			Toast.makeText(this, "could not read loco list xml file or errors in file", Toast.LENGTH_LONG ).show();
+            Log.e(TAG,  "could not read loco list xml file or errors in file: "+locoConfigFilename);
 		} else {
 			// if last loco (from stored loco_address) is in list then use this loco
 			for (Loco loco : locolist) {
-				if (loco.adr == locoAddress) {
+				if (loco.adr == lastLocoAddress) {
 					selectedLoco = loco; // update from file
 					selectedLoco.initFromSX();
 				}
@@ -350,7 +353,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 				int locoMass = Integer
 						.parseInt(prefs.getString(KEY_LOCO_MASS, "3"));
 				String locoName = prefs.getString(KEY_LOCO_NAME, "default loco 22");
-				selectedLoco = new Loco(locoAddress, locoMass, locoName);
+				selectedLoco = new Loco(lastLocoAddress, locoMass, locoName);
 				selectedLoco.initFromSX();
 			}
 		}
