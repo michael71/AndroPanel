@@ -77,19 +77,18 @@ public class ParseLocos {
 				File f = new File(Environment.getExternalStorageDirectory()
 						+ "/" + DIRECTORY + filename);
 				Log.d(TAG, "Loading Loco config file: "+ Environment.getExternalStorageDirectory()
-						+ "/" + DIRECTORY
-						+ filename + ") - using demo locos");
+						+ "/" + DIRECTORY 	+ filename );
 				FileInputStream fis;
 				InputStream demoIs = null;
 				if (!f.exists()) {
 					Toast.makeText(
 							context,
 							"No Loco Config file found (" + DIRECTORY
-									+ filename + ") - using demo locos",
+									+ filename + ") - using " + DEMO_LOCOS_FILE,
 							Toast.LENGTH_SHORT).show();
 					demoIs = context.getAssets().open(DEMO_LOCOS_FILE);
 					Log.e(TAG, "No Loco Config file found (" + DIRECTORY
-							+ filename + ") - using demo locos");
+							+ filename + ") - using" + DEMO_LOCOS_FILE);
 					try {
 						doc = builder.parse(demoIs);
 						parseDoc(doc);
@@ -229,6 +228,7 @@ public class ParseLocos {
 	private static void copyDemoFile(Context context) {
 		InputStream in;
 		OutputStream out;
+		if (DEBUG) Log.d(TAG, "copying "+DEMO_LOCOS_FILE+ " to dir:" + DIRECTORY);
 		try {
 			in = context.getAssets().open(DEMO_LOCOS_FILE);
 			out = new FileOutputStream(

@@ -28,7 +28,7 @@ public class Loco {
 	public long lastToggleTime=0;
 	private long speedSetTime=0;   // last time the speed was set on interface
 
-	public Bitmap lbm;
+	public Bitmap lbm = null;
 	
 	private int massCounter=0;
 	
@@ -38,12 +38,19 @@ public class Loco {
 		this.adr = 22;
 		this.name = "Lok 22";
 		this.mass = 3 ;
+        lastToggleTime=0; // no toggle so far
+        // init other data from actual SX bus data
+        initFromSX();
+
 	}
 
 	public Loco(String name) {  // dummy loco
 		this.adr = 3;
 		this.name = name;
 		this.mass = 3 ;
+        lastToggleTime=0; // no toggle so far
+        // init other data from actual SX bus data
+        initFromSX();
 	}
 
 	public Loco(String name, int adr, int mass, Bitmap lbm) {
@@ -74,18 +81,7 @@ public class Loco {
 		// init other data from actual SX bus data
 		initFromSX();
 	}	
-	
-	public Loco(int adr, int mass) {
-		super();
-		this.adr = adr;
-		this.name = "Adr="+adr;
-		if ( (mass >=1) && (mass <=5) ) {
-			this.mass = mass;
-		} else {
-			this.mass = 3 ;
-		}
-		initFromSX();
-	}
+
 
 	public String getName() {
 		return name;
@@ -95,12 +91,7 @@ public class Loco {
 		return ""+adr;
 	}
 
-	public Bitmap getIcon() {
-		//Bitmap lbm = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.genloco);
 
-		return lbm;
-
-	}
 	public void initFromSX() {
 		updateLocoFromSX();
 		resetToBe();
