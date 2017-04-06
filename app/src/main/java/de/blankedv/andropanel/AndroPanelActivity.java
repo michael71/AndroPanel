@@ -327,7 +327,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 				.getDefaultSharedPreferences(this);
 		int lastLocoAddress = Integer.parseInt(prefs.getString(KEY_LOCO_ADR, "22"));  // last used loco address
 
-        locoConfigFilename = prefs.getString(KEY_LOCOS_FILE, DEFAULT_LOCOS_FILENAME);
+        locoConfigFilename = prefs.getString(KEY_LOCOS_FILE, DEMO_LOCOS_FILE);
 		
 		ParseLocos.readLocosFromFile(this,locoConfigFilename);
 		

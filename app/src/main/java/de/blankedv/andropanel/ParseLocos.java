@@ -238,6 +238,8 @@ public class ParseLocos {
 			copyFile(in, out);
 			in.close();
 			out.close();
+
+
 		} catch (IOException e) {
 			Log.e(TAG, "Failed to copy asset file: " + DEMO_LOCOS_FILE + " "
 					+ e.getMessage());

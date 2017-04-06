@@ -72,6 +72,16 @@ public class Dialogs {
             }
         });
 
+        /*selLoco.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                   int arg2, long arg3) {
+                int removeLocoIndex = arg2;
+                //locolist.remove(removeLocoIndex);
+                Log.d(TAG,"remove index "+removeLocoIndex);
+                return true;
+            }
+        }); funktioniert nicht wie erwartet */
+
 
         AlertDialog sxDialog = new AlertDialog.Builder(appContext)
                 //, R.style.Animations_GrowFromBottom ) => does  not work
@@ -149,7 +159,7 @@ public class Dialogs {
                 //.setMessage("")
                 .setCancelable(false)
                 .setView(selSxAddressView)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Speichern", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //e.setSxAdr(sxAddress.getValue());
                         //e.setSxBit(sxBit.getValue());
@@ -158,16 +168,27 @@ public class Dialogs {
                         selectedLoco.adr = sxAddress.getValue();
                         selectedLoco.mass = mass.getValue();
                         selectedLoco.name = lName.getText().toString();
-                        if (newLoco) {
-                            locolist.add(selectedLoco);  // add the new, edited )
-                        }
+
                         WriteLocos.writeToXML();
                         selectedLoco.initFromSX();
                         dialog.dismiss();
 
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Löschen", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if ((selLocoIndex != NOTHING)) {
+                            //Toast.makeText(appContext,"Loco-index="+selLocoIndex
+                            //		+" wurde selektiert", Toast.LENGTH_SHORT)
+                            //		.show();
+                            openDeleteDialog(selLocoIndex);
+                            selLocoIndex = 0;  // reset to an existing value
+                        }
+                        dialog.dismiss();
+
+                    }
+                })
+                .setNegativeButton("Zurück", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //dialog.cancel();
                         dialog.dismiss();
@@ -178,6 +199,9 @@ public class Dialogs {
     }
 
 
+    static void openDeleteDialog(int index) {
+        Log.d(TAG,"lok löschen Ja/nein "+ index);
+    }
 
 
     // selectSXAddressDialog is used when editing the address of panel elements

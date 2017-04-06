@@ -43,7 +43,7 @@ public class ParseConfig {
 	 public static int panelXmin, panelXmax, panelYmin, panelYmax;
 	 public static ArrayList<Route> routelist = new ArrayList<Route>();
 	 
-	 public static final String MYTAG = "ROUTE";
+	 public static final String MYTAG = "PARSECONFIG";
 	 private static int routenumber = 0;
 	 private static final int STEP = 2; // raster
 
@@ -110,7 +110,7 @@ public class ParseConfig {
 						Log.e(MYTAG,"SAX Exception - "+e.getMessage());
 					}
 				} else {
-                    Log.d(TAG, "reading config from: "+f.toString());
+                    Log.d(MYTAG, "reading config from: "+f.toString());
 					fis = new FileInputStream(f);
 					try {
 						doc = builder.parse(fis);
@@ -154,6 +154,7 @@ public class ParseConfig {
 		OutputStream out;
 		try {
 			in = context.getAssets().open(DEMO_FILE);
+			if (DEBUG) Log.d(MYTAG, "opening DEMO_FILE from assets");
 			out = new FileOutputStream(
 					Environment.getExternalStorageDirectory() + "/"
 							+ DIRECTORY   // DIR.. contains trailing slash
@@ -165,8 +166,9 @@ public class ParseConfig {
 			}
 			in.close();
 			out.close();
+			if (DEBUG) Log.d(MYTAG, "DEMO_FILE cpoied to andropanel directory");
 		} catch (IOException e) {
-			Log.e(TAG, "Failed to copy asset file: " + DEMO_FILE + " "
+			Log.e(MYTAG, "Failed to copy asset file: " + DEMO_FILE + " "
 					+ e.getMessage());
 		}
 

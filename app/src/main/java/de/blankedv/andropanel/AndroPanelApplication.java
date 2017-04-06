@@ -52,7 +52,7 @@ public class AndroPanelApplication extends Application {
     public static Loco selectedLoco = null;
     public static String locolistName ="?";
 
-    public static final boolean DEBUG = true;  // enable or disable debugging with file
+    public static final boolean DEBUG = false;  // enable or disable debugging with file
     public static boolean demoFlag = false;
 
     public static boolean restartCommFlag = false;
@@ -110,8 +110,8 @@ public class AndroPanelApplication extends Application {
 
     public static final String DEMO_FILE = "panel-demo.xml";    // demo data in raw assets dir.
     public static final String DEMO_LOCOS_FILE = "locos-demo.xml";
-    public static final String DEFAULT_LOCOS_FILENAME = "locos.xml";
-    public static String locoConfigFilename = DEFAULT_LOCOS_FILENAME;
+
+    public static String locoConfigFilename = "locos.xml";
     public static String configFilename = "panel.xml";
 
 
