@@ -26,6 +26,7 @@ public class LinePaints {
         height = metrics.heightPixels;
         Log.d(TAG, "LinePaint init - w=" + width + " h=" + height);
 
+        reinitPaints = false;
 
         linePaint = new Paint();
         linePaint.setColor(Color.WHITE);
@@ -129,12 +130,12 @@ public class LinePaints {
         sxAddressBGPaint.setColor(Color.DKGRAY);
         sxAddressBGPaint.setAlpha(175);
 
-        rimPaint = new Paint();
+        /*rimPaint = new Paint();
         rimPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         rimPaint.setShader(new LinearGradient(0.0f, 0.0f, 500f, 400f,
                 Color.rgb(0xf0, 0xf5, 0xf0),
                 Color.rgb(0x30, 0x31, 0x30),
-                Shader.TileMode.CLAMP));
+                Shader.TileMode.CLAMP)); */
 
         majorTick = new Paint();
         majorTick.setColor(Color.BLACK);
@@ -172,12 +173,12 @@ public class LinePaints {
         rimCirclePaint.setColor(Color.argb(0x4f, 0x33, 0x36, 0x33));
         rimCirclePaint.setStrokeWidth(0.005f);
 
-        rimShadowPaint = new Paint();
+        /*rimShadowPaint = new Paint();
         rimShadowPaint.setShader(new RadialGradient(0.5f, 0.5f, 400,
                 new int[]{0x00000000, 0x00000500, 0x50000500},
                 new float[]{0.96f, 0.96f, 0.99f},
                 Shader.TileMode.MIRROR));
-        rimShadowPaint.setStyle(Paint.Style.FILL);
+        rimShadowPaint.setStyle(Paint.Style.FILL); */
 
         tachoSpeedPaint = new TextPaint();
         tachoSpeedPaint.setColor(Color.BLACK);
@@ -268,6 +269,7 @@ public class LinePaints {
         bgPaint.setStrokeCap(Paint.Cap.BUTT);
 
         if (selectedStyle.equals("DE")) {
+            BG_COLOR = Color.LTGRAY;
             linePaint.setColor(Color.BLACK);
             signalLine.setColor(Color.BLACK);
             linePaint2.setColor(Color.BLACK);
@@ -276,12 +278,12 @@ public class LinePaints {
             rasterPaint.setDither(true);
             greyPaint.setColor(Color.GRAY);
             whitePaint.setColor(Color.BLACK);
-            BG_COLOR = Color.LTGRAY;
             bgPaint.setColor(BG_COLOR);
             addressPaint.setColor(Color.YELLOW);
             addressBGPaint.setColor(Color.DKGRAY);
             panelNamePaint.setColor(Color.BLACK);
         } else if (selectedStyle.equals("UK")) {
+            BG_COLOR = 0xff306630;
             linePaint.setColor(Color.BLACK);
             signalLine.setColor(Color.BLACK);
             linePaint2.setColor(Color.BLACK);
@@ -290,26 +292,25 @@ public class LinePaints {
             rasterPaint.setDither(true);
             greyPaint.setColor(Color.GRAY);
             whitePaint.setColor(Color.BLACK);
-            BG_COLOR = 0xff306630;
+
             bgPaint.setColor(BG_COLOR);
             addressPaint.setColor(Color.YELLOW);
             addressBGPaint.setColor(Color.DKGRAY);
             panelNamePaint.setColor(Color.BLACK);
-        } else  {  // US default
-            // default values of "andro panel"
-           /* linePaint.setColor(Color.WHITE);
-            signalLine.setColor(Color.BLACK);
-            linePaint2.setColor(Color.DKGRAY);
+        } else  {
+            BG_COLOR = Color.BLACK;
+            linePaint.setColor(Color.WHITE);
+            signalLine.setColor(Color.WHITE);
+            linePaint2.setColor(Color.WHITE);
             rasterPaint.setColor(Color.LTGRAY);
             rasterPaint.setAntiAlias(true);
             rasterPaint.setDither(true);
             greyPaint.setColor(Color.GRAY);
             whitePaint.setColor(Color.WHITE);
-            BG_COLOR = Color.BLACK;
             bgPaint.setColor(BG_COLOR);
             addressPaint.setColor(Color.YELLOW);
             addressBGPaint.setColor(Color.DKGRAY);
-            panelNamePaint.setColor(Color.BLACK);  */
+            panelNamePaint.setColor(Color.WHITE);
         }
     }
 

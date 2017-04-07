@@ -74,7 +74,7 @@ public class WriteLocos {
                 String fname = Environment.getExternalStorageDirectory()+"/"+DIRECTORY+ locoConfigFilename;
                 if (DEBUG) Log.d(TAG,"writing locos to "+fname);
                 fWriter = new FileWriter(fname);
-				String locosAsXML = LocosToXMLl(locolistName);
+				String locosAsXML = LocosToXMLString(locolistName);
 				fWriter.write(locosAsXML);
 				fWriter.flush();
 				fWriter.close();
@@ -110,7 +110,7 @@ public class WriteLocos {
 	<loco adr="44" name="CSX4416" mass="4"/><loco adr="27" name="ET423-1" mass="2"/>
 	</locolist></loco-config>
 	 */
-	private static String LocosToXMLl(String name){
+	private static String LocosToXMLString(String name){
 		XmlSerializer serializer = Xml.newSerializer();
 		StringWriter writer = new StringWriter();
 		try {
@@ -134,9 +134,7 @@ public class WriteLocos {
                 if (l.lbm != null) {
                     saveLocoBitmap(l.name, l.lbm);
                 }
-
 			}
-
 			serializer.endTag("", "locolist");
 			serializer.text("\n");
 			serializer.endTag("", "loco-config");
@@ -148,7 +146,7 @@ public class WriteLocos {
 	}
 
 	private static void saveLocoBitmap(String name, Bitmap bm) {
-        String filename = name+".png";
+        String filename = Environment.getExternalStorageDirectory()+"/"+DIRECTORY+name+".png";
         FileOutputStream out = null;
         if (DEBUG) Log.d(TAG,"writing loco bitmap: "+ filename);
         try {

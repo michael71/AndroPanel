@@ -186,6 +186,10 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		if (DEBUG)
 			Log.d(TAG, "onResume - AndroPanelActivity");
 
+		if (reinitPaints) {
+			LinePaints.init(appContext, prescale);
+		}
+
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		width = metrics.widthPixels;
@@ -353,7 +357,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 				int locoMass = Integer
 						.parseInt(prefs.getString(KEY_LOCO_MASS, "3"));
 				String locoName = prefs.getString(KEY_LOCO_NAME, "default loco 22");
-				selectedLoco = new Loco(lastLocoAddress, locoMass, locoName);
+				selectedLoco = new  Loco (locoName, lastLocoAddress, locoMass, null);
 				selectedLoco.initFromSX();
 			}
 		}

@@ -200,7 +200,44 @@ public class Dialogs {
 
 
     static void openDeleteDialog(int index) {
+
         Log.d(TAG,"lok löschen Ja/nein "+ index);
+
+        final Loco delLoco = locolist.get(index);
+
+        AlertDialog deleteDialog = new AlertDialog.Builder(appContext)
+                .setMessage("Lok "+delLoco.getName()+ " wirklich löschen")
+                .setCancelable(false)
+                .setPositiveButton("Löschen", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //e.setSxAdr(sxAddress.getValue());
+                        //e.setSxBit(sxBit.getValue());
+
+                        locolist.remove(delLoco);
+                        locoConfigHasChanged = true; // flag for saving the configuration later when pausing the activity
+                        if (locolist.size() >= 1) {
+                            selectedLoco = locolist.get(0);
+                            selectedLoco.initFromSX();
+                        } else {
+                            selectedLoco = new Loco();
+                            locolist.add(selectedLoco); // at least 1 loco should be in the list
+                         }
+                        WriteLocos.writeToXML();
+
+                        dialog.dismiss();
+
+                    }
+                })
+
+                .setNegativeButton("Zurück", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //dialog.cancel();
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        deleteDialog.show();
+        return;
     }
 
 

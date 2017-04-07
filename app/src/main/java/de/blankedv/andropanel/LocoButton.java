@@ -7,6 +7,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
+/**
+ * a button in the loco control area
+ */
 public class LocoButton {
     private float xrel, yrel;  // relative position in control area.
     private Bitmap bmON, bmOFF, bmDisabled;
@@ -123,7 +126,7 @@ public class LocoButton {
         // (x,y) = lower left start of text.
         c.drawBitmap(bmON, x, y, null);
         //c.drawRect(x+3,y+3,x+w+w-3,y+h+h-3, bg);
-        c.drawText("" + selectedLoco.adr, x + w * 0.6f, y + h * 1.42f, p);
+        c.drawText("" + value, x + w * 0.6f, y + h * 1.42f, p);
 
     }
 
