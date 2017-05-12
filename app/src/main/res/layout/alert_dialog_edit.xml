@@ -70,6 +70,14 @@
             android:layout_weight="1"
             android:scaleX="1.1"
             android:scaleY="1.1" />
+        <NumberPicker
+            android:id="@+id/vmax_picker"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:layout_weight="1"
+            android:scaleX="1.1"
+            android:scaleY="1.1" />
 
 
     </TableRow>

@@ -148,6 +148,10 @@ public class Dialogs {
         final NumberPicker mass = (NumberPicker) selSxAddressView.findViewById(R.id.picker2);
         mass.setMinValue(1);
         mass.setMaxValue(5);
+        final NumberPicker vmax = (NumberPicker) selSxAddressView.findViewById(R.id.vmax_picker);
+        vmax.setMinValue(30);
+        vmax.setMaxValue(300);
+
 
         final boolean newLoco = (selectedLoco.getName().equals(NEW_LOCO_NAME));
 
@@ -168,7 +172,7 @@ public class Dialogs {
                         selectedLoco.adr = sxAddress.getValue();
                         selectedLoco.mass = mass.getValue();
                         selectedLoco.name = lName.getText().toString();
-
+                        selectedLoco.vmax = 10*(vmax.getValue() / 10);
                         WriteLocos.writeToXML();
                         selectedLoco.initFromSX();
                         dialog.dismiss();
