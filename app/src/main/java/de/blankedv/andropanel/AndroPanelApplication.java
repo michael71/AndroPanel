@@ -38,6 +38,8 @@ import java.util.concurrent.BlockingQueue;
  */
 public class AndroPanelApplication extends Application {
 
+    public static final boolean DEBUG = false;  // enable or disable debugging with file
+
     public static int width, height;
     public static final String TAG = "AndroPanelActivity";
     public static final boolean DISABLE_THROTTLE = false;
@@ -52,7 +54,7 @@ public class AndroPanelApplication extends Application {
     public static Loco selectedLoco = null;
     public static String locolistName ="?";
 
-    public static final boolean DEBUG = false;  // enable or disable debugging with file
+
     public static boolean demoFlag = false;
 
     public static boolean restartCommFlag = false;
@@ -144,7 +146,7 @@ public class AndroPanelApplication extends Application {
     public static Paint bgPaint, sxAddressBGPaint;
     public static TextPaint sxAddressPaint, xyPaint, panelNamePaint;  // used for displaying SX address on panel and for panel Name
 
-
+    public static boolean reinitPaints = false;
 
     public static final int RASTER = (int) (20 * prescale);   // raster points with xx pixels
     public static final int TURNOUT_LENGTH = 10;  // NOT to be prescaled

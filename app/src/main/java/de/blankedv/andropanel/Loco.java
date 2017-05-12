@@ -68,21 +68,6 @@ public class Loco {
 		initFromSX();
 	}
 
-	public Loco(int adr, int mass, String desc) {
-		super();
-		this.adr = adr;
-		this.name = desc;
-		if ( (mass >=1) && (mass <=5) ) {
-			this.mass = mass;
-		} else {
-			this.mass = 3 ;
-		}
-		lastToggleTime=0; // no toggle so far
-		// init other data from actual SX bus data
-		initFromSX();
-	}	
-
-
 	public String getName() {
 		return name;
 	}
@@ -255,8 +240,11 @@ public class Loco {
 
 	}
 
-	
 
+	public String longString() {
+		String s = name+" ("+adr+")(m="+mass+")";
+		return s;
+	}
 	
 	
 }

@@ -92,6 +92,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             selectedStyle = sharedPreferences.getString(KEY_STYLE_PREF, "US");
             Log.d(TAG, "selectedStyle = " + selectedStyle);
             selectStylePref.setSummary("current selected style is " + selectedStyle);
+			reinitPaints = true;
         }
 
 	}

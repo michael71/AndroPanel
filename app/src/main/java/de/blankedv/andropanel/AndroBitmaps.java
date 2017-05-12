@@ -32,7 +32,7 @@ public class AndroBitmaps {
 		bitmaps.put("reddot", BitmapFactory.decodeResource(resources, R.drawable.reddot));
 		bitmaps.put("greydot", BitmapFactory.decodeResource(resources, R.drawable.greydot));
 
-		bitmaps.put("loco", BitmapFactory.decodeResource(resources, R.drawable.loco_s));
+		bitmaps.put("genloco_s", BitmapFactory.decodeResource(resources, R.drawable.genloco_s));
 		
 		bitmaps.put("loco1", BitmapFactory.decodeResource(resources, R.drawable.f7_2_s));
 		bitmaps.put("loco0", BitmapFactory.decodeResource(resources, R.drawable.f7_2_l));

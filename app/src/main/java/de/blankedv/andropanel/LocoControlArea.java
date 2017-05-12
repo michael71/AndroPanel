@@ -101,6 +101,7 @@ public final class LocoControlArea {
 			 	bitmaps.get("func1"),
 			 	bitmaps.get("func0"));
 		adrBtn = new LocoButton(0.91f,0.5f);  // only text.
+		//adrBtn = new LocoButton(0.91f,0.5f,bitmaps.get("genloco_s"));
 
 		incrSpeedBtn = new LocoButton(0.97f,0.52f,bitmaps.get("incr"));
 		decrSpeedBtn = new LocoButton(0.03f,0.52f,bitmaps.get("decr"));
@@ -148,7 +149,7 @@ public final class LocoControlArea {
 		int xtext =  (int)(canvasWidth*(X_LOCO_MID+X_LOCO_RANGE*0.9f));
 		canvas.drawText(locoSpeed(),xtext, ySpeed+32, paintLocoSpeedTxt);
 		xtext =  (int)(canvasWidth*(X_LOCO_MID-X_LOCO_RANGE*0.9f));
-		canvas.drawText(nameText(),xtext, ySpeed+32, paintLocoSpeedTxt);
+		canvas.drawText(selectedLoco.longString(),xtext, ySpeed+32, paintLocoSpeedTxt);
 		
 		if (enableEdit) canvas.drawText("Edit", (int)(canvas.getWidth()*0.36f), ySpeed*0.8f, editPaint);
 		if (demoFlag) canvas.drawText("Demo", (int)(canvas.getWidth()*0.28f), ySpeed*0.8f, demoPaint);
@@ -174,10 +175,7 @@ public final class LocoControlArea {
 		return ""+s;
 	}
 
-	private String nameText() {
-		String s = selectedLoco.name+" (m="+selectedLoco.mass+")";
-		return s;
-	}
+
 
 	public void checkSpeedMove(float xt, float yt) {
 		// check slider
