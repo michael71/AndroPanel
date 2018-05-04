@@ -38,7 +38,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class AndroPanelApplication extends Application {
 
-    public static final boolean DEBUG = false;  // enable or disable debugging with file
+    public static final boolean DEBUG = true;  // enable or disable debugging with file
 
     public static int width, height;
     public static final String TAG = "AndroPanelActivity";

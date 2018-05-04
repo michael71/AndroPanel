@@ -55,7 +55,7 @@ public class WriteRoutes {
 						Environment.getExternalStorageDirectory() + "/"
 								+ DIRECTORY + routeFilename);
 				String content = writeXml(routes);
-				Log.d("ROUTE",content);
+				if (DEBUG) Log.d("ROUTE",content);
 				fWriter.write(content);
 				fWriter.flush();
 				fWriter.close();

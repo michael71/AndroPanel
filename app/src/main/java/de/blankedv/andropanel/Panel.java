@@ -338,20 +338,20 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		for (int i= 0; i<= vmax; i+=5) {
 			al = (float) (-135f+(i*270f/vmax));
 			phi = (float) (al*Math.PI/180.0f);
-			x1 = (float) (xc +rad*0.9*FloatMath.sin(phi));
-			x2 = (float) (xc +rad*FloatMath.sin(phi));
-			y1 = (float) (yc -rad*0.9*FloatMath.cos(phi));
-			y2 = (float) (yc -rad*FloatMath.cos(phi));
+			x1 = (float) (xc +rad*0.9*Math.sin((double)phi));
+			x2 = (float) (xc +rad*Math.sin((double)phi));
+			y1 = (float) (yc -rad*0.9*Math.cos(phi));
+			y2 = (float) (yc -rad*Math.cos(phi));
 			canvas.drawLine(x1,y1,x2,y2,minorTick);
 			//Log.d(TAG,"al="+al+" phi="+phi+"  x1,x2,y1,y2="+x1+x2+y1+y2);
 		}
 		for (int i= 0; i<= vmax; i+=20) {
 			al = (float) (-135f+(i*270f/vmax));
 			phi = (float) (al*Math.PI/180.0f);
-			x1 = (float) (xc +rad*0.8*FloatMath.sin(phi));
-			x2 = (float) (xc +rad*FloatMath.sin(phi));
-			y1 = (float) (yc -rad*0.8*FloatMath.cos(phi));
-			y2 = (float) (yc -rad*FloatMath.cos(phi));
+			x1 = (float) (xc +rad*0.8*Math.sin(phi));
+			x2 = (float) (xc +rad*Math.sin(phi));
+			y1 = (float) (yc -rad*0.8*Math.cos(phi));
+			y2 = (float) (yc -rad*Math.cos(phi));
 			canvas.drawLine(x1,y1,x2,y2,majorTick);
 			//Log.d(TAG,"al="+al+" phi="+phi+"  x1,x2,y1,y2="+x1+x2+y1+y2);
 			String txt=""+i;
@@ -361,8 +361,8 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		    float offX=(tb.right)/2.0f;
 		    float offY=(-tb.top)/2.0f;
 
-			canvas.drawText(txt, (float) (xc +rad*0.64*FloatMath.sin(phi)-offX), 
-					(float) (yc -rad*0.64*FloatMath.cos(phi)+offY),tachoSpeedPaint);
+			canvas.drawText(txt, (float) (xc +rad*0.64*Math.sin(phi)-offX),
+					(float) (yc -rad*0.64*Math.cos(phi)+offY),tachoSpeedPaint);
 		}
 
 		// speed zeiger
@@ -371,10 +371,10 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		al = (float) (0.1*al+0.9*oldAl); // low pass filter
 		oldAl=al;
 		phi = (float) (al*Math.PI/180.0f);
-		x1 = (float) (xc +rad*0.02*FloatMath.sin(phi));
-		x2 = (float) (xc +rad*0.85*FloatMath.sin(phi));
-		y1 = (float) (yc -rad*0.02*FloatMath.cos(phi));
-		y2 = (float) (yc -rad*0.85*FloatMath.cos(phi));
+		x1 = (float) (xc +rad*0.02*Math.sin(phi));
+		x2 = (float) (xc +rad*0.85*Math.sin(phi));
+		y1 = (float) (yc -rad*0.02*Math.cos(phi));
+		y2 = (float) (yc -rad*0.85*Math.cos(phi));
 	//	canvas.drawLine(x1+2,y1,x2+2,y2,tachoShadowPaint);
 		canvas.drawLine(x1,y1,x2,y2,minorTick);
     }
@@ -387,7 +387,8 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		float rx, ry, r; // relative to Zero
 		rx = mLastTouchX2 - xc;
 		ry = -mLastTouchY2 + yc;
-		r = FloatMath.sqrt(rx*rx+ry*ry);
+		float dist = (rx*rx+ry*ry);
+		r = (float)Math.sqrt(dist);
 		Log.d(TAG,"speed rx="+rx+" ry="+ry+" r="+r+" rad="+rad);;
 		if ((r > rad*0.8f) && (r < rad *1.1f)) {
 			float angle = (float) ((Math.atan2(ry,rx)/Math.PI)*180f);
