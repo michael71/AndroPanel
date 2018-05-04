@@ -47,7 +47,7 @@ public class ParseConfig {
 	 private static int routenumber = 0;
 	 private static final int STEP = 2; // raster
 
- /** 
+	/**
      * 
      * read all PanelElements from a configuration (XML) file
      * and add deducted turnouts if needed
@@ -183,11 +183,8 @@ public class ParseConfig {
 		
 		items = root.getElementsByTagName("panel");
 		if (items.getLength() != 0) {
-			panelName = parsePanelName(items.item(0));
+			parsePanelNode(items.item(0));
 			if (DEBUG) Log.d(MYTAG, "config: panel name=" + panelName);
-		} else {
-			panelName = "panel_1";
-			if (DEBUG) Log.d(MYTAG, "no panel name found, using: " + panelName);
 		}
 
 
@@ -297,17 +294,17 @@ public class ParseConfig {
 			if (theAttribute.getNodeName().equals("name")) {
 				pe.name=theAttribute.getNodeValue();
 			} else if (theAttribute.getNodeName().equals("x")) {
-				pe.x=Integer.parseInt(theAttribute.getNodeValue());
+				pe.x=Integer.parseInt(theAttribute.getNodeValue()) + peOffsetX;
 			} else if (theAttribute.getNodeName().equals("y")) {
-				pe.y=Integer.parseInt(theAttribute.getNodeValue());
+				pe.y=Integer.parseInt(theAttribute.getNodeValue()) + peOffsetY;
 			} else if (theAttribute.getNodeName().equals("x2")) {
-				pe.x2=Integer.parseInt(theAttribute.getNodeValue());
+				pe.x2=Integer.parseInt(theAttribute.getNodeValue()) + peOffsetX;
 			} else if (theAttribute.getNodeName().equals("y2")) {
-				pe.y2=Integer.parseInt(theAttribute.getNodeValue());
+				pe.y2=Integer.parseInt(theAttribute.getNodeValue())  + peOffsetY;
 			} else if (theAttribute.getNodeName().equals("xt")) {
-				pe.xt=Integer.parseInt(theAttribute.getNodeValue()); 
+				pe.xt=Integer.parseInt(theAttribute.getNodeValue())  + peOffsetX;
 			} else if (theAttribute.getNodeName().equals("yt")) {
-				pe.yt=Integer.parseInt(theAttribute.getNodeValue());
+				pe.yt=Integer.parseInt(theAttribute.getNodeValue())  + peOffsetY;
 			} else if (theAttribute.getNodeName().equals("sxadr")) {
 				pe.setSxAdr(Integer.parseInt(theAttribute.getNodeValue()));
 			} else if (theAttribute.getNodeName().equals("sxbit")) {
@@ -323,19 +320,26 @@ public class ParseConfig {
 
 	}
 	
-	private static String parsePanelName(Node item) {					
+	private static void parsePanelNode(Node item) {
 		NamedNodeMap attributes = item.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
 			Node theAttribute = attributes.item(i);
 			if (DEBUG) Log.d(MYTAG,theAttribute.getNodeName() + "=" + theAttribute.getNodeValue());
 				
 			if (theAttribute.getNodeName().equals("name")) {
-				String name=theAttribute.getNodeValue();
-				return name;
-				
-			}
+				panelName=theAttribute.getNodeValue();
+                if (DEBUG) Log.d(MYTAG,"(panel) name = "+panelName);
+			} else if (theAttribute.getNodeName().equals("offsetX")) {
+                int x =Integer.parseInt(theAttribute.getNodeValue());
+                peOffsetX = Math.round(x/20) * 20;
+                if (DEBUG) Log.d(MYTAG,"(pe)OffsetX = "+peOffsetX);
+            }  else if (theAttribute.getNodeName().equals("offsetY")) {
+                int y =Integer.parseInt(theAttribute.getNodeValue());
+                peOffsetY = Math.round(y/20) * 20;
+                if (DEBUG) Log.d(MYTAG,"(pe)OffsetY = "+peOffsetY);
+            }
 		}
-		return "";
+
 	}
 	
 	private static SensorElement parseSensor(Node item) {
@@ -350,13 +354,13 @@ public class ParseConfig {
 				if (theAttribute.getNodeName().equals("name")) {
 					pe.name=theAttribute.getNodeValue();
 				} else if (theAttribute.getNodeName().equals("x")) {
-					pe.x=getValue(theAttribute.getNodeValue());
+					pe.x=getValue(theAttribute.getNodeValue())  + peOffsetX;
 				} else if (theAttribute.getNodeName().equals("y")) {
-					pe.y=getValue(theAttribute.getNodeValue());
+					pe.y=getValue(theAttribute.getNodeValue())  + peOffsetY;
 				} else if (theAttribute.getNodeName().equals("x2")) {
-					pe.x2=getValue(theAttribute.getNodeValue());
+					pe.x2=getValue(theAttribute.getNodeValue())  + peOffsetX;
 				} else if (theAttribute.getNodeName().equals("y2")) {
-					pe.y2=getValue(theAttribute.getNodeValue());
+					pe.y2=getValue(theAttribute.getNodeValue())  + peOffsetY;
 				} else if (theAttribute.getNodeName().equals("icon")) {
 					pe.setType(theAttribute.getNodeValue()); 
 				} else if (theAttribute.getNodeName().equals("sxadr")) {
@@ -384,9 +388,9 @@ public class ParseConfig {
 			if (theAttribute.getNodeName().equals("name")) {
 				pe.name=theAttribute.getNodeValue();
 			} else if (theAttribute.getNodeName().equals("x")) {
-				pe.x=getValue(theAttribute.getNodeValue());
+				pe.x=getValue(theAttribute.getNodeValue())  + peOffsetX;;
 			} else if (theAttribute.getNodeName().equals("y")) {
-				pe.y=getValue(theAttribute.getNodeValue());
+				pe.y=getValue(theAttribute.getNodeValue())  + peOffsetY;;
 			}  else {
 				if (DEBUG) Log.d(MYTAG,"unknown attribute "+theAttribute.getNodeName()+" in config file");
 			}
@@ -412,13 +416,13 @@ public class ParseConfig {
 			Node theAttribute = attributes.item(i);
 			// if (DEBUG) Log.d(MYTAG,theAttribute.getNodeName() + "=" + theAttribute.getNodeValue());
 			if (theAttribute.getNodeName().equals("x")) {
-				pe.x=getValue(theAttribute.getNodeValue());
+				pe.x=getValue(theAttribute.getNodeValue())  + peOffsetX;
 			} else if (theAttribute.getNodeName().equals("y")) {
-				pe.y=getValue(theAttribute.getNodeValue());
+				pe.y=getValue(theAttribute.getNodeValue())  + peOffsetY;
 			} else if (theAttribute.getNodeName().equals("x2")) {
-				pe.x2=getValue(theAttribute.getNodeValue());
+				pe.x2=getValue(theAttribute.getNodeValue()) + peOffsetX;
 			} else if (theAttribute.getNodeName().equals("y2")) {
-				pe.y2=getValue(theAttribute.getNodeValue());
+				pe.y2=getValue(theAttribute.getNodeValue())  + peOffsetY;
 			} else {
 				if (DEBUG) Log.d(MYTAG,"unknown attribute "+theAttribute.getNodeName()+" in config file");
 			}

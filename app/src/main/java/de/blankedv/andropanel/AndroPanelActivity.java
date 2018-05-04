@@ -190,12 +190,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 			LinePaints.init(appContext, prescale);
 		}
 
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		width = metrics.widthPixels;
-		height = metrics.heightPixels;
-		if (DEBUG)
-			Log.i(TAG, "metrics - w=" + width + "  h=" + height);
+
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
@@ -312,6 +307,13 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 
 	private void recalcScale() {
 		Float sc;
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		int width = metrics.widthPixels;
+		int height = metrics.heightPixels;
+		if (DEBUG)
+			Log.i(TAG, "metrics - w=" + width + "  h=" + height);
+
 		sc = (width * 0.4f) / ((panelXmax - panelXmin) * 1.0f);
 		// Don't let the object get too small or too large.
 		scale = Math.max(0.4f, Math.min(sc, 3.0f));
@@ -320,8 +322,8 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		// for y we need to correct for the upper 20% of the display which is
 		// control area
 		// and not scaled
-		yoff = ((height * 0.8f - (panelYmax - panelYmin) * scale * prescale)) / 2
-				+ height / (10 * scale * prescale);
+		yoff = (((height * 0.8f) - ((panelYmax - panelYmin) * scale * prescale)) / 2)
+				+ (height / (10 * scale * prescale));
 
 		Log.d(TAG, "new scale=" + scale + " xoff=" + xoff + " yoff=" + yoff);
 	}

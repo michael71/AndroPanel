@@ -38,15 +38,14 @@ import java.util.concurrent.BlockingQueue;
  */
 public class AndroPanelApplication extends Application {
 
-    public static final boolean DEBUG = true;  // enable or disable debugging with file
+    public static final boolean DEBUG = false;  // enable or disable debugging with file
 
-    public static int width, height;
     public static final String TAG = "AndroPanelActivity";
     public static final boolean DISABLE_THROTTLE = false;
 
     public static ArrayList<PanelElement> panelElements = new ArrayList<PanelElement>();
 
-    public static String panelName = "";
+    public static String panelName = "panel_1";
     public static ArrayList<Route> routes = new ArrayList<Route>();
 
 
@@ -136,6 +135,9 @@ public class AndroPanelApplication extends Application {
     // all Paints and x/y-s are scaled before drawing
     public static float xoff = 10 * prescale;
     public static float yoff = 50 * prescale;
+    public static int peOffsetX = 0;  // this number will be added to the X-values of the Panel Elements
+    public static int peOffsetY = 0;  // this number will be added to the Y-values of the Panel Elements
+
 
     // define Paints
     public static Paint linePaint, linePaint2, rasterPaint, circlePaint, signalLine, yellowPaint, yellowSignal, greenPaint, greenSignal, redSignal;

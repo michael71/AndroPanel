@@ -270,7 +270,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 			Matrix matrix = new Matrix();
 			matrix.postScale(scale, scale);
-			matrix.postTranslate(xoff, yoff);
+			matrix.postTranslate(xoff, yoff );
 
 			for (PanelElement e : panelElements) {
 				e.doDraw(myCanvas);
