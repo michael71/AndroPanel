@@ -218,8 +218,11 @@ public class AddLocoActivity extends Activity{
 		case SELECT_IMAGE :
 			if (resultCode == Activity.RESULT_OK) {
 				Uri selectedImage = data.getData();
-				if (DEBUG) Log.d(TAG, "image selected:"+selectedImage.toString());
-				if (DEBUG) Log.d(TAG,"image selected:"+selectedImage.toString());
+				if (selectedImage != null ) {
+					if (DEBUG) Log.d(TAG, "image selected:" + selectedImage.toString());
+				} else {
+				    if (DEBUG) Log.d(TAG,"data.getData() is null (in selectedI)");
+				}
 				try {
 					// if image larger than needed, sample down first.
 					// 1. Decode ONLY image size

@@ -41,10 +41,11 @@ public class WriteLocos {
      * @return true, if succeeds - false, if not.
      */
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static boolean writeToXML() {
 
 		
-		boolean mExternalStorageWriteable = false;
+		boolean mExternalStorageWriteable;
 		String state = Environment.getExternalStorageState();
 
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -61,7 +62,8 @@ public class WriteLocos {
 		if (mExternalStorageWriteable) {
             try {
             	File dir = new File(Environment.getExternalStorageDirectory(),DIRECTORY);
-            	dir.mkdir();  // make DIRECTORY - if needed
+				//noinspection ResultOfMethodCallIgnored
+				dir.mkdir();  // make DIRECTORY - if needed
             	File from = new File(Environment.getExternalStorageDirectory(),DIRECTORY+ locoConfigFilename);
             	String suffix = "bak"; //Utils.getDateTime();
             	File to = new File(Environment.getExternalStorageDirectory(),DIRECTORY+ locoConfigFilename +"."+suffix);

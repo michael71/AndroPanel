@@ -27,6 +27,7 @@ public class Route {
 		this.nTurnout = 0;
 	}
 	
+	@SuppressWarnings("MethodDoesntCallSuperMethod")
 	public Route clone() {
 		// clone a route
 		Route clone = new Route(this.start);
@@ -57,7 +58,8 @@ public class Route {
 		this.stop = stop;
 	}
 	
-    public String toString () {
+    @SuppressWarnings("StringConcatenationInsideStringBufferAppend")
+	public String toString () {
     	StringBuilder sb= new StringBuilder();
 		sb.append("route from [" + start.x + "," + start.y
 				+ "] to [" + stop.x + "," + stop.y + "]\n");

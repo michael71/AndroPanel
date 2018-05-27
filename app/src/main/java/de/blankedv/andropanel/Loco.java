@@ -2,6 +2,7 @@ package de.blankedv.andropanel;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Message;
 import android.util.Log;
 import static de.blankedv.andropanel.AndroPanelApplication.*;
 
@@ -21,11 +22,11 @@ public class Loco {
 	
 	private int last_sx = 999;   // used to avoid resending
 	
-	public boolean lamp;
+	boolean lamp;
 	public boolean lamp_to_be;
-	public boolean function;
+	boolean function;
 	public boolean function_to_be;
-	public long lastToggleTime=0;
+	long lastToggleTime = 0;
 	private long speedSetTime=0;   // last time the speed was set on interface
 
 	public Bitmap lbm = null;
@@ -83,12 +84,9 @@ public class Loco {
 	}
 
     public boolean isForward() {
-        if (speed_act >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+		return speed_act >= 0;
     }
+
 	private void resetToBe() {
 		speed_to_be = speed_act = speed_from_sx;	
 		function_to_be = function;
@@ -130,12 +128,25 @@ public class Loco {
 			if (sx != last_sx) { // avoid sending the same message again
 				speedSetTime = System.currentTimeMillis();   // we are actively controlling the loco
 				last_sx = sx;
-				AndroPanelApplication.sendLocoData(sx);
+
+                if (demoFlag) {
+                    Message m = Message.obtain();
+                    m.what = SX_FEEDBACK_MESSAGE;
+                    m.arg1 = adr;
+                    m.arg2 = sx;
+                    handler.sendMessage(m);  // send SX data to UI Thread via Message
+                    return;
+                }
+
+				String command = "S "+adr+" "+sx;
+				Boolean success = sendQ.offer(command);
+				if ( !success  && (DEBUG)) Log.d(TAG,"loco sendCommand failed, queue full")	;
+
 			}
 		}
 	}
 	
-	public synchronized void massSimulation() {  
+	private synchronized void massSimulation() {
 		// depending on "mass", do more or less often
 		if (massCounter < mass) {
 			massCounter ++;
@@ -205,7 +216,7 @@ public class Loco {
 
 	public void toggleLocoLamp() {
 		if ((System.currentTimeMillis() - lastToggleTime) > 250) {  // entprellen
-			if (lamp_to_be == true) {
+			if (lamp_to_be) {
 				lamp_to_be = false;
 			} else {
 				lamp_to_be = true;
@@ -218,7 +229,7 @@ public class Loco {
 	
 	public void toggleFunc() {
 		if ((System.currentTimeMillis() - lastToggleTime) > 250) {  // entprellen
-			if (function_to_be == true) {
+			if (function_to_be) {
 				function_to_be = false;
 			} else {
 				function_to_be = true;
@@ -229,7 +240,7 @@ public class Loco {
 		}
 	}
 	
-	public boolean isActive() {
+	private boolean isActive() {
 		// are the loco-controls touched in the last 5 seconds
 		if( ((System.currentTimeMillis() - speedSetTime) <5000) ||
 			((System.currentTimeMillis() - lastToggleTime) < 5000) ) {
@@ -242,8 +253,7 @@ public class Loco {
 
 
 	public String longString() {
-		String s = name+" ("+adr+")(m="+mass+")";
-		return s;
+		return name+" ("+adr+")(m="+mass+")";
 	}
 	
 	

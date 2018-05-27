@@ -39,6 +39,10 @@ import android.util.Log;
 import static de.blankedv.andropanel.AndroPanelApplication.*;
 
 /**
+ *
+ * NOT USED !!!
+ *
+ *
  * network threads for sending and receiving multicast messages over the network at
  * the LANBAHN port 27027 and the LANBAHN_GROUP 239.200.201.250
  *

@@ -41,7 +41,7 @@ import static de.blankedv.andropanel.Route.MAX_DEPTH;
 public class ParseConfig {
 
 	 public static int panelXmin, panelXmax, panelYmin, panelYmax;
-	 public static ArrayList<Route> routelist = new ArrayList<Route>();
+	 public static ArrayList<Route> routelist = new ArrayList<>();
 	 
 	 public static final String MYTAG = "PARSECONFIG";
 	 private static int routenumber = 0;
@@ -177,7 +177,7 @@ public class ParseConfig {
 
 	private static ArrayList<PanelElement> parseDoc(Document doc) {
 		// assemble new ArrayList of tickets.
-		ArrayList<PanelElement> pes = new ArrayList<PanelElement>();
+		ArrayList<PanelElement> pes = new ArrayList<>();
 		NodeList items ;
 		Element root= doc.getDocumentElement();
 		
@@ -255,7 +255,7 @@ public class ParseConfig {
                         t1 = (TurnoutElement)t;
                         found_first = true;
                     }
-                } else if (!found_second){
+                } else {
                     // search for second
                     if ((t.getType().equals("turnout")) && (t.x == ds.x) && (t.y == ds.y)) {
                         // second turnout found
@@ -481,7 +481,7 @@ public class ParseConfig {
 	private static ArrayList<Route> findRoutes() {
 
 		for (PanelElement startSensor : panelElements) {
-			if (startSensor.type == "sensor") {
+			if (startSensor.type.equals("sensor")) {
 
 				int x = startSensor.x;
 				int y = startSensor.y;
@@ -535,7 +535,7 @@ public class ParseConfig {
 	 */
 	private static PanelElement getTrack(int x, int y) {
 		for (PanelElement pe:panelElements) {
-			if (pe.type == "track") {
+			if (pe.type.equals("track")) {
 				if ((DEBUG) && (x> 800) && (x < 840 )&& ( y > 320) && (y< 340)) {
 					Log.d(MYTAG,"getTrack x,y=[:"+x+", "+y+" mult "+(pe.x2-pe.x) +" "
 				+ (y-pe.y) + "==?" + (pe.y2-pe.y) + " "+ (x-pe.x));
@@ -608,7 +608,7 @@ public class ParseConfig {
 
 			// run through all turnouts to find a matching one
 			for (PanelElement te : panelElements) {
-				if (te.type == "turnout") {
+				if (te.type.equals("turnout")) {
 					// Weiche entgegen Fahrtrichung? nach (xc,yc) und (xt,yt) suchen
 					if ((x == te.x2) && (y == te.y2)) {  // end of closed position
 						// we found a turnout and it should be closed
@@ -678,7 +678,7 @@ public class ParseConfig {
 		boolean foundNewTrack = false;
 		for (PanelElement te : panelElements) {
 			
-			if ((te.type == "track") && (te.x == x) && (te.y == y)) {
+			if ((te.type.equals("track")) && (te.x == x) && (te.y == y)) {
 				Log.d(MYTAG, "new track starts here!");
 				// calculate slop and endX of this new track
 				SlopeEndX s2x = new SlopeEndX();
@@ -712,14 +712,14 @@ public class ParseConfig {
 	}
 	private static boolean isSensor(int x, int y) {
     	for (PanelElement se:panelElements) {
-    		if ( (se.type == "sensor") && (se.x == x) && (se.y == y)) return true;
+    		if ( (se.type.equals("sensor")) && (se.x == x) && (se.y == y)) return true;
     	}
     	return false;
     }
     
     private static PanelElement getSensor(int x, int y) {
        	for (PanelElement se:panelElements) {
-    		if ( (se.type == "sensor") && (se.x == x) && (se.y == y)) return se;
+    		if ( (se.type.equals("sensor")) && (se.x == x) && (se.y == y)) return se;
     	}
     	return null;
     	

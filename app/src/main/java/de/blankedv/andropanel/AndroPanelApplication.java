@@ -42,15 +42,14 @@ public class AndroPanelApplication extends Application {
     public static final boolean DEBUG = true;  // enable or disable debugging with file
 
     public static final String TAG = "AndroPanelActivity";
-    public static final boolean DISABLE_THROTTLE = false;
 
-    public static ArrayList<PanelElement> panelElements = new ArrayList<PanelElement>();
+    public static ArrayList<PanelElement> panelElements = new ArrayList<>();
 
     public static String panelName = "panel_1";
-    public static ArrayList<Route> routes = new ArrayList<Route>();
+    public static ArrayList<Route> routes = new ArrayList<>();
 
 
-    public static ArrayList<Loco> locolist = new ArrayList<Loco>();
+    public static ArrayList<Loco> locolist = new ArrayList<>();
     public static Loco selectedLoco = null;
     public static String locolistName ="?";
 
@@ -78,7 +77,6 @@ public class AndroPanelApplication extends Application {
     public static final String KEY_STYLE_PREF = "selectStylePref";
 
     public static final int SXNET_PORT = 4104;
-    public static final String SXNET_START_IP = "192.168.1.2";
     public static final int SX_FEEDBACK_MESSAGE = 1;
     public static final int LAHNBAHN_MESSAGE = 2;
     public static final int SX3PC_IP_MESSAGE = 3;
@@ -95,12 +93,11 @@ public class AndroPanelApplication extends Application {
     public static IncomingHandler handler;   //
 
     // connection state
-    public static SXnetClientThread client;
+
     public static long mLastMessage = 0;
 
-    public LanbahnThread lbClient;
-
-    public static final BlockingQueue<String> sendQ = new ArrayBlockingQueue<String>(50);
+    // in the sendQ all messages are queued and later sent via SXnetThread to SX_System
+    public static final BlockingQueue<String> sendQ = new ArrayBlockingQueue<>(50);
 
     public static String connString = "";
 
@@ -120,8 +117,8 @@ public class AndroPanelApplication extends Application {
     public static boolean locoConfigHasChanged = false;   // store info whether config has changed
     // if true, then a new config file is written at the end of the Activity
 
-    public static final ArrayList<Integer> adrList = new ArrayList<Integer>();  // contains all needed SX channels
-    public static final Hashtable<String, Bitmap> bitmaps = new Hashtable<String, Bitmap>();
+    public static final ArrayList<Integer> adrList = new ArrayList<>();  // contains all needed SX channels
+    public static final Hashtable<String, Bitmap> bitmaps = new Hashtable<>();
 
     public static boolean zoomEnabled;
     public static float scale = 1.0f;  // user selectable scaling of panel area
@@ -182,8 +179,8 @@ public class AndroPanelApplication extends Application {
 
 
         // initialize Lanbahn
-        lbClient = new LanbahnThread(getApplicationContext());
-        lbClient.start();
+        // NOT USED  lbClient = new LanbahnThread(getApplicationContext());
+        //  lbClient.start();
 
     }
 
@@ -256,7 +253,7 @@ public class AndroPanelApplication extends Application {
             if (e instanceof SXPanelElement) {
                 // add its address to list of interesting SX addresses
                 // only needed for active elements, not for tracks
-                int a = ((SXPanelElement) e).getSxAdr();
+                int a = e.getSxAdr();
                 if (!adrList.contains(a) && (a != INVALID_INT)) {
                     adrList.add(a);
                 }
@@ -267,9 +264,9 @@ public class AndroPanelApplication extends Application {
         if (!adrList.contains(selectedLoco.adr)) adrList.add(selectedLoco.adr);
 
         if (DEBUG) {
-            String adrL = "";
+            StringBuilder adrL = new StringBuilder();
             for (int a : adrList) {
-                adrL = adrL + " " + a;
+                adrL.append(" ").append(a);
             }
             Log.d(TAG, "adrlist=" + adrL);
         }
@@ -362,20 +359,6 @@ public class AndroPanelApplication extends Application {
         }
     }
 
-    /**
-     * send a byte of loco data to the SX-net client
-     *
-     * @param data
-     */
-    public static void sendLocoData(int data) {
-
-        if (client != null) {
-            client.sendCommand(selectedLoco.adr, data);
-            if (DEBUG)
-                Log.d(TAG, "sendCommand loco-adr=" + selectedLoco.adr + " data=" + data);
-        }
-
-    }
 
     public String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;

@@ -50,8 +50,8 @@ public class AboutActivity extends Activity {
 		versTv = (TextView)findViewById(R.id.version);
 		connTo = (TextView)findViewById(R.id.connected_to);
 		
-		int version = -1;
-		String vName="";
+		int version;
+		String vName;
 
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -69,7 +69,7 @@ public class AboutActivity extends Activity {
 			e.printStackTrace();
 		}
 		 
-		versTv.setText(vinfo.toString() + dsp);
+		versTv.setText(vinfo + dsp);
 		
 		if (connString.length() >0) { 
 			connTo.setText("connected to: "+connString);

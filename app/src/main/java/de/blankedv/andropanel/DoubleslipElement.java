@@ -10,7 +10,6 @@ import static de.blankedv.andropanel.AndroPanelApplication.DEBUG;
 import static de.blankedv.andropanel.AndroPanelApplication.INVALID_INT;
 import static de.blankedv.andropanel.AndroPanelApplication.TAG;
 import static de.blankedv.andropanel.AndroPanelApplication.bgPaint;
-import static de.blankedv.andropanel.AndroPanelApplication.client;
 import static de.blankedv.andropanel.AndroPanelApplication.drawSXAddresses;
 import static de.blankedv.andropanel.AndroPanelApplication.enableEdit;
 import static de.blankedv.andropanel.AndroPanelApplication.greenPaint;

@@ -37,12 +37,13 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 	Builder builder;
 
 	public static PopupWindow popUp;
-	public static LinearLayout layout;
+	LinearLayout layout;
 	TextView tv;
 	LayoutParams params;
 
 	Button but;
 
+    public SXnetClientThread client;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -148,6 +149,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		}
 	}
 
+
 	public void shutdownSXClient() {
 		Log.d(TAG, "AndroPanelActivity - shutting down SXnet Client.");
 		if (client != null)
@@ -182,7 +184,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		String cfFilename = prefs.getString(KEY_CONFIG_FILE, "-");
-		if (cfFilename != configFilename) {
+		if (!cfFilename.equals(configFilename)) {
 			// reload, if a new panel config file selected
 			if (DEBUG)
 				Log.d(TAG, "onResume - reloading panel config.");
@@ -194,7 +196,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
             // settings without scaling
 		}
 		String lfFilename = prefs.getString(KEY_LOCOS_FILE, "-");
-		if (lfFilename != locoConfigFilename) {
+		if (!lfFilename.equals(locoConfigFilename)) {
 			// reload, if a new loco config file was selected
 			if (DEBUG) {
                 Log.d(TAG, "onResume - reloading loco config file.");

@@ -31,10 +31,11 @@ public class WriteConfig {
      * @return true, if succeeds - false, if not.
      */
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static boolean writeToXML() {
 
 		
-		boolean mExternalStorageWriteable = false;
+		boolean mExternalStorageWriteable;
 		String state = Environment.getExternalStorageState();
 
 		if (Environment.MEDIA_MOUNTED.equals(state)) {

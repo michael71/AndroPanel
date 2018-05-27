@@ -20,7 +20,7 @@ public class ViewThread extends Thread {
 	 
 	    @Override
 	    public void run() {
-	        Canvas canvas = null;
+	        Canvas canvas;
 	        while (mRun) {
 	            canvas = mHolder.lockCanvas();
 	            if (canvas != null) {

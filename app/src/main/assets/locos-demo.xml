@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<!--suppress ALL -->
 <loco-config>
 <locolist name="demo-loco-list">
 <loco adr="22" name="Lok22" mass="2"/>

@@ -97,7 +97,7 @@ public class SXnetClientThread extends Thread {
 			// check send queue
 			if (!sendQ.isEmpty()) {
 	
-				String comm="";
+				String comm;
 				try {
 					comm = sendQ.take();
 					if (comm.length()>0) immediateSend(comm);
@@ -182,10 +182,8 @@ public class SXnetClientThread extends Thread {
 	 * 
 	 * in case the demoFlag is true, an echo will be sent back to UI Thread via a message handler
 	 * 
-	 * @param adr
-	 * @param data
 	 */
-	public void sendCommand(int adr, int data) {
+	/*public void sendCommand(int adr, int data) {
 		
 		if (DEBUG) Log.d(TAG,"sendCommand a="+adr+" d="+data+" shutd.="+shuttingDown+" clientTerm="+clientTerminated);
 		if (shutdownFlag || clientTerminated || (adr == INVALID_INT)) return;
@@ -201,11 +199,10 @@ public class SXnetClientThread extends Thread {
 		String command = "S "+adr+" "+data;
 		Boolean success = sendQ.offer(command);
 		if ((success == false) && (DEBUG)) Log.d(TAG,"sendCommand failed, queue full")	;
-	}
+	} */
 
 	private void immediateSend(String command) {
-		if (shutdownFlag || clientTerminated ) return;
-		if (out == null) {
+		if (shutdownFlag || clientTerminated ||  (out == null) ){
 			if (DEBUG) Log.d(TAG,"out=null, could not send: "+command);
 		} else {
 			try {	
@@ -243,10 +240,10 @@ public class SXnetClientThread extends Thread {
 		// to avoid crash if application has stopped but thread is still running
 		if (context == null) return; 
 		
-		String[] info = null;
+		String[] info;
 		msg=msg.toUpperCase();
 
-		int adr = ERROR;
+		int adr;
 		int data;
 
 		if( (msg.length() != 0) && 
@@ -284,7 +281,7 @@ public class SXnetClientThread extends Thread {
 	}
 
 	int getChannelFromString(String s) {
-		Integer channel=ERROR;
+		Integer channel;
 		try {
 			channel = Integer.parseInt(s);
 			if ( (channel >= 0 ) && (channel <= 127)) {
@@ -293,7 +290,7 @@ public class SXnetClientThread extends Thread {
 				channel = ERROR;
 			}
 		} catch (Exception e) {
-
+			channel=ERROR;
 		}
 		return channel;
 	}

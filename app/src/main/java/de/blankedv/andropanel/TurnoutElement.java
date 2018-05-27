@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint; 
 import android.graphics.Rect;
 import android.graphics.Paint.Style;
+import android.os.Message;
 import android.text.TextPaint;
 import android.util.Log;
 
@@ -100,7 +101,19 @@ public class TurnoutElement extends SXPanelElement {
 		}	
 		
 		state = STATE_UNKNOWN; // until updated via SX message
-		client.sendCommand(sxAdr,d);  // ==> send changed data over network to interface
+
+        if (demoFlag) {
+            Message m = Message.obtain();
+            m.what = SX_FEEDBACK_MESSAGE;
+            m.arg1 = sxAdr;
+            m.arg2 = d;
+            handler.sendMessage(m);  // send SX data to UI Thread via Message
+            return;
+        }
+        String command = "S "+sxAdr+" "+d;
+        Boolean success = sendQ.offer(command);
+        if (!success   &&  DEBUG ) Log.d(TAG,"turnout sendCommand failed, queue full")	;
+
 		if (DEBUG) Log.d(TAG,"toggle sxAdr "+sxAdr);
 	}
 

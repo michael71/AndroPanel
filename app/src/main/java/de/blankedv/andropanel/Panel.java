@@ -299,7 +299,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	private void drawRaster(Canvas canvas, int step) {
-		String txt="";
+		String txt;
 		for (int x = 0; x <= Math.min(canvas.getWidth(),panelXmax*2); x += step) {
 			for (int y = 0; y <= Math.min(canvas.getHeight(),panelYmax*2); y += step) {
 				// (RASTER*5)

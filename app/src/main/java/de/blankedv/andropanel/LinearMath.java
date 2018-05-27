@@ -14,14 +14,6 @@ public class LinearMath {
 		 * (c) 2007 Alexander Hristov. Use Freely (LGPL license). http://www.ahristov.com
 		 * (c) 2012 Michael Blank, for lines with endpoints
 		 *
-	   * @param x1 Point 1 of Line 1
-	   * @param y1 Point 1 of Line 1
-	   * @param x2 Point 2 of Line 1
-	   * @param y2 Point 2 of Line 1
-	   * @param x3 Point 1 of Line 2
-	   * @param y3 Point 1 of Line 2
-	   * @param x4 Point 2 of Line 2
-	   * @param y4 Point 2 of Line 2
 	   * @return Point where the segments intersect, or null if they don't
 	   */
 	  public static PanelElement trackIntersect(
@@ -83,10 +75,10 @@ public class LinearMath {
 	    				xt = xi+TURNOUT_LENGTH; 
 		    			yt = yi-TURNOUT_LENGTH; 
 	    			}
-	    			xc = xi+(int)(TURNOUT_LENGTH_LONG); 
+	    			xc = xi+ TURNOUT_LENGTH_LONG;
 	    			yc = yi;
 		    	} else {  // steigung == 0
-		    		xt = xi+(int)(TURNOUT_LENGTH_LONG); 
+		    		xt = xi+ TURNOUT_LENGTH_LONG;
 	    			yt = yi; 
 	    			if(f.y2>f.y) {  
 	    				xc = xi+TURNOUT_LENGTH; 
@@ -105,10 +97,10 @@ public class LinearMath {
 	    				xt = xi-TURNOUT_LENGTH; 
 		    			yt = yi+TURNOUT_LENGTH; 
 	    			}
-	    			xc = xi-(int)(TURNOUT_LENGTH_LONG); 
+	    			xc = xi- TURNOUT_LENGTH_LONG;
 	    			yc = yi;
 		    	} else {  // steigung == 0
-		    		xt = xi-(int)(TURNOUT_LENGTH_LONG); 
+		    		xt = xi- TURNOUT_LENGTH_LONG;
 	    			yt = yi; 
 	    			if(f.y2>f.y) {  
 	    				xc = xi-TURNOUT_LENGTH; 
@@ -127,7 +119,7 @@ public class LinearMath {
 	    				xt = xi+TURNOUT_LENGTH; 
 		    			yt = yi-TURNOUT_LENGTH; 
 	    			}
-	    			xc = xi+(int)(TURNOUT_LENGTH_LONG); 
+	    			xc = xi+ TURNOUT_LENGTH_LONG;
 	    			yc = yi;
 		    	} else {  // steigung == 0
 		    		xt = xi+TURNOUT_LENGTH_LONG; 
@@ -149,10 +141,10 @@ public class LinearMath {
 	    				xt = xi-TURNOUT_LENGTH; 
 		    			yt = yi+TURNOUT_LENGTH; 
 	    			}
-	    			xc = xi-(int)(TURNOUT_LENGTH_LONG); 
+	    			xc = xi- TURNOUT_LENGTH_LONG;
 	    			yc = yi;
 		    	} else {  // steigung == 0
-		    		xt = xi-(int)(TURNOUT_LENGTH_LONG); 
+		    		xt = xi- TURNOUT_LENGTH_LONG;
 	    			yt = yi; 
 	    			if(e.y2>e.y) {  
 	    				xc = xi-TURNOUT_LENGTH; 

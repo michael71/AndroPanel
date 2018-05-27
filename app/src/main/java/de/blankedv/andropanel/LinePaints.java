@@ -315,6 +315,6 @@ public class LinePaints {
     }
 
     private static float scaled(float w) {
-        return (float) (w * 2 * width / 1280);
+        return w * 2 * width / 1280;
     }
 }

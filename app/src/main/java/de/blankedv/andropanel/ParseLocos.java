@@ -56,7 +56,7 @@ public class ParseLocos {
 		}
 		Document doc;
 
-		boolean mExternalStorageAvailable = false;
+		boolean mExternalStorageAvailable;
 		String state = Environment.getExternalStorageState();
 
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -129,7 +129,7 @@ public class ParseLocos {
 	private static void parseDoc(Document doc) {
 		// assemble new ArrayList of tickets.
 		//ArrayList<Loco> ls = new ArrayList<Loco>();
-		locolist = new ArrayList<Loco>();
+		locolist = new ArrayList<>();
 		NodeList items;
 		Element root = doc.getDocumentElement();
 

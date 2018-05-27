@@ -52,7 +52,7 @@ public class Dialogs {
         locosToSelect[index] = NEW_LOCO_NAME ;
         final int NEW_LOCO = index;
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(appContext,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(appContext,
                 android.R.layout.simple_spinner_dropdown_item,
                 locosToSelect);
 
@@ -86,7 +86,7 @@ public class Dialogs {
         AlertDialog sxDialog = new AlertDialog.Builder(appContext)
                 //, R.style.Animations_GrowFromBottom ) => does  not work
                 //.setMessage("Lok auswählen - "+locolist.name)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setView(selSxAddressView)
                 .setPositiveButton("Auswählen", new DialogInterface.OnClickListener() {
 

@@ -46,7 +46,7 @@ public class SensorElement extends SXPanelElement {
 			// draw lamp type of sensor
 
 			// read data from SX bus and set bitmap accordingly
-			int h = 0, w = 0;
+			int h , w;
 			Bitmap bm;
 			StringBuilder bmName = new StringBuilder(type);
 			if (activated == false) {
@@ -64,14 +64,17 @@ public class SensorElement extends SXPanelElement {
 			}
 
 			bm = bitmaps.get(bmName.toString());
-			if (bm == null)
+			if (bm == null) {
 				Log.e(TAG,
 						"error, bitmap not found with name="
 								+ bmName.toString());
-			h = bm.getHeight() / 2;
-			w = bm.getWidth() / 2;
-			canvas.drawBitmap(bm, x * 2 - w, y * 2 - h, null); // center
-																				// bitmap
+
+			} else {
+				h = bm.getHeight() / 2;
+				w = bm.getWidth() / 2;
+				canvas.drawBitmap(bm, x * 2 - w, y * 2 - h, null); // center
+				// bitmap
+			}
 		}
 		if (drawSXAddresses)
 			doDrawSXAddresses(canvas);

@@ -33,7 +33,7 @@ public class WriteRoutes {
 	public static boolean writeToXML(ArrayList<Route> routes) {
 
 		String routeFilename = "routes." + configFilename  /*Utils.getDateTime() + */ ;
-		boolean mExternalStorageWriteable = false;
+		boolean mExternalStorageWriteable;
 		String state = Environment.getExternalStorageState();
 
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
