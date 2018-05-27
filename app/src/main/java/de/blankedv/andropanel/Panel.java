@@ -246,7 +246,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		locoControlArea.recalcGeometry();
 
 		panelNamePaint.setColor(Color.LTGRAY);
-		panelNamePaint.setTextSize((8.0f * prescale * width) / 1024);
+		panelNamePaint.setTextSize((16.0f * width) / 1024);
 		panelNamePaint.setStyle(Style.FILL);
 	}
 
@@ -309,12 +309,12 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 
 	private void drawRaster(Canvas canvas, int step) {
 		String txt="";
-		for (int x = 0; x <= Math.min(canvas.getWidth(),panelXmax*prescale); x += step) {
-			for (int y = 0; y <= Math.min(canvas.getHeight(),panelYmax*prescale); y += step) {
+		for (int x = 0; x <= Math.min(canvas.getWidth(),panelXmax*2); x += step) {
+			for (int y = 0; y <= Math.min(canvas.getHeight(),panelYmax*2); y += step) {
 				// (RASTER*5)
 				if ((drawXYValues) && (x%200 == RASTER) && (y%160 == RASTER) &&
-						(x <= panelXmax*prescale) && (y <= panelYmax*prescale)) {
-					txt=x/prescale+"/"+y/prescale;
+						(x <= panelXmax*2) && (y <= panelYmax*2)) {
+					txt=x/2+"/"+y/2;
 					float dx=xyPaint.measureText(txt);
 					canvas.drawText(txt, x-dx/2, y+4, xyPaint);
 				} else {

@@ -19,7 +19,7 @@ public class LinePaints {
     private static int height;
 
 
-    public static void init(Context context, float prescale) {
+    public static void init(Context context) {
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         width = metrics.widthPixels;
@@ -30,7 +30,7 @@ public class LinePaints {
 
         linePaint = new Paint();
         linePaint.setColor(Color.WHITE);
-        linePaint.setStrokeWidth(4.5f * prescale);
+        linePaint.setStrokeWidth(9f);
         linePaint.setAntiAlias(true);
         linePaint.setDither(true);
         linePaint.setStyle(Paint.Style.STROKE);
@@ -39,7 +39,7 @@ public class LinePaints {
 
         signalLine = new Paint();
         signalLine.setColor(Color.WHITE);
-        signalLine.setStrokeWidth(2.0f * prescale);
+        signalLine.setStrokeWidth(4.0f);
         signalLine.setAntiAlias(true);
         signalLine.setDither(true);
         signalLine.setStyle(Paint.Style.STROKE);
@@ -47,7 +47,7 @@ public class LinePaints {
 
         tachoPaint = new Paint();
         tachoPaint.setColor(Color.WHITE);
-        tachoPaint.setStrokeWidth(4.5f * prescale);
+        tachoPaint.setStrokeWidth(9f);
         tachoPaint.setAntiAlias(true);
         tachoPaint.setDither(true);
         tachoPaint.setStyle(Paint.Style.FILL);
@@ -55,7 +55,7 @@ public class LinePaints {
 
         linePaintRedDash = new Paint();
         linePaintRedDash.setColor(Color.RED);
-        linePaintRedDash.setStrokeWidth(3.5f * prescale);
+        linePaintRedDash.setStrokeWidth(7f);
         linePaintRedDash.setAntiAlias(true);
         linePaintRedDash.setDither(true);
         linePaintRedDash.setStyle(Paint.Style.STROKE);
@@ -67,7 +67,7 @@ public class LinePaints {
 
         linePaint2 = new Paint();
         linePaint2.setColor(Color.WHITE);
-        linePaint2.setStrokeWidth(4.5f * prescale);
+        linePaint2.setStrokeWidth(9f);
         linePaint2.setAntiAlias(true);
         linePaint2.setDither(true);
         linePaint2.setStyle(Paint.Style.STROKE);
@@ -88,7 +88,7 @@ public class LinePaints {
         greenPaint = new Paint();
         greenPaint.setColor(0xcc00ff00);
         greenPaint.setAntiAlias(true);
-        greenPaint.setStrokeWidth(4.5f * prescale);
+        greenPaint.setStrokeWidth(9f);
         greenPaint.setDither(true);
         greenPaint.setStyle(Paint.Style.STROKE);
         greenPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -98,7 +98,7 @@ public class LinePaints {
 
         redPaint = new Paint();
         redPaint.setColor(0xccff0000);
-        redPaint.setStrokeWidth(4.5f * prescale);
+        redPaint.setStrokeWidth(9f);
         redPaint.setAntiAlias(true);
         redPaint.setDither(true);
         redPaint.setStyle(Paint.Style.STROKE);
@@ -107,19 +107,19 @@ public class LinePaints {
         bgPaint = new Paint();
         bgPaint.setColor(BG_COLOR);
         bgPaint.setAntiAlias(true);
-        bgPaint.setStrokeWidth(3.8f * prescale);
+        bgPaint.setStrokeWidth(7.6f);
         bgPaint.setDither(true);
         bgPaint.setStyle(Paint.Style.STROKE);
         bgPaint.setStrokeCap(Paint.Cap.BUTT);
 
         sxAddressPaint = new TextPaint();
         sxAddressPaint.setColor(Color.YELLOW);
-        sxAddressPaint.setTextSize(7 * prescale);
+        sxAddressPaint.setTextSize(14);
         sxAddressPaint.setStyle(Style.FILL);
 
         xyPaint = new TextPaint();
         xyPaint.setColor(Color.GRAY);
-        xyPaint.setTextSize(6 * prescale);
+        xyPaint.setTextSize(12);
 
         rasterPaint = new Paint();
         rasterPaint.setColor(Color.LTGRAY);
@@ -160,12 +160,12 @@ public class LinePaints {
         circlePaint.setColor(0x88ff2222);
         circlePaint.setAntiAlias(true);
         circlePaint.setDither(true);
-        tachoOutsideLine = new Paint();
+        /*tachoOutsideLine = new Paint();
         tachoOutsideLine.setColor(Color.BLACK);
         tachoOutsideLine.setAntiAlias(true);
         tachoOutsideLine.setStrokeWidth(scaled(0.6f));
         tachoOutsideLine.setDither(true);
-        tachoOutsideLine.setStyle(Paint.Style.STROKE);
+        tachoOutsideLine.setStyle(Paint.Style.STROKE); */
 
         rimCirclePaint = new Paint();
         rimCirclePaint.setAntiAlias(true);
@@ -193,7 +193,7 @@ public class LinePaints {
         yellowPaint = new Paint();
         yellowPaint.setColor(0xccffff00);
         yellowPaint.setAntiAlias(true);
-        yellowPaint.setStrokeWidth(4.5f * prescale);
+        yellowPaint.setStrokeWidth(9f);
         yellowPaint.setDither(true);
         yellowPaint.setStyle(Paint.Style.STROKE);
         yellowPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -204,7 +204,7 @@ public class LinePaints {
 
         redPaint = new Paint();
         redPaint.setColor(0xccff0000);
-        redPaint.setStrokeWidth(4.5f * prescale);
+        redPaint.setStrokeWidth(9f);
         redPaint.setAntiAlias(true);
         redPaint.setDither(true);
         redPaint.setStyle(Paint.Style.STROKE);
@@ -215,7 +215,7 @@ public class LinePaints {
 
         greyPaint = new Paint();
         greyPaint.setColor(Color.GRAY);
-        greyPaint.setStrokeWidth(4.5f * prescale);
+        greyPaint.setStrokeWidth(9f);
         greyPaint.setAntiAlias(true);
         greyPaint.setDither(true);
         greyPaint.setStyle(Paint.Style.STROKE);
@@ -223,7 +223,7 @@ public class LinePaints {
 
         whitePaint = new Paint();
         whitePaint.setColor(Color.WHITE);
-        whitePaint.setStrokeWidth(4.5f * prescale);
+        whitePaint.setStrokeWidth(9f);
         whitePaint.setAntiAlias(true);
         whitePaint.setDither(true);
         whitePaint.setStyle(Paint.Style.STROKE);
@@ -231,7 +231,7 @@ public class LinePaints {
 
         btn0Paint = new Paint();
         btn0Paint.setColor(Color.GRAY);
-        btn0Paint.setStrokeWidth(6f * prescale);
+        btn0Paint.setStrokeWidth(12f);
         btn0Paint.setAntiAlias(true);
         btn0Paint.setDither(true);
         btn0Paint.setStyle(Paint.Style.STROKE);
@@ -239,7 +239,7 @@ public class LinePaints {
 
         btn1Paint = new Paint();
         btn1Paint.setColor(Color.WHITE);
-        btn1Paint.setStrokeWidth(6f * prescale);
+        btn1Paint.setStrokeWidth(12f);
         btn1Paint.setAntiAlias(true);
         btn1Paint.setDither(true);
         btn1Paint.setStyle(Paint.Style.STROKE);
@@ -247,7 +247,7 @@ public class LinePaints {
 
         addressPaint = new TextPaint();
         addressPaint.setColor(Color.YELLOW);
-        addressPaint.setTextSize(7 * prescale);
+        addressPaint.setTextSize(14f);
         addressPaint.setStyle(Style.FILL);
 
         addressBGPaint = new Paint();
@@ -256,14 +256,14 @@ public class LinePaints {
 
         panelNamePaint = new TextPaint();
         panelNamePaint.setColor(Color.LTGRAY);
-        panelNamePaint.setTextSize(12 * prescale);
+        panelNamePaint.setTextSize(24f);
         panelNamePaint.setStyle(Style.FILL);
 
 
         bgPaint = new Paint();
         bgPaint.setColor(BG_COLOR);
         bgPaint.setAntiAlias(true);
-        bgPaint.setStrokeWidth(3.8f * prescale);
+        bgPaint.setStrokeWidth(7.6f);
         bgPaint.setDither(true);
         bgPaint.setStyle(Paint.Style.STROKE);
         bgPaint.setStrokeCap(Paint.Cap.BUTT);
@@ -315,6 +315,6 @@ public class LinePaints {
     }
 
     private static float scaled(float w) {
-        return (float) (w * prescale * width / 1280);
+        return (float) (w * 2 * width / 1280);
     }
 }

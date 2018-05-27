@@ -38,7 +38,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class AndroPanelApplication extends Application {
 
-    public static final boolean DEBUG = false;  // enable or disable debugging with file
+    public static final boolean DEBUG = true;  // enable or disable debugging with file
 
     public static final String TAG = "AndroPanelActivity";
     public static final boolean DISABLE_THROTTLE = false;
@@ -124,17 +124,14 @@ public class AndroPanelApplication extends Application {
     public static final ArrayList<Integer> adrList = new ArrayList<Integer>();  // contains all needed SX channels
     public static final Hashtable<String, Bitmap> bitmaps = new Hashtable<String, Bitmap>();
 
-    public static boolean firstStart = true;
-
-
     public static boolean zoomEnabled;
     public static boolean autoIPEnabled;
     public static float scale = 1.0f;  // user selectable scaling of panel area
-    public static final int prescale = 2;
-    // fixed prefix for scaling - should be =1 for small displays and =2 for large displays
-    // all Paints and x/y-s are scaled before drawing
-    public static float xoff = 10 * prescale;
-    public static float yoff = 50 * prescale;
+
+
+    // all Paints and track and turnout x/y-s are scaled by 2 before drawing to bitmap
+    public static float xoff = 20;
+    public static float yoff = 100;
     public static int peOffsetX = 0;  // this number will be added to the X-values of the Panel Elements
     public static int peOffsetY = 0;  // this number will be added to the Y-values of the Panel Elements
 
@@ -150,8 +147,8 @@ public class AndroPanelApplication extends Application {
 
     public static boolean reinitPaints = false;
 
-    public static final int RASTER = (int) (20 * prescale);   // raster points with xx pixels
-    public static final int TURNOUT_LENGTH = 10;  // NOT to be prescaled
+    public static final int RASTER = 40;   // raster points with xx pixels
+    public static final int TURNOUT_LENGTH = 10;
     public static final int TURNOUT_LENGTH_LONG = (int) (TURNOUT_LENGTH * 1.4f);
 
     public static Bitmap myBitmap = Bitmap.createBitmap(4000, 1600, Bitmap.Config.ARGB_4444);
@@ -180,7 +177,7 @@ public class AndroPanelApplication extends Application {
         autoIP = prefs.getString(KEY_IP,SXNET_START_IP);
 
         selectedStyle = prefs.getString(KEY_STYLE_PREF, "US");
-        LinePaints.init(this, prescale);
+        LinePaints.init(this);
 
         // do some initializations
         for (int i = 0; i < sxData.length; i++) {

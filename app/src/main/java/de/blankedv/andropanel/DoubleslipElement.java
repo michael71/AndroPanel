@@ -16,7 +16,6 @@ import static de.blankedv.andropanel.AndroPanelApplication.enableEdit;
 import static de.blankedv.andropanel.AndroPanelApplication.greenPaint;
 import static de.blankedv.andropanel.AndroPanelApplication.linePaint;
 import static de.blankedv.andropanel.AndroPanelApplication.linePaint2;
-import static de.blankedv.andropanel.AndroPanelApplication.prescale;
 import static de.blankedv.andropanel.AndroPanelApplication.redPaint;
 import static de.blankedv.andropanel.SXPanelElement.STATE_CLOSED;
 import static de.blankedv.andropanel.SXPanelElement.STATE_THROWN;

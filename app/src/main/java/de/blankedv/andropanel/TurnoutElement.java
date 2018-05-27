@@ -66,19 +66,19 @@ public class TurnoutElement extends SXPanelElement {
 
 	private void drawTurnout(Canvas canvas, TurnoutElement t) {
 		if ((enableEdit) || (sxAdr == INVALID_INT)) {
-			canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, greenPaint);
-			canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, redPaint);
+			canvas.drawLine(t.x * 2, t.y * 2, t.x2 * 2, t.y2 * 2, greenPaint);
+			canvas.drawLine(t.x * 2, t.y * 2, t.xt * 2, t.yt * 2, redPaint);
 		} else {
 
 			if (state == STATE_CLOSED) {
-				canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, bgPaint);
-				canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, linePaint2);
+				canvas.drawLine(t.x * 2, t.y * 2, t.xt * 2, t.yt * 2, bgPaint);
+				canvas.drawLine(t.x * 2, t.y * 2, t.x2 * 2, t.y2 * 2, linePaint2);
 			} else if (state == STATE_THROWN) {
-				canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, bgPaint);
-				canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, linePaint2);
+				canvas.drawLine(t.x * 2, t.y * 2, t.x2 * 2, t.y2 * 2, bgPaint);
+				canvas.drawLine(t.x * 2, t.y * 2, t.xt * 2, t.yt * 2, linePaint2);
 			} else if (state == STATE_UNKNOWN) {
-				canvas.drawLine(t.x * prescale, t.y * prescale, t.xt * prescale, t.yt * prescale, bgPaint);
-				canvas.drawLine(t.x * prescale, t.y * prescale, t.x2 * prescale, t.y2 * prescale, bgPaint);
+				canvas.drawLine(t.x * 2, t.y * 2, t.xt * 2, t.yt * 2, bgPaint);
+				canvas.drawLine(t.x * 2, t.y * 2, t.x2 * 2, t.y2 * 2, bgPaint);
 			}
 		}
 	}
@@ -115,8 +115,8 @@ public class TurnoutElement extends SXPanelElement {
 		int w = RASTER/3;   // RASTER defines sensitive area
 		int h = RASTER/3;
 
-		float xs = x1/prescale;  // reduces by overall dimension scaling factor
-		float ys = y1/prescale;
+		float xs = x1/2;  // reduces by overall dimension scaling factor
+		float ys = y1/2;
 		//if ((x1 >= (x+xoff)) && (x1 <=(x+xoff+w)) && (y1>=(y+yoff)) && (y1<=(y+yoff+h))) {
 
 		int mx = (x+xt+x2)/3;
@@ -151,9 +151,9 @@ public class TurnoutElement extends SXPanelElement {
 		int mx = (t.x+t.xt+t.x2)/3;
 		int my = (t.y+t.yt+t.y2)/3;
 
-		canvas.drawRect((mx-2)*prescale, (my-2)*prescale-text_height,
-				((mx+2)*prescale+text_width), my*prescale+2, sxAddressBGPaint);  // dark rectangle
-		canvas.drawText(txt,mx*prescale, my*prescale, sxAddressPaint);   // the numbers
+		canvas.drawRect((mx-2)*2, (my-2)*2-text_height,
+				((mx+2)*2+text_width), my*2+2, sxAddressBGPaint);  // dark rectangle
+		canvas.drawText(txt,mx*2, my*2, sxAddressPaint);   // the numbers
 
 	}
  }

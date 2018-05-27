@@ -57,9 +57,9 @@ public class PanelElement {
      
 		if (y==y2) { // horizontal line
 			// draw a line and not a bitmap
-			canvas.drawLine(x*prescale,y*prescale,x2*prescale,y2*prescale, linePaint);	
+			canvas.drawLine(x*2,y*2,x2*2,y2*2, linePaint);
 		} else {  // diagonal, draw with round stroke
-			canvas.drawLine(x*prescale,y*prescale,x2*prescale,y2*prescale, linePaint2);
+			canvas.drawLine(x*2,y*2,x2*2,y2*2, linePaint2);
 		}
 
 	}

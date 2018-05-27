@@ -93,8 +93,8 @@ public class SXPanelElement extends PanelElement {
 		int w = RASTER/3;   // RASTER defines sensitive area
 		int h = RASTER/3;
 
-		float xs = x1/prescale;  // reduces by overall dimension scaling factor
-		float ys = y1/prescale;
+		float xs = x1/2;  // reduces by overall dimension scaling factor
+		float ys = y1/2;
 		//if ((x1 >= (x+xoff)) && (x1 <=(x+xoff+w)) && (y1>=(y+yoff)) && (y1<=(y+yoff+h))) {
 
 		if ((xs >= (x-w)) && (xs <=(x+w)) && (ys>=(y-h)) && (ys<=(y+h))) {
@@ -119,9 +119,9 @@ public class SXPanelElement extends PanelElement {
 		int text_height =  bounds.height();
 		int text_width =  bounds.width();
 
-		canvas.drawRect((x-2)*prescale, (y-2)*prescale-text_height,
-				((x+2)*prescale+text_width), y*prescale+2, sxAddressBGPaint);  // dark rectangle
-				canvas.drawText(txt,x*prescale, y*prescale, sxAddressPaint);   // the numbers
+		canvas.drawRect((x-2)*2, (y-2)*2-text_height,
+				((x+2)*2+text_width), y*2+2, sxAddressBGPaint);  // dark rectangle
+				canvas.drawText(txt,x*2, y*2, sxAddressPaint);   // the numbers
 
 	}
 

@@ -36,11 +36,11 @@ public class SensorElement extends SXPanelElement {
 			// read data from SX bus and set red/gray dashed line accordingly
 
 			if (state ==  STATE_CLOSED) {
-				canvas.drawLine(x * prescale, y * prescale, x2 * prescale, y2
-						* prescale, linePaintGrayDash);
+				canvas.drawLine(x * 2, y * 2, x2 * 2, y2
+						* 2, linePaintGrayDash);
 			} else {
-				canvas.drawLine(x * prescale, y * prescale, x2 * prescale, y2
-						* prescale, linePaintRedDash);
+				canvas.drawLine(x * 2, y * 2, x2 * 2, y2
+						* 2, linePaintRedDash);
 			}
 		} else {
 			// draw lamp type of sensor
@@ -70,7 +70,7 @@ public class SensorElement extends SXPanelElement {
 								+ bmName.toString());
 			h = bm.getHeight() / 2;
 			w = bm.getWidth() / 2;
-			canvas.drawBitmap(bm, x * prescale - w, y * prescale - h, null); // center
+			canvas.drawBitmap(bm, x * 2 - w, y * 2 - h, null); // center
 																				// bitmap
 		}
 		if (drawSXAddresses)

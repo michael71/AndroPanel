@@ -53,7 +53,7 @@ public class ParseConfig {
      * and add deducted turnouts if needed
      * results will be put into global variable "panelElements"
      * 
-     * all dimension will be scaled with the global value of "prescale"
+     * all dimension will be scaled with a global factor of 2
      * 
      * @param context
      * @return true, if succeeds - false, if not.

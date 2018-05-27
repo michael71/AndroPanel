@@ -187,7 +187,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 			Log.d(TAG, "onResume - AndroPanelActivity");
 
 		if (reinitPaints) {
-			LinePaints.init(appContext, prescale);
+			LinePaints.init(appContext);
 		}
 
 
@@ -318,12 +318,12 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		// Don't let the object get too small or too large.
 		scale = Math.max(0.4f, Math.min(sc, 3.0f));
 
-		xoff = ((width - (panelXmax - panelXmin) * scale * prescale)) / 2;
+		xoff = ((width - (panelXmax - panelXmin) * scale * 2)) / 2;
 		// for y we need to correct for the upper 20% of the display which is
 		// control area
 		// and not scaled
-		yoff = (((height * 0.8f) - ((panelYmax - panelYmin) * scale * prescale)) / 2)
-				+ (height / (10 * scale * prescale));
+		yoff = (((height * 0.8f) - ((panelYmax - panelYmin) * scale * 2)) / 2)
+				+ (height / (10 * scale * 2));
 
 		Log.d(TAG, "new scale=" + scale + " xoff=" + xoff + " yoff=" + yoff);
 	}
