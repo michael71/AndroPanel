@@ -8,14 +8,8 @@
         android:id="@+id/menu_settings"
         android:title="@string/settings"/>
     <item
-        android:id="@+id/menu_panel"
-        android:title="@string/select_panel"/>
-    <item
         android:id="@+id/menu_center"
         android:title="@string/center_panel"/>
-    <item
-        android:id="@+id/menu_throttle"
-        android:title="@string/select_throttle"/>
     <item
         android:id="@+id/menu_about"
         android:title="@string/about"/>

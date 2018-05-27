@@ -36,6 +36,7 @@ import java.util.concurrent.BlockingQueue;
  *
  * @author mblank
  */
+
 public class AndroPanelApplication extends Application {
 
     public static final boolean DEBUG = true;  // enable or disable debugging with file
@@ -61,7 +62,6 @@ public class AndroPanelApplication extends Application {
     public static int counter = 0;
     // preferences
     public static final String KEY_IP = "ipPref";
-    public static final String KEY_AUTOIP = "autoIPPref";
     public static final String KEY_LOCO_ADR = "locoAdrPref";
     public static final String KEY_LOCO_MASS = "locoMassPref";
     public static final String KEY_LOCO_NAME = "locoNamePref";
@@ -99,7 +99,6 @@ public class AndroPanelApplication extends Application {
     public static long mLastMessage = 0;
 
     public LanbahnThread lbClient;
-    public static String autoIP;
 
     public static final BlockingQueue<String> sendQ = new ArrayBlockingQueue<String>(50);
 
@@ -125,7 +124,6 @@ public class AndroPanelApplication extends Application {
     public static final Hashtable<String, Bitmap> bitmaps = new Hashtable<String, Bitmap>();
 
     public static boolean zoomEnabled;
-    public static boolean autoIPEnabled;
     public static float scale = 1.0f;  // user selectable scaling of panel area
 
 
@@ -156,11 +154,6 @@ public class AndroPanelApplication extends Application {
 
     public static boolean enableEdit = false;
 
-    public static final int DISP_THROTTLE = 1;
-    public static final int DISP_PANEL = 0;
-    public static int disp_selected = 0;
-
-
     public static Context appContext;
 
 
@@ -173,8 +166,6 @@ public class AndroPanelApplication extends Application {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         drawSXAddresses = prefs.getBoolean(KEY_SHOW_SX, false);
         drawXYValues = prefs.getBoolean(KEY_SHOW_XY_VALUES, false);
-        // initialize IPs
-        autoIP = prefs.getString(KEY_IP,SXNET_START_IP);
 
         selectedStyle = prefs.getString(KEY_STYLE_PREF, "US");
         LinePaints.init(this);
@@ -249,13 +240,6 @@ public class AndroPanelApplication extends Application {
                 toast.show();
                 break;
 
-            case  SX3PC_IP_MESSAGE:
-                // this is a message which contains the ip of the computer running the SX3PC program,
-                // which we want to connect to
-
-                autoIP = (String)msg.obj;
-                System.out.println("autoIP read from lanbahn message="+autoIP);
-                break;
         }
 
     }

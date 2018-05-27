@@ -137,7 +137,7 @@ public class LinePaints {
                 Color.rgb(0x30, 0x31, 0x30),
                 Shader.TileMode.CLAMP)); */
 
-        majorTick = new Paint();
+        /* majorTick = new Paint();
         majorTick.setColor(Color.BLACK);
         majorTick.setAntiAlias(true);
         majorTick.setStrokeWidth(scaled(4.5f));
@@ -149,7 +149,7 @@ public class LinePaints {
         minorTick.setAntiAlias(true);
         minorTick.setStrokeWidth(scaled(1.5f));
         minorTick.setDither(true);
-        minorTick.setStyle(Paint.Style.STROKE);
+        minorTick.setStyle(Paint.Style.STROKE); */
 
         rasterPaint = new Paint();
         rasterPaint.setColor(Color.LTGRAY);
@@ -180,7 +180,7 @@ public class LinePaints {
                 Shader.TileMode.MIRROR));
         rimShadowPaint.setStyle(Paint.Style.FILL); */
 
-        tachoSpeedPaint = new TextPaint();
+        /* tachoSpeedPaint = new TextPaint();
         tachoSpeedPaint.setColor(Color.BLACK);
         tachoSpeedPaint.setTextSize(scaled(15.0f));
         tachoSpeedPaint.setStyle(Style.FILL);
@@ -188,7 +188,7 @@ public class LinePaints {
         tachoShadowPaint = new TextPaint();
         tachoShadowPaint.setColor(Color.LTGRAY);
         tachoShadowPaint.setTextSize(scaled(15.0f));
-        tachoShadowPaint.setStyle(Style.FILL);
+        tachoShadowPaint.setStyle(Style.FILL); */
 
         yellowPaint = new Paint();
         yellowPaint.setColor(0xccffff00);

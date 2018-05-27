@@ -31,8 +31,6 @@
     <string name="test_array">Choose a planet</string>
     <string name="files_settings">Config Files</string>
     <string name="center_panel">Center Panel</string>
-    <string name="select_panel">Display Panel</string>
-    <string name="select_throttle">Display Throttle</string>
     <string name="aboutString">"AndroPanel is free software - you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. Andropanel is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  For details about the GNU General Public License see http://www.gnu.org/licenses "</string>
     <string name="copyrightString">Copyright 2012-2016 - Michael Blank - Sonja Schittenhelm - michael@opensx.net</string>
     <string name="moreInfoString">more info on http://www.oscale.net/andropanel</string>

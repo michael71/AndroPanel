@@ -3,10 +3,6 @@ package de.blankedv.andropanel;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//import javax.jmdns.JmDNS;
-//import javax.jmdns.ServiceEvent;
-//import javax.jmdns.ServiceListener;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -20,7 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -44,18 +40,9 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 	public static LinearLayout layout;
 	TextView tv;
 	LayoutParams params;
-	LinearLayout mainLayout;
+
 	Button but;
-	boolean click = true;
 
-	TimerTask mytimer;
-
-	public static View selSxAddressView;
-
-	//private static JmDNS zeroConf = null;
-	//private static MulticastLock mLock = null;
-	private final static String SXNET_TYPE = "_sxnet._tcp.local.";
-	private final static String HOSTNAME = "tunesremote";
 
 	/** Called when the activity is first created. */
 	@Override
@@ -218,13 +205,8 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
-	    if (DISABLE_THROTTLE)
-	        menu.findItem(R.id.menu_throttle).setVisible(false);
-//	    else
-//	        menu.findItem(R.id.mark_read).setVisible(false);
  		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -243,19 +225,12 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		case R.id.menu_reconnect:
 			startSXNetCommunication();
 			return (true);
-		case R.id.menu_panel: 
-			disp_selected=DISP_PANEL;
-			return (true);
-		case R.id.menu_center: 
+		case R.id.menu_center:
 			recalcScale();
 			return (true);
-		case R.id.menu_throttle: 
-			disp_selected=DISP_THROTTLE;
-			return (true);
-		case R.id.menu_about: 
+		case R.id.menu_about:
 			startActivity(new Intent(this, AboutActivity.class));
 			return (true);
-	
 		case R.id.menu_quit:
 			AlertDialog alert = builder.create();
 			alert.show();
@@ -283,17 +258,9 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-        Log.d(TAG, "AndroPanelActivity - autoIPEnabled="+autoIPEnabled);
+
         String ip = prefs.getString(KEY_IP, "192.168.178.31");
 
-		if ((autoIPEnabled == true) && (autoIP.length()>0) && (!ip.equals(autoIP))) {
-            ip = autoIP;
-            Log.d(TAG, "AndroPanelActivity - auto ip changed="+ip);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(KEY_IP, ip);
-            // Commit the edits!
-            editor.commit();
-		}
 
 		//locolist.selectedLoco.adr = Integer
 		//		.parseInt(prefs.getString(KEY_LOCO_ADR, "22"));
@@ -364,101 +331,5 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 			}
 		}
 	}
-
-/*	@Override
-	public void serviceAdded(ServiceEvent event) {
-		   // someone is yelling about their touch-able service
-	      // go figure out what their ip address is
-	      Log.d(TAG, String.format("serviceAdded(event=\n%s\n)", event.toString()));
-	      final String name = event.getName();
-
-	      // trigger delayed gui event
-	      // needs to be delayed because jmdns hasnt parsed txt info yet
-	     // resultsUpdated.sendMessageDelayed(Message.obtain(resultsUpdated, -1, name), DELAY);
-
-	}
-
-	@Override
-	public void serviceRemoved(ServiceEvent event) {
-		  Log.d(TAG, String.format("serviceRemoved(event=\n%s\n)", event.toString()));
-
-
-	}
-
-	@Override
-	public void serviceResolved(ServiceEvent event) {
-		  Log.d(TAG, String.format("serviceResolved(event=\n%s\n)", event.toString()));
-
-
-	}*/
-
-	/* public Boolean getSXnetConnection() {
-		WifiManager wifi = (WifiManager) this
-				.getSystemService(Context.WIFI_SERVICE);
-
-		WifiInfo wifiinfo = wifi.getConnectionInfo();
-		int intaddr = wifiinfo.getIpAddress();
-		InetAddress addr;
-
-		if (intaddr != 0) { // Only worth doing if there's an actual wifi
-			// connection
-			byte[] byteaddr = new byte[] { (byte) (intaddr & 0xff),
-					(byte) (intaddr >> 8 & 0xff),
-					(byte) (intaddr >> 16 & 0xff),
-					(byte) (intaddr >> 24 & 0xff) };
-
-			try {
-				addr = InetAddress.getByAddress(byteaddr);
-				Log.d(TAG, String.format("found intaddr=%d, addr=%s", intaddr,
-						addr.toString()));
-				// start multicast lock
-//				mLock = wifi.createMulticastLock("sxnet-lock");
-//				mLock.setReferenceCounted(true);
-//				mLock.acquire();
-//
-//				zeroConf = JmDNS.create(addr, HOSTNAME);
-//				zeroConf.addServiceListener(SXNET_TYPE, this);
-			} catch (Exception e) {
-				Log.e(TAG, "zeroConf error " + e.getMessage());
-			}
-		} else {
-			String wifiState = checkWifiState();
-			if (wifiState != "") {
-				Toast.makeText(this, wifiState, Toast.LENGTH_LONG).show();
-			}
-		}
-		return true;
-
-	}  */
-
-	/**
-	 * Gets the current wifi state, and changes the text shown in the header as
-	 * required.
-	 */
-	/* public String checkWifiState() {
-
-		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		int intaddr = wifi.getConnectionInfo().getIpAddress();
-
-		if (wifi.getWifiState() == WifiManager.WIFI_STATE_DISABLED) {
-
-			// Wifi is disabled
-			Log.e(TAG, "ERROR: wifi is disabled.");
-			return "ERROR: wifi is disabled.";
-
-		} else if (intaddr == 0) {
-
-			// Wifi is enabled, but no network connection
-			Log.e(TAG, "ERROR: wifi enabled, but not network connection.");
-			return "ERROR: wifi enabled, but not network connection.";
-		} else {
-
-			// Wifi is enabled and there's a network
-			Log.d(TAG, "wifi enabled and network available");
-			return "";
-
-		}
-
-	} */
 
 }

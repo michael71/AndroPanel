@@ -72,8 +72,6 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
 		// Let's do something if a preference value changes
 		if (key.equals(KEY_IP)) {
 			ipPref.setSummary("= "+sharedPreferences.getString(KEY_IP,""));
-		} else  if (key.equals(KEY_AUTOIP)) {
-			autoIPEnabled = sharedPreferences.getBoolean(KEY_AUTOIP,false);
 		} else  if (key.equals(KEY_SHOW_SX)) {
 			drawSXAddresses = sharedPreferences.getBoolean(KEY_SHOW_SX,false);
 		} else if (key.equals(KEY_SHOW_XY_VALUES)) {

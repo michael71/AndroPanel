@@ -43,10 +43,6 @@
             android:title="@string/showXYvalues" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/sxnet_server_settings" >
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="autoIPPref"
-            android:title="Automatically configure IP" />
         <EditTextPreference
             android:name="SXnet server address"
             android:defaultValue="192.168.178.34"

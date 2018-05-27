@@ -170,7 +170,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 									+ mLastTouchY);
 					locoControlArea.checkTouch(mLastTouchX, mLastTouchY);
 				} else {
-					if (disp_selected == DISP_PANEL) {
+
 					Log.d(TAG,
 							"ACTION_UP _Checking SX panel elements at: mlastTouchX="
 									+ mLastTouchX + "  mLastTouchY"
@@ -190,13 +190,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 							break; // only 1 can be selected with one touch
 						}
 					}
-					} else {
-						// control tacho etc
-						Log.d(TAG,"ACTION_UP speed mlastTouchX="
-								+ mLastTouchX + "  mLastTouchY"
-								+ mLastTouchY);
-						calcSpeedTouched(mLastTouchX,mLastTouchY);
-					}
+
 				}
 
 			} else {
@@ -258,7 +252,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		// if (USS == true)
 		int topLeft = mHeight / 8;
 		myBitmap.eraseColor(Color.TRANSPARENT); // Color.DKGRAY);
-		if (disp_selected == DISP_PANEL) {
+
 			// label with panel name and display green "unlock", if zoom enabled
 			
 			if (zoomEnabled) {
@@ -278,10 +272,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			drawRaster(myCanvas, RASTER);
 
 			canvas.drawBitmap(myBitmap, matrix, null);
-		} else {
-	
-			drawThrottle(canvas);
-		}
+
 
 		canvas.drawRect(controlAreaRect, paintControlAreaBG);
 
@@ -293,7 +284,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			ScaleGestureDetector.SimpleOnScaleGestureListener {
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
-			if ((zoomEnabled) && (disp_selected == DISP_PANEL)) {
+			if (zoomEnabled) {
 				mScaleFactor *= detector.getScaleFactor();
 				Log.d(TAG, "mScaleFactor=" + mScaleFactor);
 				// Don't let the object get too small or too large.
@@ -324,100 +315,4 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 	
-    private void drawThrottle(Canvas canvas) {
-		//canvas.drawBitmap(bitmaps.get("fahrpult_rw"), mWidth/5, topLeft+50, null);
-		float xc = mWidth/2;
-		float yc = mHeight/2+mHeight/16;
-		float rad = mHeight/2.7f;
-		canvas.drawCircle(xc, yc, rad, tachoPaint);
-		canvas.drawCircle(xc, yc, rad*1.01f, tachoOutsideLine);
-		canvas.drawCircle(xc, yc, rad/40, minorTick);
-		//canvas.drawCircle(xc, yc, rad/1.04f, rimShadowPaint);
-		float al,phi,x1,x2,y1,y2;
-		int vmax = selectedLoco.vmax;
-		for (int i= 0; i<= vmax; i+=5) {
-			al = (float) (-135f+(i*270f/vmax));
-			phi = (float) (al*Math.PI/180.0f);
-			x1 = (float) (xc +rad*0.9*Math.sin((double)phi));
-			x2 = (float) (xc +rad*Math.sin((double)phi));
-			y1 = (float) (yc -rad*0.9*Math.cos(phi));
-			y2 = (float) (yc -rad*Math.cos(phi));
-			canvas.drawLine(x1,y1,x2,y2,minorTick);
-			//Log.d(TAG,"al="+al+" phi="+phi+"  x1,x2,y1,y2="+x1+x2+y1+y2);
-		}
-		for (int i= 0; i<= vmax; i+=20) {
-			al = (float) (-135f+(i*270f/vmax));
-			phi = (float) (al*Math.PI/180.0f);
-			x1 = (float) (xc +rad*0.8*Math.sin(phi));
-			x2 = (float) (xc +rad*Math.sin(phi));
-			y1 = (float) (yc -rad*0.8*Math.cos(phi));
-			y2 = (float) (yc -rad*Math.cos(phi));
-			canvas.drawLine(x1,y1,x2,y2,majorTick);
-			//Log.d(TAG,"al="+al+" phi="+phi+"  x1,x2,y1,y2="+x1+x2+y1+y2);
-			String txt=""+i;
-			Rect tb = new Rect();
-		    tachoSpeedPaint.getTextBounds(txt, 0, txt.length(), tb);
-		    //Log.d(TAG,"Bounds i="+i+" tb.left="+tb.left+" tb.right="+tb.right+" tb.top="+tb.top+" tb.bottom="+tb.bottom);
-		    float offX=(tb.right)/2.0f;
-		    float offY=(-tb.top)/2.0f;
-
-			canvas.drawText(txt, (float) (xc +rad*0.64*Math.sin(phi)-offX),
-					(float) (yc -rad*0.64*Math.cos(phi)+offY),tachoSpeedPaint);
-		}
-
-		// speed zeiger
-		int s = selectedLoco.speed_from_sx;
-		al = (float) (-135f+(Math.abs(s)*270f/31));
-		al = (float) (0.1*al+0.9*oldAl); // low pass filter
-		oldAl=al;
-		phi = (float) (al*Math.PI/180.0f);
-		x1 = (float) (xc +rad*0.02*Math.sin(phi));
-		x2 = (float) (xc +rad*0.85*Math.sin(phi));
-		y1 = (float) (yc -rad*0.02*Math.cos(phi));
-		y2 = (float) (yc -rad*0.85*Math.cos(phi));
-	//	canvas.drawLine(x1+2,y1,x2+2,y2,tachoShadowPaint);
-		canvas.drawLine(x1,y1,x2,y2,minorTick);
-    }
-
-    private int calcSpeedTouched(float mLastTouchX2, float mLastTouchY2) {
-    	float xc = mWidth/2;
-		float yc = mHeight/2+mHeight/16;
-		float rad = mHeight/2.7f;
-		
-		float rx, ry, r; // relative to Zero
-		rx = mLastTouchX2 - xc;
-		ry = -mLastTouchY2 + yc;
-		float dist = (rx*rx+ry*ry);
-		r = (float)Math.sqrt(dist);
-		Log.d(TAG,"speed rx="+rx+" ry="+ry+" r="+r+" rad="+rad);;
-		if ((r > rad*0.8f) && (r < rad *1.1f)) {
-			float angle = (float) ((Math.atan2(ry,rx)/Math.PI)*180f);
-			Log.d(TAG,"speed radius o.k.  rx="+rx+" ry="+ry+ " atan2 angle="+angle);
-			if ((angle >0) && (angle <=180)) {
-				angle = 225-angle;
-			} else if ((angle >= -180) && (angle <= -130)) {
-				angle = 45-(180+angle);
-			} else if ((angle <=0) && (angle >= -50) ) {
-			    angle =-angle+225;
-			} else {
-				angle = 999f;
-			}
-			if (angle != 999f) {
-				angle = Math.min(angle, 270f);
-				angle = Math.max(0, angle);
-
-				float speed = 160f*angle/270f;
-				Log.d(TAG,"speed radius o.k.  atan2 angleCorr="+angle+" speed="+speed+" km/h");
-				int s = Math.round(31*speed/160f);
-                if (selectedLoco.isForward()) {
-                    selectedLoco.setSpeed(s);
-                } else {
-                    selectedLoco.setSpeed(-s);
-                }
-			} else {
-				Log.d(TAG,"speed radius o.k.  invalid angle");
-			}
-		}
-		return 0;
-    }
 }
