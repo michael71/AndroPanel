@@ -9,7 +9,7 @@ Voraussetzungen:
 
 3. wenn Loks gesteuert werden sollen, so müssen sie in einem XML File definiert sein, siehe app/src/main/assets/locos-demo.xml 
 
-Copyright (C) Michael Blank - 2014-2016, IBM Klub Böblingen, Sparte Modellbahn
+Copyright (C) Michael Blank - 2014-2018, IBM Klub Böblingen, Sparte Modellbahn
 
 <p align="center">
   <img src="https://github.com/michael71/AndroPanel/blob/master/andropanel1.jpg" width="640" height="400"/>
