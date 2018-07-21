@@ -243,24 +243,32 @@ public class SXnetClientThread extends Thread {
 		String[] info;
 		msg=msg.toUpperCase();
 
+		// new code: multiple commands in a single message, separated by ';'
+		// example: String msg = "X 74 101; XL 780 2; XL 800 3  ;  XL 720 1";
+		String[] allcmds = msg.split(";");
 		int adr;
 		int data;
 
-		if( (msg.length() != 0) && 
-				(!msg.contains("ERROR")) && 
-				(!msg.contains("OK"))
-				)  { // message should contain valid data
-			info = msg.split("\\s+");  // one or more whitespace
+		// only first one is (or should be) a true SX message like "X 74 101"
 
-			if ( (info.length >= 3) && info[0].equals("X") ) {
-				adr = getChannelFromString(info[1]);
-				data = getDataFromString(info[2]);
-				if (( adr != ERROR) && (data != ERROR) ) {
-					Message m = Message.obtain();
-					m.what = SX_FEEDBACK_MESSAGE;
-					m.arg1 = adr;
-					m.arg2 = data;
-					handler.sendMessage(m);  // send SX data to UI Thread via Message
+		for (String cmd : allcmds) {
+			if ((cmd.length() != 0) &&
+					(!cmd.contains("ERROR")) &&
+					(!cmd.contains("OK"))
+					) { // message should contain valid data
+				info = cmd.split("\\s+");  // one or more whitespace
+
+				if ((info.length >= 3) && info[0].equals("X")) {
+					adr = getChannelFromString(info[1]);
+					data = getDataFromString(info[2]);
+					if (DEBUG) Log.d(TAG,"pure SX: " + cmd);
+					if ((adr != ERROR) && (data != ERROR)) {
+						Message m = Message.obtain();
+						m.what = SX_FEEDBACK_MESSAGE;
+						m.arg1 = adr;
+						m.arg2 = data;
+						handler.sendMessage(m);  // send SX data to UI Thread via Message
+					}
 				}
 			}
 		}

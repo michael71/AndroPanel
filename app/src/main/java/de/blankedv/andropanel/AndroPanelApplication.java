@@ -28,7 +28,7 @@ import java.util.concurrent.BlockingQueue;
  * <p>
  * handles interfacing with sx-net-client, which is run on different thread
  * <p>
- * main contains a 50msec timer which is used for LocoSpeed mass simulation
+ * main contains a 50msec timersen which is used for LocoSpeed mass simulation
  * <p>
  * multiple turnouts can be controlled (all from panel...xml)
  * and a single Loco (name "selectedLoco", selected from loco...xml)
@@ -40,6 +40,7 @@ import java.util.concurrent.BlockingQueue;
 public class AndroPanelApplication extends Application {
 
     public static final boolean DEBUG = false;  // enable or disable debugging with file
+        // should be disabled for release apk file
 
     public static final String TAG = "AndroPanelActivity";
 
