@@ -30,6 +30,10 @@ public class TurnoutElement extends SXPanelElement {
         inverted = 0;
     }
 
+	/** copy constructor - without copying address
+	 *
+	 * @param turnout
+	 */
 	public TurnoutElement(PanelElement turnout) {
 		type = turnout.type;
 		x = turnout.x;    // center of turnout
@@ -92,25 +96,23 @@ public class TurnoutElement extends SXPanelElement {
 		lastToggle = System.currentTimeMillis();  // reset toggle timer
 		
 		int stateFromSX = AndroPanelApplication.getSxBit(sxAdr,sxBit);
-		int d = AndroPanelApplication.getSxData(sxAdr);
-		
+		int stateToBe;
+
+		// toggle current state
 		if (stateFromSX == 0) {
-			d |= (1 << (sxBit-1));  // sx bit von 1 bis 8
+			stateToBe = 1;
 		} else {
-			d = d & ~(1 << (sxBit-1));  // sx bit von 1 bis 8
-		}	
+			stateToBe = 0;
+		}
 		
 		state = STATE_UNKNOWN; // until updated via SX message
 
         if (demoFlag) {
-            Message m = Message.obtain();
-            m.what = SX_FEEDBACK_MESSAGE;
-            m.arg1 = sxAdr;
-            m.arg2 = d;
-            handler.sendMessage(m);  // send SX data to UI Thread via Message
+            state = stateToBe;
             return;
         }
-        String command = "S "+sxAdr+" "+d;
+
+        String command = "S "+sxAdr+"."+sxBit+" "+stateToBe;
         Boolean success = sendQ.offer(command);
         if (!success   &&  DEBUG ) Log.d(TAG,"turnout sendCommand failed, queue full")	;
 

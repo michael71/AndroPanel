@@ -39,7 +39,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class AndroPanelApplication extends Application {
 
-    public static final boolean DEBUG = false;  // enable or disable debugging with file
+    public static final boolean DEBUG = true;  // enable or disable debugging with file
         // should be disabled for release apk file
 
     public static final String TAG = "AndroPanelActivity";

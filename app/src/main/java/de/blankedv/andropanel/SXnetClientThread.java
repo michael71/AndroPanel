@@ -1,6 +1,5 @@
 package de.blankedv.andropanel;
 
-import static android.R.attr.data;
 import static de.blankedv.andropanel.AndroPanelApplication.*;
 
 import java.io.BufferedReader;
@@ -13,7 +12,6 @@ import java.net.SocketAddress;
 import android.content.Context;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * communicates with the SX3-PC server program (usually on port 4104)
@@ -32,8 +30,6 @@ public class SXnetClientThread extends Thread {
 	private Context context;   
 	private int count_no_response = 0;
 
-	private static final int ERROR = 9999;
-	
 	private long timeElapsed;
 
 	private boolean shutdownFlag;
@@ -91,7 +87,7 @@ public class SXnetClientThread extends Thread {
 					count_no_response = 0; // reset timeout counter.
 				}
 			} catch (IOException e) {
-				Log.e(TAG,"ERROR: reading from socket - "+e.getMessage());
+				Log.e(TAG,"INVALID_INT: reading from socket - "+e.getMessage());
 			}
 
 			// check send queue
@@ -172,34 +168,12 @@ public class SXnetClientThread extends Thread {
 	public void readChannel(int adr) {
 
 		if (DEBUG) Log.d(TAG,"readChannel a="+adr+" shutd.="+shuttingDown+" clientTerm="+clientTerminated);
-		if ( shutdownFlag || clientTerminated || (adr == INVALID_INT)) return;
+		if ( shutdownFlag || clientTerminated || (adr == AndroPanelApplication.INVALID_INT)) return;
 		String command = "R "+adr;
 		Boolean success = sendQ.offer(command);
 		if ((success == false) && (DEBUG)) Log.d(TAG,"readChannel failed, queue full")	;
 	}
 
-	/** adds a command to the sendQueue "sendQ"
-	 * 
-	 * in case the demoFlag is true, an echo will be sent back to UI Thread via a message handler
-	 * 
-	 */
-	/*public void sendCommand(int adr, int data) {
-		
-		if (DEBUG) Log.d(TAG,"sendCommand a="+adr+" d="+data+" shutd.="+shuttingDown+" clientTerm="+clientTerminated);
-		if (shutdownFlag || clientTerminated || (adr == INVALID_INT)) return;
-		if (demoFlag) {
-			Message m = Message.obtain();
-            m.what = SX_FEEDBACK_MESSAGE;
-			m.arg1 = adr;
-			m.arg2 = data;
-			handler.sendMessage(m);  // send SX data to UI Thread via Message
-			return;
-		}
-
-		String command = "S "+adr+" "+data;
-		Boolean success = sendQ.offer(command);
-		if ((success == false) && (DEBUG)) Log.d(TAG,"sendCommand failed, queue full")	;
-	} */
 
 	private void immediateSend(String command) {
 		if (shutdownFlag || clientTerminated ||  (out == null) ){
@@ -218,23 +192,20 @@ public class SXnetClientThread extends Thread {
 	}
 
 
-	/**
-	 * SX Net Protocol (all msg terminated with CR)
-	 * 
-	 * client sends                           |  SXnetServer Response  
-	 * ---------------------------------------|-------------------
-	 * R cc    = Read channel cc (0..127)     |  "X" cc dd
-	 * B cc b  = SetBit Ch. cc Bit b (1..8)   |  "OK" (and later, when changed in CS: X cc dd )
-	 * C cc b  = Clear Ch cc Bit b (1..8)     |  "OK" (and later, when changed in CS: X cc dd )
-	 * S cc dd = set channel cc Data dd (<256)|  "OK" (and later, when changed in CS: X cc dd )
-	 * DSDF 89sf  (i.e. garbage)              |  "ERROR" 
-	 * 
-	 * channel 127 bit 8 == Track Power
-	 * 
-	 * for a list of channels (which the client has set or read in the past) all changes are 
-	 *                    transmitted back to the client
-	 */
- 
+	// SX Net Protocol (ASCII, all msg terminated with '\n')
+	// REV JULY 2018
+	// sent by mobile device                     -> SX3-PC sends back: "X cc dd"
+    //                                      !! only after change has been applied in central system
+
+	// R cc = Read channel cc (0..127)           -> returns
+	// S cc.b dd = Set channel cc bit b (0 or 1) -> returns "X cc dd"
+	// SX cc dd = Set channgel cc to byte dd     -> returns "X cc dd"
+
+	// channel 127 bit 8 == Track Power
+
+	// for all channels 0 ... 104 (SXMAX_USED) and 127 all changes are
+	// transmitted to all connected clients
+
 	private void handleMsgFromServer(String msg) {
 		// check whether there is an application to send info to -
 		// to avoid crash if application has stopped but thread is still running
@@ -261,8 +232,8 @@ public class SXnetClientThread extends Thread {
 				if ((info.length >= 3) && info[0].equals("X")) {
 					adr = getChannelFromString(info[1]);
 					data = getDataFromString(info[2]);
-					if (DEBUG) Log.d(TAG,"pure SX: " + cmd);
-					if ((adr != ERROR) && (data != ERROR)) {
+					if (DEBUG) Log.d(TAG,"pure SX byte: " + cmd);
+					if ((adr != INVALID_INT) && (data != INVALID_INT)) {
 						Message m = Message.obtain();
 						m.what = SX_FEEDBACK_MESSAGE;
 						m.arg1 = adr;
@@ -276,14 +247,14 @@ public class SXnetClientThread extends Thread {
 
 	private int getDataFromString(String s) {
 		// converts String to integer between 0 and 255 (=SX Data)
-		Integer data=ERROR;
+		Integer data= INVALID_INT;
 		try {
 			data = Integer.parseInt(s);
 			if ( (data < 0 ) || (data >255)) {
-				data = ERROR;
+				data = INVALID_INT;
 			} 
 		} catch (Exception e) {
-			data = ERROR;
+			data = INVALID_INT;
 		}
 		return data;
 	}
@@ -295,10 +266,10 @@ public class SXnetClientThread extends Thread {
 			if ( (channel >= 0 ) && (channel <= 127)) {
 				return channel;
 			} else {
-				channel = ERROR;
+				channel = INVALID_INT;
 			}
 		} catch (Exception e) {
-			channel=ERROR;
+			channel= INVALID_INT;
 		}
 		return channel;
 	}

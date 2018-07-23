@@ -75,7 +75,9 @@ public class SXPanelElement extends PanelElement {
 	@Override
 	public void update() {
         state = AndroPanelApplication.getSxBit(sxAdr, sxBit);
-        if (inverted == 1) {
+		// STATE_UNKNOWN is not possible here
+
+		if (inverted == 1) {
             if (state == STATE_CLOSED) {
                 state = STATE_THROWN;
             } else {

@@ -137,9 +137,7 @@ public class  AndroPanelActivity extends Activity {  //implements ServiceListene
 		super.onPause();
 		if (DEBUG)
 			Log.d(TAG, "onPause - AndroPanelActivity");
-		// firstStart=false; // flag to avoid re-connection call during first
-		// start
-		// sendQ.add(DISCONNECT);
+
 		((AndroPanelApplication) getApplication()).saveZoomEtc();
 		if (configHasChanged) {
 			WriteConfig.writeToXML();

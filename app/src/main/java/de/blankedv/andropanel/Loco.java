@@ -138,7 +138,7 @@ public class Loco {
                     return;
                 }
 
-				String command = "S "+adr+" "+sx;
+				String command = "SX "+adr+" "+sx;
 				Boolean success = sendQ.offer(command);
 				if ( !success  && (DEBUG)) Log.d(TAG,"loco sendCommand failed, queue full")	;
 
